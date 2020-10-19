@@ -1,0 +1,47 @@
+.Ingame{
+    background-image: url("../../images/bg-2.png");
+    display: flex;
+    min-height: 100vh;
+    justify-content: start;
+    flex-direction: column;
+    background-position: center
+}
+
+.ingame-top-section{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.level-show-text{
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: 400;
+    text-align: left;
+    padding-top: 1.5rem;
+    padding-left: 0.5rem;
+}
+
+.back-btn{
+    width: 95px;
+    height: 40px;
+    background-color: #FF9999;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    color: #ffffff;
+    font-size: 18;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+.game-window{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}

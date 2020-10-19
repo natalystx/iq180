@@ -1,0 +1,133 @@
+.re-random-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.re-random-btn{
+    width: 95px;
+    height: 40px;
+    background-color: #99C2FF;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    color: #ffffff;
+    font-size: 18;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+.game-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5rem;
+}
+
+.ur-equaltion-text{
+    position: relative;
+    font-size: 20px;
+    text-align: left;
+    font-weight: 300;
+    color: #6c6c6c;
+  left: -3rem;
+}
+
+.ans-text{
+    position: relative;
+    font-size: 25px;
+    text-align: right;
+    font-weight: 300;
+    color: #6c6c6c;
+    right: -3rem;
+}
+
+.equaltionInput{
+    width: 350px;
+    height: 65px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    margin-top: 0.5rem;
+    color: #6c6c6c;
+    font-weight: 400;
+    font-size: 25px;
+    padding-left: 1rem;
+}
+
+.calculator-section{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.number-btn{
+    width: 56px;
+    height: 56px;
+    border: none;
+    background-color: #86E4B7;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+.operator-btn{
+    width: 56px;
+    height: 56px;
+    border: none;
+    background-color: #FB8878;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 10px;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+.submit-btn{
+    width: 155px;
+    height: 56px;
+    border: none;
+    border-radius: 20px;
+    background-color: #4EF0C9;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    outline: none;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+}
+
+.show-ans-btn{
+    width: 350px;
+    height: 56px;
+    border: none;
+    border-radius: 20px;
+    background-color: #99C2FF;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    outline: none;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1.5rem;
+}
