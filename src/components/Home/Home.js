@@ -13,10 +13,6 @@ class Home extends React.Component {
         this.setState({ level: event.target.value })
     }
 
-    //Navigate to ingame page
-    goInGame = () => {
-
-    }
     render() {
         return (
             <div className="Home">
