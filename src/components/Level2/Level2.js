@@ -76,12 +76,12 @@ class Level2 extends React.Component {
         // Parse string to mathmatic equation for computable 
         let defaultAns = Parser.evaluate(defaultEqualtion)
 
-        //check default answer is 2 digits
-        if (Math.floor(defaultAns) < 99 || Math.floor(defaultAns) > 999) {
+        //check default answer is 3 digits
+        if (defaultAns < 99 || defaultAns > 999 || !Number.isInteger(defaultAns)) {
             await this.doRandomNumbers()
         } else {
             await this.setState({
-                defaultAnswer: Math.floor(defaultAns),
+                defaultAnswer: defaultAns,
                 defaultEqualtion: defaultEqualtion
             })
         }
@@ -92,25 +92,26 @@ class Level2 extends React.Component {
     delAnswer = async () => {
 
 
+        const operatorList = ['-', '+', '*', '/', '(', ')']
         let temp = this.state.equaltion
 
         // check values
-        if (temp[temp.length - 1] === '+' || temp[temp.length - 1] === '-' || temp[temp.length - 1] === '*' || temp[temp.length - 1] === '/' || temp.length === 0) {
+        if (operatorList.includes(this.state.equaltion[this.state.equaltion.length - 1]) || this.state.equaltion.length === 0) {
             //delete answer
-            temp = temp.slice(0, -1)
+            temp = await temp.slice(0, -1)
             //setState new answer
-            this.setState({ equaltion: temp })
+            await this.setState({ equaltion: temp })
         } else {
             //delete answer
             temp = temp.slice(0, -1)
             //remove disable button
             let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
             let tempIndex = this.state.lastButtonIndex
-            tempIndex = tempIndex.slice(0, -1)
+            tempIndex = await tempIndex.slice(0, -1)
             elem.removeAttribute("disabled")
 
             //setState new answer and buttonIndex
-            this.setState({ equaltion: temp, lastButtonIndex: tempIndex })
+            await this.setState({ equaltion: temp, lastButtonIndex: tempIndex })
         }
 
     }
