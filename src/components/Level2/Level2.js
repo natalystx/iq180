@@ -1,9 +1,9 @@
 import React from 'react';
 import * as Parser from 'mathjs'; //math library
-import './Level1.css';
+import './Level2.css';
 import delIcon from '../../images/icons/delete.png';
 
-class Level1 extends React.Component {
+class Level2 extends React.Component {
 
     //set initial values of variables 
     constructor(props) {
@@ -13,7 +13,8 @@ class Level1 extends React.Component {
                 'a': 0,
                 'b': 0,
                 'c': 0,
-                'd': 0
+                'd': 0,
+                'e': 0
             },
             equaltion: '',
             answer: 0,
@@ -32,31 +33,31 @@ class Level1 extends React.Component {
 
         //add equation into the list 
         let equaltionList = {
-            1: '((a+b)+	c)+	d',
-            2: '((a-b)-c)+d',
-            3: '((a*b)*c)-d',
-            4: '((a/b)/c)*d',
-            5: '((a*b)+c)*d',
-            6: 'a+(b+(c+d))',
-            7: 'a-(b-(c+d))',
-            8: 'a*(b*(c-d))',
-            9: 'a/(b/(c*d))',
-            10: 'a-(b/(c+d))',
-            11: '(a+b)+(c+d)',
-            12: '(a-b)-(c+d)',
-            13: '(a*b)*(c-d)',
-            14: '(a/b)/(c*d)',
-            15: '(a*b)/(c+d)',
-            16: '(a+(b+c))+d',
-            17: '(a-(b-c))+d',
-            18: '(a*(b*c))-d',
-            19: '(a/(b/c))*d',
-            20: '(a-(b/c))*d',
-            21: 'a+((b+c)+d)',
-            22: 'a-((b-c)+d)',
-            23: 'a*((b*c)-d)',
-            24: 'a/((b/c)*d)',
-            25: 'a-((b/c)*d)'
+            1: '(a*b)*c*(d*e)',
+            2: '(a*b)*(c*d)*e',
+            3: '(a*b*c)*(d*e)',
+            4: '(a*b)*(c*d*e)',
+            5: '((a*b)*c)*(d*e)',
+            6: '((((a*b)*c)*d)*e)',
+            7: '(a-b)+(c*d)+e',
+            8: '(a*b)/c*(d+e)',
+            9: '(a*b)-(c+d)-e',
+            10: '(a-b+c)*(d/e)',
+            11: '(a/b+c)-(d-e)',
+            12: '(a*b)+(c*d+e)',
+            13: '(a-b)*(c-d+e)',
+            14: '((a-b)*c)-(d/e)',
+            15: '((a*b)-c)+(d+e)',
+            16: '((((a-b)+c)*d)/e)',
+            17: '((((a*b)+c)/d)/e)',
+            18: '(a-b)*(c/(d-e))',
+            19: '(a*b)/(c+(d+e))',
+            20: 'a*(b-(c/(d/e)))',
+            21: 'a/(b*(c+(d/e)))',
+            22: '((a*b)+(c+d))+e',
+            23: '((a-b)*(c-d))-e',
+            24: '(a*(b+c))/(d*e)',
+            25: 'a*(b+((c/d)-e))'
         }
 
         //random one equation for list, 25 means the total numbers of list 
@@ -70,12 +71,13 @@ class Level1 extends React.Component {
         defaultEqualtion = await defaultEqualtion.split('b').join(this.state.numbers['b'])
         defaultEqualtion = await defaultEqualtion.split('c').join(this.state.numbers['c'])
         defaultEqualtion = await defaultEqualtion.split('d').join(this.state.numbers['d'])
+        defaultEqualtion = await defaultEqualtion.split('e').join(this.state.numbers['e'])
 
         // Parse string to mathmatic equation for computable 
         let defaultAns = Parser.evaluate(defaultEqualtion)
 
         //check default answer is 2 digits
-        if (Math.floor(defaultAns) < 10 || Math.floor(defaultAns) > 99) {
+        if (Math.floor(defaultAns) < 99 || Math.floor(defaultAns) > 999) {
             await this.doRandomNumbers()
         } else {
             await this.setState({
@@ -178,7 +180,10 @@ class Level1 extends React.Component {
         temp['c'] = (dummy !== temp['a'] && dummy !== temp['b'] && dummy !== 0) ? dummy : Math.floor(Math.random() * 9)
         dummy = Math.floor(Math.random() * 10)
         temp['d'] = (dummy !== temp['a'] && dummy !== temp['b'] && dummy !== temp['c'] && dummy !== 0) ? dummy : Math.floor(Math.random() * 9)
+        dummy = Math.floor(Math.random() * 10)
+        temp['e'] = (dummy !== temp['a'] && dummy !== temp['b'] && dummy !== temp['c'] && dummy !== temp['d'] && dummy !== 0) ? dummy : Math.floor(Math.random() * 9)
         this.setState({ numbers: temp })
+
 
         //generate default ans
         this.setState({
@@ -210,7 +215,7 @@ class Level1 extends React.Component {
                 showAnsClass: 'ans-card',
                 respondText: 'โปรดกรอกสมการ'
             })
-        } else if (this.state.equaltion.length >= 6) {
+        } else if (this.state.equaltion.length >= 9) {
             this.setState({
                 showAnsClass: 'ans-card',
                 respondText: this.state.defaultEqualtion
@@ -263,6 +268,7 @@ class Level1 extends React.Component {
                         <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2">{this.state.numbers['b']}</button>
                         <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3">{this.state.numbers['c']}</button>
                         <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4">{this.state.numbers['d']}</button>
+                        <button className="number-btn" value={this.state.numbers['e']} onClick={this.insertAnswer} index="5">{this.state.numbers['e']}</button>
 
                         {/* Operators */}
                         <button className="operator-btn" value={'+'} onClick={this.insertAnswer}>+</button>
@@ -291,4 +297,4 @@ class Level1 extends React.Component {
     }
 }
 
-export default Level1;
+export default Level2;

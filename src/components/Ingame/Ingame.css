@@ -1,10 +1,23 @@
+@keyframes slideUp{
+    from{
+      transform: translateY(-100%);
+    }
+    to{
+      transform: translateY(0%);
+    }
+  }
+
 .Ingame{
-    background-image: url("../../images/bg-2.png");
+    background-image: url("../../images/bg.jpg");
     display: flex;
     min-height: 100vh;
     justify-content: start;
     flex-direction: column;
-    background-position: center
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: slideUp 0.3s ease-in;
+    transition: transform 0.3s ease;
 }
 
 .ingame-top-section{
@@ -44,4 +57,16 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
+}
+
+@media only screen and (min-width:1366px){
+    .level-show-text{
+        font-size: 30px;
+        margin-left: 2rem;
+    }
+    .back-btn{
+        width: 150px;
+        height: 50px;
+        font-size: 20px;
+    }
 }

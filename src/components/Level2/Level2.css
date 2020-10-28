@@ -99,6 +99,7 @@
     flex-wrap: wrap;
     margin-top: 2rem;
     justify-content: center;
+    width: 80vw;
 }
 
 .number-btn{
@@ -223,7 +224,7 @@
 
 @media only screen and (min-width: 768px){
     .calculator-section{
-        width: 50vw;
+        width: 60vw;
     }
 }
 
@@ -247,7 +248,7 @@
         width: 35vw;
     }
     .calculator-section{
-        width: 20vw;
+        width: 25vw;
     }
     .show-ans-btn{
         margin-top: 1rem;
