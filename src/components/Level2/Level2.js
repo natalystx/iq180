@@ -84,8 +84,6 @@ class Level2 extends React.Component {
                 defaultAnswer: defaultAns,
                 defaultEqualtion: defaultEqualtion
             })
-            console.log(this.state.defaultAnswer)
-            console.log(this.state.defaultEqualtion)
         }
 
     }

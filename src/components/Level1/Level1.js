@@ -1,7 +1,7 @@
-import React from 'react';
-import * as Parser from 'mathjs'; //math library
-import './Level1.css';
-import delIcon from '../../images/icons/delete.png';
+import React from 'react'
+import * as Parser from 'mathjs' //math library
+import './Level1.css'
+import delIcon from '../../images/icons/delete.png'
 
 class Level1 extends React.Component {
 
@@ -78,15 +78,160 @@ class Level1 extends React.Component {
         if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
             await this.doRandomNumbers()
         } else {
-            await this.setState({
-                defaultAnswer: defaultAns,
-                defaultEqualtion: defaultEqualtion
-            })
-            console.log(this.state.defaultEqualtion);
-            console.log(this.state.defaultAnswer);
+            if (this.checkDivideResult(defaultEqualtion)) {
+                await this.setState({
+                    defaultAnswer: defaultAns,
+                    defaultEqualtion: defaultEqualtion
+                })
+            } else {
+                await this.setState({
+                    defaultAnswer: defaultAns,
+                    defaultEqualtion: defaultEqualtion
+                })
+            }
+
         }
 
 
+    }
+
+    checkDivideResult = (defaultEqualtion) => {
+
+        // (9/(9/2))*6
+
+        //check equaltion is contain "/"
+        if (defaultEqualtion.search('/') > -1) {  // incase of equaltion is contain
+
+            console.log(defaultEqualtion.search('/'))
+            console.log(defaultEqualtion)
+
+            let equaltion = defaultEqualtion // default equaltion
+            let indexFoundList = null // index of "/" found in equaltion
+
+            // do this loop while equaltion still containing "/"
+            while (equaltion.search('/') > -1) {
+                let divideFoundIndex = equaltion.search('/') //current found index of "/"
+                indexFoundList = divideFoundIndex // set found index of "/"
+
+                //check on left and right char is number or not
+                if (isNaN(equaltion[divideFoundIndex - 1]) && isNaN(equaltion[divideFoundIndex + 1])) { //in case of left and right is Number
+
+                    // get result of 2 numbers by dividing
+                    let result = parseInt(equaltion[divideFoundIndex - 1]) / parseInt(equaltion[divideFoundIndex + 1])
+                    console.log(Number.isInteger(result))
+
+                    // check number is Integer or not and return 
+                    return Number.isInteger(result) ? true : false
+
+                } else { //in case of left and right isn't Number
+
+                    let parentheses = ['(', ')']
+
+                    // checks left and right has any parentheses
+                    if (parentheses.includes(equaltion[divideFoundIndex - 1]) || parentheses.includes(equaltion[divideFoundIndex + 1])) {
+
+                        // if on the right side is '('
+                        if (equaltion[divideFoundIndex + 1] === parentheses[0]) {
+                            let tempEqaultion = ''
+
+                            //get the part of equaltion in parentheses
+                            for (let index = divideFoundIndex + 1; equaltion.length; index++) {
+
+                                if (equaltion[index] === parentheses[1]) { //stop when found close parentheses
+
+                                    tempEqaultion += equaltion[index]
+                                    break
+                                } else {
+
+                                    tempEqaultion += equaltion[index]
+                                }
+                            }
+
+                            console.log(tempEqaultion)
+                            console.log(Parser.evaluate(tempEqaultion))
+                            if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
+                                console.log('yes')
+                            } else {
+                                return false
+                            }
+                        }
+
+                        // if on the left side and before numbers is '('
+                        else if (equaltion[divideFoundIndex - 2] === parentheses[0]) {
+                            let tempEqaultion = ''
+
+                            //get the part of equaltion in parentheses
+                            for (let index = divideFoundIndex + 1; equaltion.length; index++) {
+
+                                if (equaltion[index] === parentheses[1]) { //stop when found close parentheses
+
+                                    tempEqaultion += equaltion[index]
+                                    break
+                                } else {
+
+                                    tempEqaultion += equaltion[index]
+                                }
+                            }
+
+                            console.log('temp' + tempEqaultion)
+                            console.log(Parser.evaluate(tempEqaultion))
+
+                            if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
+                                console.log('yes')
+                            } else {
+                                console.log('no')
+                                return false
+                            }
+                        }
+
+                    }
+
+                    // if on the left side and before numbers is ')'
+                    else if (equaltion[divideFoundIndex - 1] === parentheses[1]) {
+                        let tempEqaultion = ''
+
+                        //get the part of equaltion in parentheses
+                        for (let index = divideFoundIndex + 1; 0; index--) {
+
+                            if (equaltion[index] === parentheses[0]) { //stop when found close parentheses
+
+                                tempEqaultion += equaltion[index]
+                                tempEqaultion
+                                break
+                            } else {
+
+                                tempEqaultion += equaltion[index]
+                            }
+                        }
+
+                        console.log('temp' + tempEqaultion)
+                        console.log(Parser.evaluate(tempEqaultion))
+
+                        if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
+                            console.log('yes')
+                        } else {
+                            console.log('no')
+                            return false
+                        }
+                    }
+
+                    // else {
+                    //     equaltion = equaltion.slice(0, indexFoundList) + equaltion.slice(indexFoundList + 1)
+                    //     indexFoundList = null
+                    //     console.log(equaltion)
+                    //     console.log(false)
+                    // }
+
+
+                }
+
+            }
+
+        } else { // incase of equaltion isn't contain /
+
+            console.log(defaultEqualtion)
+            return false
+        }
     }
 
     //delete input answer
@@ -135,12 +280,9 @@ class Level1 extends React.Component {
     //calculate user's equation result and checks with default answer
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        console.log(operatorList);
-        console.log(this.state.equaltion.slice(-1));
         let tempAns = operatorList.includes(this.state.equaltion.slice(-1)) ? false : await Parser.evaluate(this.state.equaltion)
 
         if (this.state.equaltion.length >= 6) {
-            console.log(tempAns);
             if (tempAns === this.state.defaultAnswer) {
                 this.setState({
                     isAnsCorrect: true,
@@ -293,8 +435,8 @@ class Level1 extends React.Component {
                     </div>
                 </div>
             </div >
-        );
+        )
     }
 }
 
-export default Level1;
+export default Level1
