@@ -32,7 +32,7 @@ class Level1 extends React.Component {
 
         //add equation into the list 
         let equationList = {
-            1: '((a+b)+	c)+	d',
+            1: '((a+b)+c)+d',
             2: '((a-b)-c)+d',
             3: '((a*b)*c)-d',
             4: '((a/b)/c)*d',
@@ -78,6 +78,7 @@ class Level1 extends React.Component {
         if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
             await this.doRandomNumbers()
         } else {
+
             if (this.checkDivideResult(defaultEquation)) {
                 await this.setState({
                     defaultAnswer: defaultAns,
@@ -88,148 +89,57 @@ class Level1 extends React.Component {
                     defaultAnswer: defaultAns,
                     defaultEquation: defaultEquation
                 })
+
             }
+
+
 
         }
 
 
     }
 
-    checkDivideResult = (defaultEquation) => {
-
-        // (9/(9/2))*6
-
+    checkDivideResult = async (defaultEquation) => {
         //check equation is contain "/"
         if (defaultEquation.search('/') > -1) {  // incase of equation is contain
-
-            console.log(defaultEquation.search('/'))
-            console.log(defaultEquation)
-
-            let equation = defaultEquation // default equation
-
-            // do this loop while equation still containing "/"
-            while (equation.search('/') > -1) {
-                let divideFoundIndex = equation.search('/') //current found index of "/"
-                let indexFoundList = divideFoundIndex // set found index of "/"
-
-                //check on left and right char is number or not
-                if (isNaN(equation[divideFoundIndex - 1]) && isNaN(equation[divideFoundIndex + 1])) { //in case of left and right is Number
-
-                    // get result of 2 numbers by dividing
-                    let result = parseInt(equation[divideFoundIndex - 1]) / parseInt(equation[divideFoundIndex + 1])
-                    console.log(Number.isInteger(result))
-
-                    // check number is Integer or not and return 
-                    return Number.isInteger(result) ? true : false
-
-                } else { //in case of left and right isn't Number
-
-                    let parentheses = ['(', ')']
-
-                    // checks left and right has any parentheses
-                    if (parentheses.includes(equation[divideFoundIndex - 1]) || parentheses.includes(equation[divideFoundIndex + 1])) {
-
-                        // if on the right side is '('
-                        if (equation[divideFoundIndex + 1] === parentheses[0]) {
-                            let tempEqaultion = ''
-
-                            //get the part of equation in parentheses
-                            for (let index = divideFoundIndex + 1; equation.length; index++) {
-
-                                if (equation[index] === parentheses[1]) { //stop when found close parentheses
-
-                                    tempEqaultion += equation[index]
-                                    break
-                                } else {
-
-                                    tempEqaultion += equation[index]
-                                }
-                            }
-
-                            console.log(tempEqaultion)
-                            console.log(Parser.evaluate(tempEqaultion))
-                            if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
-                                console.log('yes')
-                            } else {
-                                return false
-                            }
-                        }
-
-                        // if on the left side and before numbers is '('
-                        else if (equation[divideFoundIndex - 2] === parentheses[0]) {
-                            let tempEqaultion = ''
-
-                            //get the part of equation in parentheses
-                            for (let index = divideFoundIndex + 1; equation.length; index++) {
-
-                                if (equation[index] === parentheses[1]) { //stop when found close parentheses
-
-                                    tempEqaultion += equation[index]
-                                    break
-                                } else {
-
-                                    tempEqaultion += equation[index]
-                                }
-                            }
-
-                            console.log('temp' + tempEqaultion)
-                            console.log(Parser.evaluate(tempEqaultion))
-
-                            if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
-                                console.log('yes')
-                            } else {
-                                console.log('no')
-                                return false
-                            }
-                        }
-
-                    }
-
-                    // if on the left side and before numbers is ')'
-                    else if (equation[divideFoundIndex - 1] === parentheses[1]) {
-                        let tempEqaultion = ''
-
-                        //get the part of equation in parentheses
-                        for (let index = divideFoundIndex + 1; 0; index--) {
-
-                            if (equation[index] === parentheses[0]) { //stop when found close parentheses
-
-                                tempEqaultion += equation[index]
-                                break
-                            } else {
-
-                                tempEqaultion += equation[index]
-                            }
-                        }
-
-                        console.log('temp' + tempEqaultion)
-                        console.log(Parser.evaluate(tempEqaultion))
-
-                        if (Number.isInteger(Parser.evaluate(tempEqaultion))) {
-                            console.log('yes')
-                        } else {
-                            console.log('no')
-                            return false
-                        }
-                    }
-
-                    // else {
-                    //     equation = equation.slice(0, indexFoundList) + equation.slice(indexFoundList + 1)
-                    //     indexFoundList = null
-                    //     console.log(equation)
-                    //     console.log(false)
-                    // }
-
-
-                }
-
-            }
-
+            console.log('yes ' + defaultEquation)
+            const marksPos = this.scanDivideMarkPos(defaultEquation)
+            console.log(marksPos)
+            return this.splitEquation(marksPos, defaultEquation) ? true : this.doRandomNumbers()
         } else { // incase of equation isn't contain /
-
             console.log(defaultEquation)
             return false
         }
+    }
+
+    //get Position of divide marks
+    scanDivideMarkPos = (equation) => {
+        let marksPos = []
+        for (let index = 0; index < equation.length; index++) {
+            if (equation[index] === '/') {
+                marksPos.push(index)
+            }
+        }
+        return marksPos
+    }
+
+    splitEquation = (marksPos, equation) => {
+
+        let isAllResultInt = false
+        marksPos.forEach(pos => {
+            console.log('pos: ' + pos)
+            let left = equation[pos - 1]
+            let right = equation[pos + 1]
+
+            if (!isNaN(left) && !isNaN(right)) {
+                let result = parseInt(left) / parseInt(right)
+                console.log(result)
+                isAllResultInt = Number.isInteger(result)
+            }
+        })
+
+        return isAllResultInt
+
     }
 
     //delete input answer
