@@ -82,6 +82,8 @@ class Level1 extends React.Component {
                 defaultAnswer: defaultAns,
                 defaultEqualtion: defaultEqualtion
             })
+            console.log(this.state.defaultEqualtion);
+            console.log(this.state.defaultAnswer);
         }
 
 
@@ -101,7 +103,7 @@ class Level1 extends React.Component {
             await this.setState({ equaltion: temp })
         } else {
             //delete answer
-            temp = temp.slice(0, -1)
+            temp = await temp.slice(0, -1)
             //remove disable button
             let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
             let tempIndex = this.state.lastButtonIndex
@@ -133,23 +135,26 @@ class Level1 extends React.Component {
     //calculate user's equation result and checks with default answer
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        let tempAns = !operatorList.includes(this.state.equaltion[this.state.equaltion[this.state.equaltion.length - 1]]) ? false : await Parser.evaluate(this.state.equaltion)
-        this.setState({ answer: tempAns })
+        console.log(operatorList);
+        console.log(this.state.equaltion.slice(-1));
+        let tempAns = operatorList.includes(this.state.equaltion.slice(-1)) ? false : await Parser.evaluate(this.state.equaltion)
 
         if (this.state.equaltion.length >= 6) {
-
-            if (this.state.answer === this.state.defaultAnswer) {
+            console.log(tempAns);
+            if (tempAns === this.state.defaultAnswer) {
                 this.setState({
                     isAnsCorrect: true,
                     showAnsClass: 'ans-card',
                     respondText: 'คำตอบถูกต้อง',
-                    isCorrectClass: 'correct'
+                    isCorrectClass: 'correct',
+                    answer: tempAns
                 })
             } else {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
-                    respondText: 'คำตอบไม่ถูกต้อง'
+                    respondText: 'คำตอบไม่ถูกต้อง',
+                    answer: tempAns
                 })
             }
         } else if (this.state.equaltion.length === 0) {
