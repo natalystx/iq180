@@ -1,7 +1,7 @@
-import React from 'react';
-import * as Parser from 'mathjs'; //math library
-import './Level2.css';
-import delIcon from '../../images/icons/delete.png';
+import React from 'react'
+import * as Parser from 'mathjs' //math library
+import './Level2.css'
+import delIcon from '../../images/icons/delete.png'
 
 class Level2 extends React.Component {
 
@@ -16,10 +16,10 @@ class Level2 extends React.Component {
                 'd': 0,
                 'e': 0
             },
-            equaltion: '',
+            equation: '',
             answer: 0,
             defaultAnswer: 0,
-            defaultEqualtion: null,
+            defaultEquation: null,
             isAnsCorrect: false,
             respondText: 'คำตอบไม่ถูกต้อง',
             showAnsClass: 'ans-card-inactive',
@@ -32,7 +32,7 @@ class Level2 extends React.Component {
     genDefaultAnswer = async () => {
 
         //add equation into the list 
-        let equaltionList = {
+        let equationList = {
             1: '(a*b)*c*(d*e)',
             2: '(a*b)*(c*d)*e',
             3: '(a*b*c)*(d*e)',
@@ -63,18 +63,18 @@ class Level2 extends React.Component {
         //random one equation for list, 25 means the total numbers of list 
         let randomIndex = await Math.floor(Math.random() * 25)
 
-        //recheck for make sure index of equaltionList is not equal 0 if equal 0 just +1
-        let defaultEqualtion = randomIndex === 0 ? equaltionList[randomIndex + 1] : equaltionList[randomIndex]
+        //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
+        let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
 
         //split equation and replace all a,b,c,d with numbers as same index name
-        defaultEqualtion = await defaultEqualtion.split('a').join(this.state.numbers['a'])
-        defaultEqualtion = await defaultEqualtion.split('b').join(this.state.numbers['b'])
-        defaultEqualtion = await defaultEqualtion.split('c').join(this.state.numbers['c'])
-        defaultEqualtion = await defaultEqualtion.split('d').join(this.state.numbers['d'])
-        defaultEqualtion = await defaultEqualtion.split('e').join(this.state.numbers['e'])
+        defaultEquation = await defaultEquation.split('a').join(this.state.numbers['a'])
+        defaultEquation = await defaultEquation.split('b').join(this.state.numbers['b'])
+        defaultEquation = await defaultEquation.split('c').join(this.state.numbers['c'])
+        defaultEquation = await defaultEquation.split('d').join(this.state.numbers['d'])
+        defaultEquation = await defaultEquation.split('e').join(this.state.numbers['e'])
 
         // Parse string to mathmatic equation for computable 
-        let defaultAns = Parser.evaluate(defaultEqualtion)
+        let defaultAns = Parser.evaluate(defaultEquation)
 
         //check default answer is 3 digits
         if (defaultAns < 99 || defaultAns > 999 || !Number.isInteger(defaultAns)) {
@@ -82,7 +82,7 @@ class Level2 extends React.Component {
         } else {
             await this.setState({
                 defaultAnswer: defaultAns,
-                defaultEqualtion: defaultEqualtion
+                defaultEquation: defaultEquation
             })
         }
 
@@ -93,14 +93,14 @@ class Level2 extends React.Component {
 
 
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        let temp = this.state.equaltion
+        let temp = this.state.equation
 
         // check values
-        if (operatorList.includes(this.state.equaltion[this.state.equaltion.length - 1]) || this.state.equaltion.length === 0) {
+        if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
             //delete answer
             temp = await temp.slice(0, -1)
             //setState new answer
-            await this.setState({ equaltion: temp })
+            await this.setState({ equation: temp })
         } else {
             //delete answer
             temp = temp.slice(0, -1)
@@ -111,23 +111,23 @@ class Level2 extends React.Component {
             elem.removeAttribute("disabled")
 
             //setState new answer and buttonIndex
-            await this.setState({ equaltion: temp, lastButtonIndex: tempIndex })
+            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
         }
 
     }
 
     //get user input answer
     insertAnswer = (event) => {
-        let temp = this.state.equaltion
+        let temp = this.state.equation
         temp = temp + event.target.value
         let elem = event.target
         if (elem.hasAttribute("index")) {
             let indexTemp = [...this.state.lastButtonIndex]
             indexTemp.push(elem.getAttribute("index"))
-            this.setState({ equaltion: temp, lastButtonIndex: indexTemp })
+            this.setState({ equation: temp, lastButtonIndex: indexTemp })
             elem.setAttribute("disabled", true)
         } else {
-            this.setState({ equaltion: temp })
+            this.setState({ equation: temp })
         }
 
     }
@@ -135,10 +135,10 @@ class Level2 extends React.Component {
     //calculate user's equation result and checks with default answer
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        let tempAns = operatorList.includes(this.state.equaltion.slice(-1)) ? false : await Parser.evaluate(this.state.equaltion)
+        let tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
         this.setState({ answer: tempAns })
 
-        if (this.state.equaltion.length >= 6) {
+        if (this.state.equation.length >= 6) {
 
             if (tempAns === this.state.defaultAnswer) {
                 this.setState({
@@ -156,7 +156,7 @@ class Level2 extends React.Component {
                     answer: tempAns
                 })
             }
-        } else if (this.state.equaltion.length === 0) {
+        } else if (this.state.equation.length === 0) {
             this.setState({
                 isAnsCorrect: false,
                 showAnsClass: 'ans-card',
@@ -190,7 +190,7 @@ class Level2 extends React.Component {
 
         //generate default ans
         this.setState({
-            equaltion: '',
+            equation: '',
             respondText: 'คำตอบไม่ถูกต้อง',
             showAnsClass: 'ans-card-inactive',
             isCorrectClass: 'incorrect',
@@ -213,15 +213,15 @@ class Level2 extends React.Component {
 
     // show example of equation to get same result as default answer
     showExample = () => {
-        if (this.state.equaltion === '') {
+        if (this.state.equation === '') {
             this.setState({
                 showAnsClass: 'ans-card',
                 respondText: 'โปรดกรอกสมการ'
             })
-        } else if (this.state.equaltion.length >= 9) {
+        } else if (this.state.equation.length >= 9) {
             this.setState({
                 showAnsClass: 'ans-card',
-                respondText: this.state.defaultEqualtion
+                respondText: this.state.defaultEquation
             })
         }
         else {
@@ -234,7 +234,7 @@ class Level2 extends React.Component {
 
     clearAns = () => {
         this.setState({
-            equaltion: '',
+            equation: '',
             lastButtonIndex: []
         })
         let elem = document.querySelectorAll('button[index]')
@@ -253,7 +253,7 @@ class Level2 extends React.Component {
                 </div>
                 <div className="game-content">
                     <div className="info-text">
-                        <p className="ur-equaltion-text">
+                        <p className="ur-equation-text">
                             สมการของคุณ
                         </p>
                         <p className="ans-text">
@@ -261,7 +261,7 @@ class Level2 extends React.Component {
                         </p>
                     </div>
                     <div className="input-section">
-                        <input type="text" className="equaltionInput" readOnly={true} value={this.state.equaltion} />
+                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} />
                         <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                     </div>
                     <div className="calculator-section">
@@ -296,8 +296,8 @@ class Level2 extends React.Component {
                     </div>
                 </div>
             </div >
-        );
+        )
     }
 }
 
-export default Level2;
+export default Level2

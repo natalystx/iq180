@@ -15,10 +15,10 @@ class Level1 extends React.Component {
                 'c': 0,
                 'd': 0
             },
-            equaltion: '',
+            equation: '',
             answer: 0,
             defaultAnswer: 0,
-            defaultEqualtion: null,
+            defaultEquation: null,
             isAnsCorrect: false,
             respondText: 'คำตอบไม่ถูกต้อง',
             showAnsClass: 'ans-card-inactive',
@@ -31,7 +31,7 @@ class Level1 extends React.Component {
     genDefaultAnswer = async () => {
 
         //add equation into the list 
-        let equaltionList = {
+        let equationList = {
             1: '((a+b)+	c)+	d',
             2: '((a-b)-c)+d',
             3: '((a*b)*c)-d',
@@ -62,31 +62,31 @@ class Level1 extends React.Component {
         //random one equation for list, 25 means the total numbers of list 
         let randomIndex = await Math.floor(Math.random() * 25)
 
-        //recheck for make sure index of equaltionList is not equal 0 if equal 0 just +1
-        let defaultEqualtion = randomIndex === 0 ? equaltionList[randomIndex + 1] : equaltionList[randomIndex]
+        //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
+        let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
 
         //split equation and replace all a,b,c,d with numbers as same index name
-        defaultEqualtion = await defaultEqualtion.split('a').join(this.state.numbers['a'])
-        defaultEqualtion = await defaultEqualtion.split('b').join(this.state.numbers['b'])
-        defaultEqualtion = await defaultEqualtion.split('c').join(this.state.numbers['c'])
-        defaultEqualtion = await defaultEqualtion.split('d').join(this.state.numbers['d'])
+        defaultEquation = await defaultEquation.split('a').join(this.state.numbers['a'])
+        defaultEquation = await defaultEquation.split('b').join(this.state.numbers['b'])
+        defaultEquation = await defaultEquation.split('c').join(this.state.numbers['c'])
+        defaultEquation = await defaultEquation.split('d').join(this.state.numbers['d'])
 
         // Parse string to mathmatic equation for computable 
-        let defaultAns = Parser.evaluate(defaultEqualtion)
+        let defaultAns = Parser.evaluate(defaultEquation)
 
         //check default answer is 2 digits
         if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
             await this.doRandomNumbers()
         } else {
-            if (this.checkDivideResult(defaultEqualtion)) {
+            if (this.checkDivideResult(defaultEquation)) {
                 await this.setState({
                     defaultAnswer: defaultAns,
-                    defaultEqualtion: defaultEqualtion
+                    defaultEquation: defaultEquation
                 })
             } else {
                 await this.setState({
                     defaultAnswer: defaultAns,
-                    defaultEqualtion: defaultEqualtion
+                    defaultEquation: defaultEquation
                 })
             }
 
@@ -95,29 +95,28 @@ class Level1 extends React.Component {
 
     }
 
-    checkDivideResult = (defaultEqualtion) => {
+    checkDivideResult = (defaultEquation) => {
 
         // (9/(9/2))*6
 
-        //check equaltion is contain "/"
-        if (defaultEqualtion.search('/') > -1) {  // incase of equaltion is contain
+        //check equation is contain "/"
+        if (defaultEquation.search('/') > -1) {  // incase of equation is contain
 
-            console.log(defaultEqualtion.search('/'))
-            console.log(defaultEqualtion)
+            console.log(defaultEquation.search('/'))
+            console.log(defaultEquation)
 
-            let equaltion = defaultEqualtion // default equaltion
-            let indexFoundList = null // index of "/" found in equaltion
+            let equation = defaultEquation // default equation
 
-            // do this loop while equaltion still containing "/"
-            while (equaltion.search('/') > -1) {
-                let divideFoundIndex = equaltion.search('/') //current found index of "/"
-                indexFoundList = divideFoundIndex // set found index of "/"
+            // do this loop while equation still containing "/"
+            while (equation.search('/') > -1) {
+                let divideFoundIndex = equation.search('/') //current found index of "/"
+                let indexFoundList = divideFoundIndex // set found index of "/"
 
                 //check on left and right char is number or not
-                if (isNaN(equaltion[divideFoundIndex - 1]) && isNaN(equaltion[divideFoundIndex + 1])) { //in case of left and right is Number
+                if (isNaN(equation[divideFoundIndex - 1]) && isNaN(equation[divideFoundIndex + 1])) { //in case of left and right is Number
 
                     // get result of 2 numbers by dividing
-                    let result = parseInt(equaltion[divideFoundIndex - 1]) / parseInt(equaltion[divideFoundIndex + 1])
+                    let result = parseInt(equation[divideFoundIndex - 1]) / parseInt(equation[divideFoundIndex + 1])
                     console.log(Number.isInteger(result))
 
                     // check number is Integer or not and return 
@@ -128,22 +127,22 @@ class Level1 extends React.Component {
                     let parentheses = ['(', ')']
 
                     // checks left and right has any parentheses
-                    if (parentheses.includes(equaltion[divideFoundIndex - 1]) || parentheses.includes(equaltion[divideFoundIndex + 1])) {
+                    if (parentheses.includes(equation[divideFoundIndex - 1]) || parentheses.includes(equation[divideFoundIndex + 1])) {
 
                         // if on the right side is '('
-                        if (equaltion[divideFoundIndex + 1] === parentheses[0]) {
+                        if (equation[divideFoundIndex + 1] === parentheses[0]) {
                             let tempEqaultion = ''
 
-                            //get the part of equaltion in parentheses
-                            for (let index = divideFoundIndex + 1; equaltion.length; index++) {
+                            //get the part of equation in parentheses
+                            for (let index = divideFoundIndex + 1; equation.length; index++) {
 
-                                if (equaltion[index] === parentheses[1]) { //stop when found close parentheses
+                                if (equation[index] === parentheses[1]) { //stop when found close parentheses
 
-                                    tempEqaultion += equaltion[index]
+                                    tempEqaultion += equation[index]
                                     break
                                 } else {
 
-                                    tempEqaultion += equaltion[index]
+                                    tempEqaultion += equation[index]
                                 }
                             }
 
@@ -157,19 +156,19 @@ class Level1 extends React.Component {
                         }
 
                         // if on the left side and before numbers is '('
-                        else if (equaltion[divideFoundIndex - 2] === parentheses[0]) {
+                        else if (equation[divideFoundIndex - 2] === parentheses[0]) {
                             let tempEqaultion = ''
 
-                            //get the part of equaltion in parentheses
-                            for (let index = divideFoundIndex + 1; equaltion.length; index++) {
+                            //get the part of equation in parentheses
+                            for (let index = divideFoundIndex + 1; equation.length; index++) {
 
-                                if (equaltion[index] === parentheses[1]) { //stop when found close parentheses
+                                if (equation[index] === parentheses[1]) { //stop when found close parentheses
 
-                                    tempEqaultion += equaltion[index]
+                                    tempEqaultion += equation[index]
                                     break
                                 } else {
 
-                                    tempEqaultion += equaltion[index]
+                                    tempEqaultion += equation[index]
                                 }
                             }
 
@@ -187,20 +186,19 @@ class Level1 extends React.Component {
                     }
 
                     // if on the left side and before numbers is ')'
-                    else if (equaltion[divideFoundIndex - 1] === parentheses[1]) {
+                    else if (equation[divideFoundIndex - 1] === parentheses[1]) {
                         let tempEqaultion = ''
 
-                        //get the part of equaltion in parentheses
+                        //get the part of equation in parentheses
                         for (let index = divideFoundIndex + 1; 0; index--) {
 
-                            if (equaltion[index] === parentheses[0]) { //stop when found close parentheses
+                            if (equation[index] === parentheses[0]) { //stop when found close parentheses
 
-                                tempEqaultion += equaltion[index]
-                                tempEqaultion
+                                tempEqaultion += equation[index]
                                 break
                             } else {
 
-                                tempEqaultion += equaltion[index]
+                                tempEqaultion += equation[index]
                             }
                         }
 
@@ -216,9 +214,9 @@ class Level1 extends React.Component {
                     }
 
                     // else {
-                    //     equaltion = equaltion.slice(0, indexFoundList) + equaltion.slice(indexFoundList + 1)
+                    //     equation = equation.slice(0, indexFoundList) + equation.slice(indexFoundList + 1)
                     //     indexFoundList = null
-                    //     console.log(equaltion)
+                    //     console.log(equation)
                     //     console.log(false)
                     // }
 
@@ -227,9 +225,9 @@ class Level1 extends React.Component {
 
             }
 
-        } else { // incase of equaltion isn't contain /
+        } else { // incase of equation isn't contain /
 
-            console.log(defaultEqualtion)
+            console.log(defaultEquation)
             return false
         }
     }
@@ -238,14 +236,14 @@ class Level1 extends React.Component {
     delAnswer = async () => {
 
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        let temp = this.state.equaltion
+        let temp = this.state.equation
 
         // check values
-        if (operatorList.includes(this.state.equaltion[this.state.equaltion.length - 1]) || this.state.equaltion.length === 0) {
+        if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
             //delete answer
             temp = await temp.slice(0, -1)
             //setState new answer
-            await this.setState({ equaltion: temp })
+            await this.setState({ equation: temp })
         } else {
             //delete answer
             temp = await temp.slice(0, -1)
@@ -256,23 +254,23 @@ class Level1 extends React.Component {
             elem.removeAttribute("disabled")
 
             //setState new answer and buttonIndex
-            await this.setState({ equaltion: temp, lastButtonIndex: tempIndex })
+            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
         }
 
     }
 
     //get user input answer
     insertAnswer = (event) => {
-        let temp = this.state.equaltion
+        let temp = this.state.equation
         temp = temp + event.target.value
         let elem = event.target
         if (elem.hasAttribute("index")) {
             let indexTemp = [...this.state.lastButtonIndex]
             indexTemp.push(elem.getAttribute("index"))
-            this.setState({ equaltion: temp, lastButtonIndex: indexTemp })
+            this.setState({ equation: temp, lastButtonIndex: indexTemp })
             elem.setAttribute("disabled", true)
         } else {
-            this.setState({ equaltion: temp })
+            this.setState({ equation: temp })
         }
 
     }
@@ -280,9 +278,9 @@ class Level1 extends React.Component {
     //calculate user's equation result and checks with default answer
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/', '(', ')']
-        let tempAns = operatorList.includes(this.state.equaltion.slice(-1)) ? false : await Parser.evaluate(this.state.equaltion)
+        let tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
 
-        if (this.state.equaltion.length >= 6) {
+        if (this.state.equation.length >= 6) {
             if (tempAns === this.state.defaultAnswer) {
                 this.setState({
                     isAnsCorrect: true,
@@ -299,7 +297,7 @@ class Level1 extends React.Component {
                     answer: tempAns
                 })
             }
-        } else if (this.state.equaltion.length === 0) {
+        } else if (this.state.equation.length === 0) {
             this.setState({
                 isAnsCorrect: false,
                 showAnsClass: 'ans-card',
@@ -330,7 +328,7 @@ class Level1 extends React.Component {
 
         //generate default ans
         this.setState({
-            equaltion: '',
+            equation: '',
             respondText: 'คำตอบไม่ถูกต้อง',
             showAnsClass: 'ans-card-inactive',
             isCorrectClass: 'incorrect',
@@ -353,15 +351,15 @@ class Level1 extends React.Component {
 
     // show example of equation to get same result as default answer
     showExample = () => {
-        if (this.state.equaltion === '') {
+        if (this.state.equation === '') {
             this.setState({
                 showAnsClass: 'ans-card',
                 respondText: 'โปรดกรอกสมการ'
             })
-        } else if (this.state.equaltion.length >= 6) {
+        } else if (this.state.equation.length >= 6) {
             this.setState({
                 showAnsClass: 'ans-card',
-                respondText: this.state.defaultEqualtion
+                respondText: this.state.defaultEquation
             })
         }
         else {
@@ -374,7 +372,7 @@ class Level1 extends React.Component {
 
     clearAns = () => {
         this.setState({
-            equaltion: '',
+            equation: '',
             lastButtonIndex: []
         })
         let elem = document.querySelectorAll('button[index]')
@@ -393,7 +391,7 @@ class Level1 extends React.Component {
                 </div>
                 <div className="game-content">
                     <div className="info-text">
-                        <p className="ur-equaltion-text">
+                        <p className="ur-equation-text">
                             สมการของคุณ
                         </p>
                         <p className="ans-text">
@@ -401,7 +399,7 @@ class Level1 extends React.Component {
                         </p>
                     </div>
                     <div className="input-section">
-                        <input type="text" className="equaltionInput" readOnly={true} value={this.state.equaltion} />
+                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} />
                         <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                     </div>
                     <div className="calculator-section">
