@@ -35,7 +35,7 @@
     padding-top: 5rem;
 }
 
-.ur-equaltion-text{
+.ur-equation-text{
     position: relative;
     font-size: 20px;
     text-align: left;
@@ -60,7 +60,7 @@
     align-items: center;
 }
 
-.equaltionInput{
+.equationInput{
     width: 18rem;
     height: 65px;
     border: none;
@@ -239,13 +239,13 @@
     .info-text{
         width: 33vw;
     }
-    .ur-equaltion-text{
+    .ur-equation-text{
         font-size: 25px;
     }
     .input-section{
         margin-bottom: 3rem;
     }
-    .equaltionInput{
+    .equationInput{
         width: 35vw;
     }
     .calculator-section{
