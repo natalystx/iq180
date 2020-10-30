@@ -42,17 +42,17 @@ class Level1 extends React.Component {
             8: 'a*(b*(c-d))',
             9: 'a/(b/(c*d))',
             10: 'a-(b/(c+d))',
-            11: '(a+b)+(c+d)',
+            11: 'a-(b/(c/d))',
             12: '(a-b)-(c+d)',
             13: '(a*b)*(c-d)',
             14: '(a/b)/(c*d)',
             15: '(a*b)/(c+d)',
-            16: '(a+(b+c))+d',
+            16: '(a-(b*c))/d',
             17: '(a-(b-c))+d',
             18: '(a*(b*c))-d',
             19: '(a/(b/c))*d',
             20: '(a-(b/c))*d',
-            21: 'a+((b+c)+d)',
+            21: '(a-b)/(c/d)',
             22: 'a-((b-c)+d)',
             23: 'a*((b*c)-d)',
             24: 'a/((b/c)*d)',
@@ -102,12 +102,9 @@ class Level1 extends React.Component {
     checkDivideResult = async (defaultEquation) => {
         //check equation is contain "/"
         if (defaultEquation.search('/') > -1) {  // incase of equation is contain
-            console.log('yes ' + defaultEquation)
             const marksPos = this.scanDivideMarkPos(defaultEquation)
-            console.log(marksPos)
             return this.splitEquation(marksPos, defaultEquation) ? true : this.doRandomNumbers()
         } else { // incase of equation isn't contain /
-            console.log(defaultEquation)
             return false
         }
     }
@@ -123,22 +120,183 @@ class Level1 extends React.Component {
         return marksPos
     }
 
+    //split equation and check result of value 
     splitEquation = (marksPos, equation) => {
 
-        let isAllResultInt = false
+        let isAllResultInt = []
         marksPos.forEach(pos => {
-            console.log('pos: ' + pos)
             let left = equation[pos - 1]
             let right = equation[pos + 1]
 
+            //left and right are numbers
             if (!isNaN(left) && !isNaN(right)) {
                 let result = parseInt(left) / parseInt(right)
-                console.log(result)
-                isAllResultInt = Number.isInteger(result)
+                isAllResultInt.push(Number.isInteger(result))
+            } 
+            //left and right are parentheses
+            else if (left === ')' && right ==='(') {
+                let leftPart = ''
+                let rightPart = ''
+
+                //get left part
+                for (let index = pos-1; index >= 0; index--) {
+                    if (equation[index] === '(') {
+                        leftPart+=equation[index]
+
+                        let openParathensesCounter = 0
+                        let closeParathensesCounter = 0
+
+                        //check parathenses
+                        for (let index = 0; index < leftPart.length; index++) {
+                            
+
+                            if (leftPart[index] === '(') {
+                                openParathensesCounter++
+                            }
+                            if(leftPart[index] === ')'){
+                                closeParathensesCounter++
+                            }
+                            
+                            
+                        }
+
+                        if(openParathensesCounter === closeParathensesCounter){
+                            break
+                        }
+                    } else{
+                        leftPart+=equation[index]
+                    }
+                    
+                }
+
+                //get right part
+                for (let index = pos+1; index < equation.length; index++) {
+                    if (equation[index] === ')') {
+                        rightPart+=equation[index]
+
+                        let openParathensesCounter = 0
+                        let closeParathensesCounter = 0
+
+                         //check parathenses
+                         for (let index = 0; index < rightPart.length; index++) {
+                            
+
+                            if (rightPart[index] === '(') {
+                                openParathensesCounter++
+                            }
+                            if(rightPart[index] === ')'){
+                                closeParathensesCounter++
+                            }
+                            
+                            
+                        }
+
+                        if(openParathensesCounter === closeParathensesCounter){
+                            break
+                        }
+                        
+                    } else{
+                        rightPart+=equation[index]
+                    }
+                    
+                }
+
+                let equationPart = leftPart.split("").reverse().join("") + '/' + rightPart
+                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+
+
+            }
+            //left or right is parentheses
+            else if(left === ')' || right ==='('){
+                
+             if(left === ')'){
+                let leftPart = ''
+                    //get left part
+                for (let index = pos-1; index >= 0; index--) {
+                    if (equation[index] === '(') {
+                        leftPart+=equation[index]
+                        let openParathensesCounter = 0
+                        let closeParathensesCounter = 0
+
+                        //check parathenses
+                        for (let index = 0; index < leftPart.length; index++) {
+                            
+
+                            if (leftPart[index] === '(') {
+                                openParathensesCounter++
+                            }
+                            if(leftPart[index] === ')'){
+                                closeParathensesCounter++
+                            }
+                            
+                            
+                        }
+
+                        if(openParathensesCounter === closeParathensesCounter){
+                            break
+                        }
+                        
+                    } else{
+                        leftPart+=equation[index]
+                    }
+                    
+                }
+
+                let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos+1]
+                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+
+             }
+
+             if(right ==='('){
+                let rightPart = ''
+                  //get right part
+                for (let index = pos+1; index < equation.length; index++) {
+                    if (equation[index] === ')') {
+                        rightPart+=equation[index]
+
+                        let openParathensesCounter = 0
+                        let closeParathensesCounter = 0
+
+                        //check parathenses
+                        for (let index = 0; index < rightPart.length; index++) {
+                            
+
+                            if (rightPart[index] === '(') {
+                                openParathensesCounter++
+                            }
+                            if(rightPart[index] === ')'){
+                                closeParathensesCounter++
+                            }
+                            
+                            
+                        }
+
+                        if(openParathensesCounter === closeParathensesCounter){
+                            break
+                        }
+                    } else{
+                        rightPart+=equation[index]
+                    }
+                    
+                }
+
+                let equationPart = equation[pos-1] + '/' + rightPart
+                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+             }
+ 
             }
         })
 
-        return isAllResultInt
+        //check all is Integer
+        let finalResult = false
+        for (let index = 0; index < isAllResultInt.length; index++) {
+            
+            finalResult = index > 0 ? isAllResultInt[index] && finalResult : isAllResultInt[index]
+            
+        }
+
+        //return result
+        return finalResult
 
     }
 
