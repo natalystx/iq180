@@ -84,6 +84,8 @@ class Level1 extends React.Component {
                     defaultAnswer: defaultAns,
                     defaultEquation: defaultEquation
                 })
+                console.log(this.state.defaultAnswer)
+                console.log(this.state.defaultEquation)
             } else {
                 await this.setState({
                     defaultAnswer: defaultAns,
@@ -132,73 +134,73 @@ class Level1 extends React.Component {
             if (!isNaN(left) && !isNaN(right)) {
                 let result = parseInt(left) / parseInt(right)
                 isAllResultInt.push(Number.isInteger(result))
-            } 
+            }
             //left and right are parentheses
-            else if (left === ')' && right ==='(') {
+            else if (left === ')' && right === '(') {
                 let leftPart = ''
                 let rightPart = ''
 
                 //get left part
-                for (let index = pos-1; index >= 0; index--) {
+                for (let index = pos - 1; index >= 0; index--) {
                     if (equation[index] === '(') {
-                        leftPart+=equation[index]
+                        leftPart += equation[index]
 
                         let openParathensesCounter = 0
                         let closeParathensesCounter = 0
 
                         //check parathenses
                         for (let index = 0; index < leftPart.length; index++) {
-                            
+
 
                             if (leftPart[index] === '(') {
                                 openParathensesCounter++
                             }
-                            if(leftPart[index] === ')'){
+                            if (leftPart[index] === ')') {
                                 closeParathensesCounter++
                             }
-                            
-                            
+
+
                         }
 
-                        if(openParathensesCounter === closeParathensesCounter){
+                        if (openParathensesCounter === closeParathensesCounter) {
                             break
                         }
-                    } else{
-                        leftPart+=equation[index]
+                    } else {
+                        leftPart += equation[index]
                     }
-                    
+
                 }
 
                 //get right part
-                for (let index = pos+1; index < equation.length; index++) {
+                for (let index = pos + 1; index < equation.length; index++) {
                     if (equation[index] === ')') {
-                        rightPart+=equation[index]
+                        rightPart += equation[index]
 
                         let openParathensesCounter = 0
                         let closeParathensesCounter = 0
 
-                         //check parathenses
-                         for (let index = 0; index < rightPart.length; index++) {
-                            
+                        //check parathenses
+                        for (let index = 0; index < rightPart.length; index++) {
+
 
                             if (rightPart[index] === '(') {
                                 openParathensesCounter++
                             }
-                            if(rightPart[index] === ')'){
+                            if (rightPart[index] === ')') {
                                 closeParathensesCounter++
                             }
-                            
-                            
+
+
                         }
 
-                        if(openParathensesCounter === closeParathensesCounter){
+                        if (openParathensesCounter === closeParathensesCounter) {
                             break
                         }
-                        
-                    } else{
-                        rightPart+=equation[index]
+
+                    } else {
+                        rightPart += equation[index]
                     }
-                    
+
                 }
 
                 let equationPart = leftPart.split("").reverse().join("") + '/' + rightPart
@@ -207,92 +209,92 @@ class Level1 extends React.Component {
 
             }
             //left or right is parentheses
-            else if(left === ')' || right ==='('){
-                
-             if(left === ')'){
-                let leftPart = ''
+            else if (left === ')' || right === '(') {
+
+                if (left === ')') {
+                    let leftPart = ''
                     //get left part
-                for (let index = pos-1; index >= 0; index--) {
-                    if (equation[index] === '(') {
-                        leftPart+=equation[index]
-                        let openParathensesCounter = 0
-                        let closeParathensesCounter = 0
+                    for (let index = pos - 1; index >= 0; index--) {
+                        if (equation[index] === '(') {
+                            leftPart += equation[index]
+                            let openParathensesCounter = 0
+                            let closeParathensesCounter = 0
 
-                        //check parathenses
-                        for (let index = 0; index < leftPart.length; index++) {
-                            
+                            //check parathenses
+                            for (let index = 0; index < leftPart.length; index++) {
 
-                            if (leftPart[index] === '(') {
-                                openParathensesCounter++
+
+                                if (leftPart[index] === '(') {
+                                    openParathensesCounter++
+                                }
+                                if (leftPart[index] === ')') {
+                                    closeParathensesCounter++
+                                }
+
+
                             }
-                            if(leftPart[index] === ')'){
-                                closeParathensesCounter++
+
+                            if (openParathensesCounter === closeParathensesCounter) {
+                                break
                             }
-                            
-                            
+
+                        } else {
+                            leftPart += equation[index]
                         }
 
-                        if(openParathensesCounter === closeParathensesCounter){
-                            break
-                        }
-                        
-                    } else{
-                        leftPart+=equation[index]
                     }
-                    
+
+                    let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos + 1]
+                    isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+
                 }
 
-                let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos+1]
-                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                if (right === '(') {
+                    let rightPart = ''
+                    //get right part
+                    for (let index = pos + 1; index < equation.length; index++) {
+                        if (equation[index] === ')') {
+                            rightPart += equation[index]
 
-             }
+                            let openParathensesCounter = 0
+                            let closeParathensesCounter = 0
 
-             if(right ==='('){
-                let rightPart = ''
-                  //get right part
-                for (let index = pos+1; index < equation.length; index++) {
-                    if (equation[index] === ')') {
-                        rightPart+=equation[index]
+                            //check parathenses
+                            for (let index = 0; index < rightPart.length; index++) {
 
-                        let openParathensesCounter = 0
-                        let closeParathensesCounter = 0
 
-                        //check parathenses
-                        for (let index = 0; index < rightPart.length; index++) {
-                            
+                                if (rightPart[index] === '(') {
+                                    openParathensesCounter++
+                                }
+                                if (rightPart[index] === ')') {
+                                    closeParathensesCounter++
+                                }
 
-                            if (rightPart[index] === '(') {
-                                openParathensesCounter++
+
                             }
-                            if(rightPart[index] === ')'){
-                                closeParathensesCounter++
+
+                            if (openParathensesCounter === closeParathensesCounter) {
+                                break
                             }
-                            
-                            
+                        } else {
+                            rightPart += equation[index]
                         }
 
-                        if(openParathensesCounter === closeParathensesCounter){
-                            break
-                        }
-                    } else{
-                        rightPart+=equation[index]
                     }
-                    
+
+                    let equationPart = equation[pos - 1] + '/' + rightPart
+                    isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
                 }
 
-                let equationPart = equation[pos-1] + '/' + rightPart
-                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
-             }
- 
             }
         })
 
         //check all is Integer
         let finalResult = false
         for (let index = 0; index < isAllResultInt.length; index++) {
-            
+
             finalResult = index > 0 ? isAllResultInt[index] && finalResult : isAllResultInt[index]
-            
+
         }
 
         //return result
@@ -343,41 +345,90 @@ class Level1 extends React.Component {
 
     }
 
+    //checkparatheses
+    checkParatheses = (eqaution) => {
+
+        let openParathensesCounter = 0
+        let closeParathensesCounter = 0
+
+        //check parathenses
+        for (let index = 0; index < eqaution.length; index++) {
+
+
+            if (eqaution[index] === '(') {
+                openParathensesCounter++
+            }
+            if (eqaution[index] === ')') {
+                closeParathensesCounter++
+            }
+
+
+        }
+
+        if (openParathensesCounter === closeParathensesCounter) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
     //calculate user's equation result and checks with default answer
     calAns = async () => {
-        const operatorList = ['-', '+', '*', '/', '(', ')']
-        let tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
+        const operatorList = ['-', '+', '*', '/']
+        let tempAns
 
-        if (this.state.equation.length >= 6) {
-            if (tempAns === this.state.defaultAnswer) {
+        if (this.checkParatheses(this.state.equation)) {
+            tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
+
+            if (this.state.equation.length >= 6) {
+                if (tempAns === this.state.defaultAnswer) {
+                    this.setState({
+                        isAnsCorrect: true,
+                        showAnsClass: 'ans-card',
+                        respondText: 'คำตอบถูกต้อง',
+                        isCorrectClass: 'correct',
+                        answer: tempAns
+                    })
+                } else {
+                    this.setState({
+                        isAnsCorrect: false,
+                        showAnsClass: 'ans-card',
+                        respondText: 'คำตอบไม่ถูกต้อง',
+                        isCorrectClass: 'incorrect',
+                        answer: tempAns
+                    })
+                }
+            } else if (this.state.equation.length === 0) {
                 this.setState({
-                    isAnsCorrect: true,
+                    isAnsCorrect: false,
                     showAnsClass: 'ans-card',
-                    respondText: 'คำตอบถูกต้อง',
-                    isCorrectClass: 'correct',
-                    answer: tempAns
+                    isCorrectClass: 'incorrect',
+                    respondText: 'โปรดกรอกสมการ'
                 })
             } else {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
-                    respondText: 'คำตอบไม่ถูกต้อง',
-                    answer: tempAns
+                    isCorrectClass: 'incorrect',
+                    respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
                 })
             }
-        } else if (this.state.equation.length === 0) {
-            this.setState({
-                isAnsCorrect: false,
-                showAnsClass: 'ans-card',
-                respondText: 'โปรดกรอกสมการ'
-            })
+
+            console.log(tempAns)
         } else {
             this.setState({
                 isAnsCorrect: false,
                 showAnsClass: 'ans-card',
-                respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
+                respondText: 'โปรดใส่วงเล็บให้ครบถ้วน',
+                isCorrectClass: 'incorrect',
+                answer: 0
             })
         }
+
+
+
+
 
     }
 
@@ -441,7 +492,8 @@ class Level1 extends React.Component {
     clearAns = () => {
         this.setState({
             equation: '',
-            lastButtonIndex: []
+            lastButtonIndex: [],
+            showAnsClass: 'ans-card-inactive',
         })
         let elem = document.querySelectorAll('button[index]')
         elem.forEach(item => {
