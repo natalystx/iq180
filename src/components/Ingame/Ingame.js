@@ -1,8 +1,9 @@
-import React from 'react';
-import './Ingame.css';
-import { Link } from 'react-router-dom';
-import Level1 from '../Level1/Level1';
+import React from 'react'
+import './Ingame.css'
+import { Link } from 'react-router-dom'
+import Level1 from '../Level1/Level1'
 import Level2 from '../Level2/Level2'
+import Level3 from '../Level3/Level3'
 
 class Ingame extends React.Component {
     constructor(props) {
@@ -23,7 +24,8 @@ class Ingame extends React.Component {
         // Levels of game components store
         const levelComponents = {
             1: <Level1 />,
-            2: <Level2 />
+            2: <Level2 />,
+            3: <Level3 />
         }
 
         return (
@@ -38,8 +40,8 @@ class Ingame extends React.Component {
                     {levelComponents[this.state.level]}
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default Ingame;
+export default Ingame
