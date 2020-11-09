@@ -1,0 +1,263 @@
+.re-random-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.re-random-btn{
+    width: 95px;
+    height: 40px;
+    background-color: #99C2FF;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    color: #ffffff;
+    font-size: 18;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+.game-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5rem;
+}
+
+.ur-equation-text{
+    position: relative;
+    font-size: 20px;
+    text-align: left;
+    font-weight: 300;
+    color: #ffffff;
+  left: -3rem;
+}
+
+.ans-text{
+    position: relative;
+    font-size: 25px;
+    text-align: right;
+    font-weight: 300;
+    color: #ffffff;
+    right: -3rem;
+}
+
+.input-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.equationInput{
+    width: 18rem;
+    height: 65px;
+    border: none;
+    border-radius: 20px 0px 0px 20px;
+    outline: none;
+    margin-top: 0.5rem;
+    color: #6c6c6c;
+    background-color: #ffffff;
+    font-weight: 400;
+    font-size: 25px;
+    padding-left: 1rem;
+}
+
+.del-btn{
+    margin-top: 0.5rem;
+    width: 65px;
+    height: 65px;
+    border: none;
+    background-color: #FB8878;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 0px 20px 20px 0px;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: manipulation;
+}
+
+.del-icon{
+    width: 30px;
+    height: 30px;
+}
+
+.calculator-section{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    justify-content: center;
+    width: 80vw;
+}
+
+.number-btn{
+    cursor: pointer;
+    width: 56px;
+    height: 56px;
+    border: none;
+    background-color: #86E4B7;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 100%;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    outline: none;
+    text-align: center;
+}
+.number-btn:disabled{
+    background-color: #4d4d4d;
+    outline: none;
+}
+
+.number-btn:active{
+    background-color: #86a4e4;
+    outline: none;
+}
+
+.operator-btn:active{
+    background-color: #86a4e4;
+    outline: none;
+}
+
+.operator-btn{
+    cursor: pointer;
+    width: 56px;
+    height: 56px;
+    border: none;
+    background-color: #FB8878;
+    font-size: 20px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 10px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+.submit-btn{
+    width: 9.6rem;
+    height: 56px;
+    border: none;
+    border-radius: 20px;
+    background-color: #4EF0C9;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    outline: none;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+}
+
+.clear-btn{
+    width: 9.6rem;
+    height: 56px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0614e;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    outline: none;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+}
+
+.show-ans-btn{
+    width: 21rem;
+    height: 56px;
+    border: none;
+    border-radius: 20px;
+    background-color: #99C2FF;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    outline: none;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1.5rem;
+}
+
+.ans-card{
+    width: 80vw;
+    height: 160px;
+    border: none;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: 400;
+    margin-top: 1rem;
+}
+
+.incorrect{
+    background-color: #FF9999;
+}
+
+.correct{
+    background-color: #86E4B7;
+}
+
+.ans-card-inactive{
+    display: none;
+}
+
+@media only screen and (min-width: 768px){
+    .calculator-section{
+        width: 60vw;
+    }
+}
+
+@media only screen and (min-width: 1024px){
+    .calculator-section{
+        width: 60vw;
+    }
+}
+
+@media only screen and (min-width: 1366px){
+    .info-text{
+        width: 33vw;
+    }
+    .ur-equation-text{
+        font-size: 25px;
+    }
+    .input-section{
+        margin-bottom: 3rem;
+    }
+    .equationInput{
+        width: 35vw;
+    }
+    .calculator-section{
+        width: 25vw;
+    }
+    .show-ans-btn{
+        margin-top: 1rem;
+    }
+    .re-random-btn{
+        width: 150px;
+        height: 50px;
+        font-size: 20px;
+    }
+}

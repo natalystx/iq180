@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Level1 from '../Level1/Level1'
 import Level2 from '../Level2/Level2'
 import Level3 from '../Level3/Level3'
+import Level4 from '../Level4/Level4'
 
 class Ingame extends React.Component {
     constructor(props) {
@@ -25,7 +26,8 @@ class Ingame extends React.Component {
         const levelComponents = {
             1: <Level1 />,
             2: <Level2 />,
-            3: <Level3 />
+            3: <Level3 />,
+            4: <Level4 />
         }
 
         return (
