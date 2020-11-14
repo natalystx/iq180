@@ -37,55 +37,56 @@ class Level5 extends React.Component {
             3: '(nthRoot(C)^A)-(D^B)',
             4: '(nthRoot(A^B)/C)+D',
             5: '(nthRoot(A^B)+C)-D',
-            6: '(b^c-a)*d',
-            7: '(c^a+b)*d',
-            8: '(c^b-a)*d',
-            9: '(c^d*a)^b',
-            10: '(d^a+b)*c',
-            11: '(d^b-a)*c',
-            12: '(d^c/a)/b',
-            13: '(a*c)/d^b',
-            14: '(a*b)+d^c',
-            15: '(a*b)-d^c',
-            16: '(b*c)-d^a',
-            17: '(a^b+c)-d',
-            18: '(a^b+c)*d',
-            19: '(a^b+c)/d',
-            20: '(a-(b/c))*d',
-            21: '(a^b-c)+d',
-            22: '(a*c^b)+d',
-            23: '(a+c)+d^b',
-            24: '(a+c)*d^b',
-            25: '(a+c)/d^b',
-            26: 'a^b+(c/d)',
-            27: 'a-(c^b*d)',
-            28: '(a/b^c)*d',
-            29: '(a*b)/d^c',
-            30: 'a^c/(b+d)',
-            31: 'a*(b^c/d)',
-            32: '(a*b^c)+d',
-            33: '(a-b)*d^c',
-            34: 'a^d*(b/d)',
-            35: 'a/(b^c+d)',
-            36: '(b/c^a)*d',
-            37: '(b+c)*d^a',
-            38: 'b^a-(c*d)',
-            39: 'b*(c^a/d)',
-            40: 'c^(a/b)+d',
-            41: '(c/d)^(a-b)',
-            42: 'b^(a/c)+d',
-            43: '(b*d)^(a/c)',
-            44: 'c^(a*b)+d',
-            45: 'd^(a/(b-c))',
-            46: 'c^((a/b)*d)',
-            47: 'c^(a/(b*d))',
-            48: 'a^((b*c)+d)',
-            49: 'a^(b/(c-d))',
-            50: 'a^(b+(c/d))'
+            6: '(nthRoot(C)^(A+B))*D',
+            7: '(nthRoot(C)^(A-B))/D',
+            8: '(C^(A+B))/(nthRoot(D))',
+            9: '(C^(A/B))-(nthRoot(D))',
+            10: 'C^((nthRoot(A))/B)-D',
+            11: 'C^((nthRoot(A))+B)/D',
+            12: 'C^((nthRoot(A))-B)*D',
+            13: 'C^(A-(nthRoot(B)))*D',
+            14: 'C^(A/(nthRoot(B)))+D',
+            15: 'C^(A+(nthRoot(B)))-D',
+            16: 'C^(nthRoot(A-B))*D',
+            17: 'C^(nthRoot(A/B))+D',
+            18: 'C^(nthRoot(A*B))-D',
+            19: 'nthRoot((C^(A-B))+D)',
+            20: 'nthRoot((C^(A/B))*D)',
+            21: 'nthRoot((C^(A*B))+D)',
+            22: 'nthRoot(C)/(D^(A-B))',
+            23: 'nthRoot(C)-(D^(A*B))',
+            24: 'nthRoot(C)+(D^(A/B))',
+            25: 'C+((nthRoot(D))^(A/B))',
+            26: 'C/((nthRoot(D))^(A-B))',
+            27: 'C*((nthRoot(D))^(A/B))',
+            28: 'C*(D^((nthRoot(A))/B))',
+            29: 'C+(D^((nthRoot(A))-B))',
+            30: 'C/(D^((nthRoot(A))/B))',
+            31: 'C+(D^((nthRoot(A))*B))',
+            32: 'C*(D^(A/(nthRoot(B))))',
+            33: 'C*(D^(A-(nthRoot(B))))',
+            34: 'C+(D^(A-(nthRoot(B))))',
+            35: 'C*(D^(nthRoot(A/B)))',
+            36: 'C/(D^(nthRoot(A*B)))',
+            37: 'C+(D^(nthRoot(A-B)))',
+            38: 'nthRoot(C*(D^(A/B)))',
+            39: 'nthRoot(C+(D^(A-B)))',
+            40: 'nthRoot(C/(D^(A/B)))',
+            41: 'nthRoot(D)^((A*B)-C)',
+            42: 'nthRoot(D)^((A*B)/C)',
+            43: 'nthRoot(D)^((A-B)+C)',
+            44: 'D^(((nthRoot(A))-B)+C)',
+            45: 'D^(((nthRoot(A))/B)*C)',
+            46: 'D^(((nthRoot(A))/B)+C)',
+            47: 'D^((A-(nthRoot(B)))+C)',
+            48: 'D^((A*(nthRoot(B)))/C)',
+            49: 'D^((A-(nthRoot(B)))-C)',
+            50: 'D^((A+(nthRoot(B)))/C)'
         }
 
         //random one equation for list, 25 means the total numbers of list 
-        let randomIndex = await Math.floor(Math.random() * 5)
+        let randomIndex = await Math.floor(Math.random() * 50)
+
 
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
         let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
@@ -97,35 +98,79 @@ class Level5 extends React.Component {
         defaultEquation = await defaultEquation.split('C').join(this.state.numbers['c'])
         defaultEquation = await defaultEquation.split('D').join(this.state.numbers['d'])
 
-        // Parse string to mathmatic equation for computable 
-        let defaultAns = Parser.evaluate(defaultEquation)
+        console.log('index: ' + randomIndex)
+        console.log('equation: ' + defaultEquation)
 
-        //check default answer is 2 digits
-        if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
-            await this.doRandomNumbers()
-        } else {
+        // check root condition and wait for result 
+        if (await this.checkRootValue(defaultEquation)) {
+            // Parse string to mathmatic equation for computable 
+            let defaultAns = Parser.evaluate(defaultEquation)
 
-            if (this.checkDivideResult(defaultEquation)) {
-                await this.setState({
-                    defaultAnswer: defaultAns,
-                    defaultEquation: defaultEquation
-                })
-                console.log(this.state.defaultAnswer)
-                console.log(this.state.defaultEquation)
+            //check default answer is 2 digits
+            if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
+                await this.doRandomNumbers()
             } else {
-                await this.setState({
-                    defaultAnswer: defaultAns,
-                    defaultEquation: defaultEquation
-                })
+
+                if (this.checkDivideResult(defaultEquation)) {
+                    await this.setState({
+                        defaultAnswer: defaultAns,
+                        defaultEquation: defaultEquation
+                    })
+                    console.log('equation: ' + this.state.defaultEquation)
+                    console.log('answer: ' + this.state.defaultAnswer)
+                } else {
+                    await this.setState({
+                        defaultAnswer: defaultAns,
+                        defaultEquation: defaultEquation
+                    })
+
+                }
+
+
 
             }
-            console.log('index: ' + randomIndex)
-            console.log('equation: ' + this.state.defaultEquation)
-            console.log('answer: ' + this.state.defaultAnswer)
-
+        } else { // if root value it doesn't get on conditional rerandom numbers and equation 
+            await this.doRandomNumbers() //random number then sync to equation's random function
         }
 
 
+    }
+
+    //check inside root value
+    checkRootValue = (defaultEquation) => {
+
+        const startIndex = defaultEquation.indexOf('nthRoot') //find start index of root 
+        let rootPart = '' // set default value of rootPart 
+        let openParathensesCounter = 0 // set default value of openParathensesCounter 
+        let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
+        let insideRootCal = '' // set default value of insideRootCal 
+
+        //loop to get a part of root in equation
+        for (let index = startIndex; index < defaultEquation.length; index++) {
+            if (defaultEquation[index] === '(') { // count open parathenses 
+                rootPart += defaultEquation[index] // store value in index into rootPart
+                openParathensesCounter++ // store openParathensesCounter
+            } else if (defaultEquation[index] === ')') { // close open parathenses 
+                rootPart += defaultEquation[index] // store value in index into rootPart
+                closeParathensesCounter++ // close openParathensesCounter
+
+                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
+                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
+                    insideRootCal = rootPart.replace('nthRoot', '') //get value inside parathenses of root 
+                    break //break the loop 
+                }
+            } else {
+                rootPart += defaultEquation[index] // store openParathensesCounter
+            }
+
+        }
+        const insideRootValue = Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
+
+        if (insideRootValue >= 0) { // check insideRootValue is >= 0
+            return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
+        } else {
+            return false // incase insideRootValue < 0 get false
+        }
     }
 
     checkDivideResult = async (defaultEquation) => {
@@ -345,7 +390,7 @@ class Level5 extends React.Component {
             await this.setState({ equation: temp })
         } else if (this.state.equation[this.state.equation.length - 1] === 't') {
             //delete answer
-            temp = await temp.slice(0, -8)
+            temp = await temp.replace('nthRoot', '')
             //remove disable button
             let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
             let tempIndex = this.state.lastButtonIndex
@@ -419,43 +464,53 @@ class Level5 extends React.Component {
         let tempAns
 
         if (this.checkParatheses(this.state.equation)) {
-            tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
-
-            if (this.state.equation.length >= 6) {
-                if (tempAns === this.state.defaultAnswer) {
-                    this.setState({
-                        isAnsCorrect: true,
-                        showAnsClass: 'ans-card',
-                        respondText: 'คำตอบถูกต้อง',
-                        isCorrectClass: 'correct',
-                        answer: tempAns
-                    })
-                } else {
+            if (await this.checkRootValue(this.state.equation)) {
+                tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
+                console.log(tempAns)
+                if (this.state.equation.length >= 6) {
+                    if (tempAns === this.state.defaultAnswer) {
+                        this.setState({
+                            isAnsCorrect: true,
+                            showAnsClass: 'ans-card',
+                            respondText: 'คำตอบถูกต้อง',
+                            isCorrectClass: 'correct',
+                            answer: tempAns
+                        })
+                    } else {
+                        this.setState({
+                            isAnsCorrect: false,
+                            showAnsClass: 'ans-card',
+                            respondText: 'คำตอบไม่ถูกต้อง',
+                            isCorrectClass: 'incorrect',
+                            answer: tempAns
+                        })
+                    }
+                } else if (this.state.equation.length === 0) {
                     this.setState({
                         isAnsCorrect: false,
                         showAnsClass: 'ans-card',
-                        respondText: 'คำตอบไม่ถูกต้อง',
                         isCorrectClass: 'incorrect',
-                        answer: tempAns
+                        respondText: 'โปรดกรอกสมการ'
                     })
                 }
-            } else if (this.state.equation.length === 0) {
-                this.setState({
-                    isAnsCorrect: false,
-                    showAnsClass: 'ans-card',
-                    isCorrectClass: 'incorrect',
-                    respondText: 'โปรดกรอกสมการ'
-                })
+                else {
+                    this.setState({
+                        isAnsCorrect: false,
+                        showAnsClass: 'ans-card',
+                        isCorrectClass: 'incorrect',
+                        respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
+                    })
+                }
             } else {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
+                    respondText: 'ค่าในเครื่องหมายรูทไม่สามารถติดลบได้และเป็นจำนวนเต็มเท่านั้น',
                     isCorrectClass: 'incorrect',
-                    respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
+                    answer: 0
                 })
             }
 
-            console.log(tempAns)
         } else {
             this.setState({
                 isAnsCorrect: false,
