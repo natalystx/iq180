@@ -32,65 +32,96 @@ class Level5 extends React.Component {
 
         //add equation into the list 
         let equationList = {
-            1: '(nthRoot(C)^A)*(D^B)',
-            2: '(nthRoot(C)^A)/(D^B)',
-            3: '(nthRoot(C)^A)-(D^B)',
-            4: '(nthRoot(A^B)/C)+D',
-            5: '(nthRoot(A^B)+C)-D',
-            6: '(nthRoot(C)^(A+B))*D',
-            7: '(nthRoot(C)^(A-B))/D',
-            8: '(C^(A+B))/(nthRoot(D))',
-            9: '(C^(A/B))-(nthRoot(D))',
-            10: 'C^((nthRoot(A))/B)-D',
-            11: 'C^((nthRoot(A))+B)/D',
-            12: 'C^((nthRoot(A))-B)*D',
-            13: 'C^(A-(nthRoot(B)))*D',
-            14: 'C^(A/(nthRoot(B)))+D',
-            15: 'C^(A+(nthRoot(B)))-D',
-            16: 'C^(nthRoot(A-B))*D',
-            17: 'C^(nthRoot(A/B))+D',
-            18: 'C^(nthRoot(A*B))-D',
-            19: 'nthRoot((C^(A-B))+D)',
-            20: 'nthRoot((C^(A/B))*D)',
-            21: 'nthRoot((C^(A*B))+D)',
-            22: 'nthRoot(C)/(D^(A-B))',
-            23: 'nthRoot(C)-(D^(A*B))',
-            24: 'nthRoot(C)+(D^(A/B))',
-            25: 'C+((nthRoot(D))^(A/B))',
-            26: 'C/((nthRoot(D))^(A-B))',
-            27: 'C*((nthRoot(D))^(A/B))',
-            28: 'C*(D^((nthRoot(A))/B))',
-            29: 'C+(D^((nthRoot(A))-B))',
-            30: 'C/(D^((nthRoot(A))/B))',
-            31: 'C+(D^((nthRoot(A))*B))',
-            32: 'C*(D^(A/(nthRoot(B))))',
-            33: 'C*(D^(A-(nthRoot(B))))',
-            34: 'C+(D^(A-(nthRoot(B))))',
-            35: 'C*(D^(nthRoot(A/B)))',
-            36: 'C/(D^(nthRoot(A*B)))',
-            37: 'C+(D^(nthRoot(A-B)))',
-            38: 'nthRoot(C*(D^(A/B)))',
-            39: 'nthRoot(C+(D^(A-B)))',
-            40: 'nthRoot(C/(D^(A/B)))',
-            41: 'nthRoot(D)^((A*B)-C)',
-            42: 'nthRoot(D)^((A*B)/C)',
-            43: 'nthRoot(D)^((A-B)+C)',
-            44: 'D^(((nthRoot(A))-B)+C)',
-            45: 'D^(((nthRoot(A))/B)*C)',
-            46: 'D^(((nthRoot(A))/B)+C)',
-            47: 'D^((A-(nthRoot(B)))+C)',
-            48: 'D^((A*(nthRoot(B)))/C)',
-            49: 'D^((A-(nthRoot(B)))-C)',
-            50: 'D^((A+(nthRoot(B)))/C)'
+            1: '(√(C)^A)*(D^B)',
+            2: '(√(C)^A)/(D^B)',
+            3: '(√(C)^A)-(D^B)',
+            4: '(√(A^B)/C)+D',
+            5: '(√(A^B)+C)-D',
+            6: '(√(C)^(A+B))*D',
+            7: '(√(C)^(A-B))/D',
+            8: '(C^(A+B))/(√(D))',
+            9: '(C^(A/B))-(√(D))',
+            10: 'C^((√(A))/B)-D',
+            11: 'C^((√(A))+B)/D',
+            12: 'C^((√(A))-B)*D',
+            13: 'C^(A-(√(B)))*D',
+            14: 'C^(A/(√(B)))+D',
+            15: 'C^(A+(√(B)))-D',
+            16: 'C^(√(A-B))*D',
+            17: 'C^(√(A/B))+D',
+            18: 'C^(√(A*B))-D',
+            19: '√((C^(A-B))+D)',
+            20: '√((C^(A/B))*D)',
+            21: '√((C^(A*B))+D)',
+            22: '√(C)/(D^(A-B))',
+            23: '√(C)-(D^(A*B))',
+            24: '√(C)+(D^(A/B))',
+            25: 'C+((√(D))^(A/B))',
+            26: 'C/((√(D))^(A-B))',
+            27: 'C*((√(D))^(A/B))',
+            28: 'C*(D^((√(A))/B))',
+            29: 'C+(D^((√(A))-B))',
+            30: 'C/(D^((√(A))/B))',
+            31: 'C+(D^((√(A))*B))',
+            32: 'C*(D^(A/(√(B))))',
+            33: 'C*(D^(A-(√(B))))',
+            34: 'C+(D^(A-(√(B))))',
+            35: 'C*(D^(√(A/B)))',
+            36: 'C/(D^(√(A*B)))',
+            37: 'C+(D^(√(A-B)))',
+            38: '√(C*(D^(A/B)))',
+            39: '√(C+(D^(A-B)))',
+            40: '√(C/(D^(A/B)))',
+            41: '√(D)^((A*B)-C)',
+            42: '√(D)^((A*B)/C)',
+            43: '√(D)^((A-B)+C)',
+            44: 'D^(((√(A))-B)+C)',
+            45: 'D^(((√(A))/B)*C)',
+            46: 'D^(((√(A))/B)+C)',
+            47: 'D^((A-(√(B)))+C)',
+            48: 'D^((A*(√(B)))/C)',
+            49: 'D^((A-(√(B)))-C)',
+            50: 'D^((A+(√(B)))/C)',
+            51: '(√(A^B)/C)*D',
+            52: '(√(A^B)-C)+D',
+            53: '((A^B)-(√(C)))+D',
+            54: '((A^B)/(√(C)))*D',
+            55: '√(A^B-C)*D',
+            56: '√((A^B)/C)*D',
+            57: '√((A^B)/C*D)',
+            58: '√((A^B)-C*D)',
+            59: '(A*(√(B)))/(C+D)',
+            60: '(√(A)/B)/(C+D)',
+            61: '(√(A/B))+(C+D)',
+            62: '√(A,B)+C-D',
+            63: 'A/(√(C,B))+D',
+            64: '(A/C)-(√(D,B))',
+            65: '√(A,B)*(C/D)',
+            66: 'A/(√(C,B)*D)',
+            67: 'A/(C*√(D,B))',
+            68: '√(A/C,B)*D',
+            69: 'A/(√(C*D,B))',
+            70: '√(A*(C/D),B)',
+            71: '√(C,(A*B))/(D)',
+            72: 'C*(√(D,(A+B)))',
+            73: '√(D,((A/B)+C))',
+            74: '√(D,(A-(B/C)))',
+            75: '√(C,D^(A+B))',
+            76: '√((A+C),B)/D',
+            77: '√(A+(C*D),B)',
+            78: '√(D,((A/B)+C))',
+            79: 'C^(√((A/B),D))',
+            80: 'C^(√(A/B,D))'
         }
 
         //random one equation for list, 25 means the total numbers of list 
-        let randomIndex = await Math.floor(Math.random() * 50)
+        let randomIndex = await Math.floor(Math.random() * 80)
 
 
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
-        let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
+        let defaultEquation = randomIndex === 0 ? await equationList[randomIndex + 1] : await equationList[randomIndex]
 
+        console.log('index: ' + randomIndex)
 
         //split equation and replace all a,b,c,d with numbers as same index name
         defaultEquation = await defaultEquation.split('A').join(this.state.numbers['a'])
@@ -98,20 +129,20 @@ class Level5 extends React.Component {
         defaultEquation = await defaultEquation.split('C').join(this.state.numbers['c'])
         defaultEquation = await defaultEquation.split('D').join(this.state.numbers['d'])
 
-        console.log('index: ' + randomIndex)
-        console.log('equation: ' + defaultEquation)
 
+
+        const tempDefaultEquation = defaultEquation.replace('√', 'nthRoot')
         // check root condition and wait for result 
-        if (await this.checkRootValue(defaultEquation)) {
+        if (await this.checkRootValue(tempDefaultEquation)) {
             // Parse string to mathmatic equation for computable 
-            let defaultAns = Parser.evaluate(defaultEquation)
+            let defaultAns = Parser.evaluate(tempDefaultEquation)
 
             //check default answer is 2 digits
             if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
                 await this.doRandomNumbers()
             } else {
 
-                if (this.checkDivideResult(defaultEquation)) {
+                if (this.checkDivideResult(tempDefaultEquation)) {
                     await this.setState({
                         defaultAnswer: defaultAns,
                         defaultEquation: defaultEquation
@@ -141,12 +172,13 @@ class Level5 extends React.Component {
 
         const startIndex = defaultEquation.indexOf('nthRoot') //find start index of root 
         let rootPart = '' // set default value of rootPart 
+        let insideRootCal = '' // set default value of insideRootCal 
         let openParathensesCounter = 0 // set default value of openParathensesCounter 
         let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
-        let insideRootCal = '' // set default value of insideRootCal 
 
         //loop to get a part of root in equation
         for (let index = startIndex; index < defaultEquation.length; index++) {
+
             if (defaultEquation[index] === '(') { // count open parathenses 
                 rootPart += defaultEquation[index] // store value in index into rootPart
                 openParathensesCounter++ // store openParathensesCounter
@@ -160,16 +192,58 @@ class Level5 extends React.Component {
                     break //break the loop 
                 }
             } else {
-                rootPart += defaultEquation[index] // store openParathensesCounter
+                rootPart += defaultEquation[index] // store rootPart
             }
 
         }
-        const insideRootValue = Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
 
-        if (insideRootValue >= 0) { // check insideRootValue is >= 0
+        const insideRootValue = insideRootCal.includes(',') ? Parser.evaluate(this.getNRootForm(insideRootCal)) : Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
+
+        if (insideRootValue > 0 && Number.isInteger(insideRootValue)) { // check insideRootValue is >= 0
             return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
         } else {
             return false // incase insideRootValue < 0 get false
+        }
+    }
+
+
+    //gen nthRoot form
+    getNRootForm = (params) => {
+        let newParams = params // define variable
+        let baseRootPart = '' // set default value of baseRootPart 
+        let openParathensesCounter = 0 // set default value of openParathensesCounter 
+        let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
+        console.log('nthRoot' + newParams)
+
+        const baseRootPartStartIndex = newParams.indexOf(',') + 1 //find start index of comma
+
+        for (let index = baseRootPartStartIndex; index < newParams.length; index++) {
+
+            if (newParams[index] === '(') { // count open parathenses 
+                baseRootPart += newParams[index] // store value in index into baseRootPart
+                openParathensesCounter++ // store openParathensesCounter
+            } else if (newParams[index] === ')') { // close open parathenses 
+                baseRootPart += newParams[index] // store value in index into baseRootPart
+                closeParathensesCounter++ // close openParathensesCounter
+
+                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
+                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
+                    break //break the loop 
+                } else {
+                    baseRootPart = baseRootPart.replace('(', '')
+                    baseRootPart = baseRootPart.replace(')', '')
+                }
+            } else {
+                baseRootPart += newParams[index] // store baseRootPart
+            }
+
+        }
+
+        console.log('baseRootPart: ' + baseRootPart)
+        if (Parser.evaluate(baseRootPart) >= 2) {
+            return 'nthRoot' + newParams // return new form of equation
+        } else {
+            return 0
         }
     }
 
@@ -377,7 +451,7 @@ class Level5 extends React.Component {
     //delete input answer
     delAnswer = async () => {
 
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^']
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',']
 
         let temp = this.state.equation
 
@@ -388,18 +462,8 @@ class Level5 extends React.Component {
             temp = await temp.slice(0, -1)
             //setState new answer
             await this.setState({ equation: temp })
-        } else if (this.state.equation[this.state.equation.length - 1] === 't') {
-            //delete answer
-            temp = await temp.replace('nthRoot', '')
-            //remove disable button
-            let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
-            let tempIndex = this.state.lastButtonIndex
-            tempIndex = await tempIndex.slice(0, -1)
-            elem.removeAttribute("disabled")
-
-            //setState new answer and buttonIndex
-            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
-        } else {
+        }
+        else {
             //delete answer
             temp = await temp.slice(0, -1)
             //remove disable button
@@ -431,19 +495,19 @@ class Level5 extends React.Component {
     }
 
     //checkparatheses
-    checkParatheses = (eqaution) => {
+    checkParatheses = (equation) => {
 
         let openParathensesCounter = 0
         let closeParathensesCounter = 0
 
         //check parathenses
-        for (let index = 0; index < eqaution.length; index++) {
+        for (let index = 0; index < equation.length; index++) {
 
 
-            if (eqaution[index] === '(') {
+            if (equation[index] === '(') {
                 openParathensesCounter++
             }
-            if (eqaution[index] === ')') {
+            if (equation[index] === ')') {
                 closeParathensesCounter++
             }
 
@@ -462,10 +526,12 @@ class Level5 extends React.Component {
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/']
         let tempAns
+        let equationTemp = this.state.equation.replace('√', 'nthRoot')
+        console.log('temp: ' + equationTemp)
 
         if (this.checkParatheses(this.state.equation)) {
-            if (await this.checkRootValue(this.state.equation)) {
-                tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
+            if (await this.checkRootValue(equationTemp)) {
+                tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
                 console.log(tempAns)
                 if (this.state.equation.length >= 6) {
                     if (tempAns === this.state.defaultAnswer) {
@@ -501,11 +567,19 @@ class Level5 extends React.Component {
                         respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
                     })
                 }
-            } else {
+            } else if (this.state.equation.length >= 6) {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
                     respondText: 'ค่าในเครื่องหมายรูทไม่สามารถติดลบได้และเป็นจำนวนเต็มเท่านั้น',
+                    isCorrectClass: 'incorrect',
+                    answer: 0
+                })
+            } else {
+                this.setState({
+                    isAnsCorrect: false,
+                    showAnsClass: 'ans-card',
+                    respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว',
                     isCorrectClass: 'incorrect',
                     answer: 0
                 })
@@ -520,10 +594,6 @@ class Level5 extends React.Component {
                 answer: 0
             })
         }
-
-
-
-
 
     }
 
@@ -631,7 +701,8 @@ class Level5 extends React.Component {
                         <button className="operator-btn" value={'*'} onClick={this.insertAnswer}>*</button>
                         <button className="operator-btn" value={'/'} onClick={this.insertAnswer}>/</button>
                         <button className="operator-btn" value={'^'} onClick={this.insertAnswer}>^</button>
-                        <button className="operator-btn" value={'nthRoot'} onClick={this.insertAnswer} index="5">√</button>
+                        <button className="operator-btn" value={','} onClick={this.insertAnswer}>,</button>
+                        <button className="operator-btn" value={'√'} onClick={this.insertAnswer} index="5">√</button>
                         <button className="operator-btn" value={'('} onClick={this.insertAnswer}>(</button>
                         <button className="operator-btn" value={')'} onClick={this.insertAnswer}>)</button>
 
@@ -652,6 +723,7 @@ class Level5 extends React.Component {
                 </div>
             </div >
         )
+
     }
 }
 
