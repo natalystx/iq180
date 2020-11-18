@@ -23,7 +23,10 @@ class Level5 extends React.Component {
             respondText: 'คำตอบไม่ถูกต้อง',
             showAnsClass: 'ans-card-inactive',
             isCorrectClass: 'incorrect',
-            lastButtonIndex: []
+            lastButtonIndex: [],
+            isShowRootDetails: false,
+            isNotShowRootAgain: false,
+            isCheck: false
         }
     }
 
@@ -176,33 +179,39 @@ class Level5 extends React.Component {
         let openParathensesCounter = 0 // set default value of openParathensesCounter 
         let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
 
-        //loop to get a part of root in equation
-        for (let index = startIndex; index < defaultEquation.length; index++) {
+        //check includes some root
+        if (defaultEquation.includes('nthRoot')) {
+            //loop to get a part of root in equation
+            for (let index = startIndex; index < defaultEquation.length; index++) {
 
-            if (defaultEquation[index] === '(') { // count open parathenses 
-                rootPart += defaultEquation[index] // store value in index into rootPart
-                openParathensesCounter++ // store openParathensesCounter
-            } else if (defaultEquation[index] === ')') { // close open parathenses 
-                rootPart += defaultEquation[index] // store value in index into rootPart
-                closeParathensesCounter++ // close openParathensesCounter
+                if (defaultEquation[index] === '(') { // count open parathenses 
+                    rootPart += defaultEquation[index] // store value in index into rootPart
+                    openParathensesCounter++ // store openParathensesCounter
+                } else if (defaultEquation[index] === ')') { // close open parathenses 
+                    rootPart += defaultEquation[index] // store value in index into rootPart
+                    closeParathensesCounter++ // close openParathensesCounter
 
-                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
-                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
-                    insideRootCal = rootPart.replace('nthRoot', '') //get value inside parathenses of root 
-                    break //break the loop 
+                    //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
+                    if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
+                        insideRootCal = rootPart.replace('nthRoot', '') //get value inside parathenses of root 
+                        break //break the loop 
+                    }
+                } else {
+                    rootPart += defaultEquation[index] // store rootPart
                 }
-            } else {
-                rootPart += defaultEquation[index] // store rootPart
+
             }
 
-        }
+            const insideRootValue = insideRootCal.includes(',') ? Parser.evaluate(this.getNRootForm(insideRootCal)) : Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
 
-        const insideRootValue = insideRootCal.includes(',') ? Parser.evaluate(this.getNRootForm(insideRootCal)) : Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
-
-        if (insideRootValue > 0 && Number.isInteger(insideRootValue)) { // check insideRootValue is >= 0
-            return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
+            if (insideRootValue > 0 && Number.isInteger(insideRootValue)) { // check insideRootValue is >= 0
+                return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
+            } else {
+                console.log('isNeg')
+                return 0 // incase insideRootValue < 0 get false
+            }
         } else {
-            return false // incase insideRootValue < 0 get false
+            return false //return false cause isn't contains root 
         }
     }
 
@@ -474,22 +483,100 @@ class Level5 extends React.Component {
 
             //setState new answer and buttonIndex
             await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+
+            const allNumber = document.querySelectorAll('button[index]')
+
+            await allNumber.forEach(elem => {
+                const index = elem.getAttribute('index')
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                } else {
+                    elem.removeAttribute("disabled")
+                }
+            })
         }
 
     }
 
     //get user input answer
-    insertAnswer = (event) => {
+    insertAnswer = async (event) => {
         let temp = this.state.equation
         temp = temp + event.target.value
         let elem = event.target
-        if (elem.hasAttribute("index")) {
-            let indexTemp = [...this.state.lastButtonIndex]
-            indexTemp.push(elem.getAttribute("index"))
-            this.setState({ equation: temp, lastButtonIndex: indexTemp })
-            elem.setAttribute("disabled", true)
-        } else {
+        let allNumber = document.querySelectorAll("button[isnumber]")
+        let allIndex = document.querySelectorAll("button[index]")
+        if (elem.hasAttribute("isnumber")) {
+            await allNumber.forEach(elem => {
+                elem.setAttribute("disabled", true)
+            })
+            if (elem.hasAttribute("index")) {
+                let indexTemp = [...this.state.lastButtonIndex]
+                indexTemp.push(elem.getAttribute("index"))
+                this.setState({ equation: temp, lastButtonIndex: indexTemp })
+                elem.setAttribute("disabled", true)
+            } else {
+                this.setState({ equation: temp })
+            }
+        } else if (elem.hasAttribute("notnumber") && elem.getAttribute("value") !== '√') {
+            await allNumber.forEach(elem => {
+                elem.removeAttribute("disabled")
+            })
+
+            await allIndex.forEach(elem => {
+                let index = elem.getAttribute("index")
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                }
+            })
+
             this.setState({ equation: temp })
+
+        } else {
+            if (elem.hasAttribute("index")) {
+                let indexTemp = [...this.state.lastButtonIndex]
+                indexTemp.push(elem.getAttribute("index"))
+                this.setState({ equation: temp, lastButtonIndex: indexTemp })
+                elem.setAttribute("disabled", true)
+            } else {
+                this.setState({ equation: temp })
+            }
+            this.openRootModal()
+        }
+
+
+
+    }
+
+    //open root modal when check on root
+    openRootModal = () => {
+        const rootModal = document.querySelector('.alert-root')
+        if (!this.state.isCheck) {
+            if (!this.state.isShowRootDetails && !this.state.isNotShowRootAgain) {
+                rootModal.style.display = 'flex'
+                this.setState({ isShowRootDetails: true, isNotShowRootAgain: false })
+            } else {
+                rootModal.style.display = 'none'
+                this.setState({ isShowRootDetails: false, isNotShowRootAgain: false })
+            }
+        } else {
+            rootModal.style.display = 'none'
+            this.setState({ isShowRootDetails: false, isNotShowRootAgain: true })
+
+        }
+    }
+
+    checkShowAgain = (event) => {
+        const checkbox = event.target
+        if (!this.state.isCheck) {
+            checkbox.setAttribute('checked', true)
+            console.log(checkbox.getAttribute('checked'));
+
+            this.setState({ isCheck: checkbox.getAttribute('checked') })
+        } else {
+            checkbox.setAttribute('checked', false)
+            console.log(checkbox.getAttribute('checked'));
+
+            this.setState({ isCheck: checkbox.getAttribute('checked') })
         }
 
     }
@@ -529,7 +616,10 @@ class Level5 extends React.Component {
         let equationTemp = this.state.equation.replace('√', 'nthRoot')
         console.log('temp: ' + equationTemp)
 
+        // check Paratheses 
         if (this.checkParatheses(this.state.equation)) {
+
+            //check is contain root ? 
             if (await this.checkRootValue(equationTemp)) {
                 tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
                 console.log(tempAns)
@@ -567,7 +657,8 @@ class Level5 extends React.Component {
                         respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
                     })
                 }
-            } else if (this.state.equation.length >= 6) {
+            }
+            else if (await this.checkRootValue(equationTemp) === 0) {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
@@ -575,14 +666,45 @@ class Level5 extends React.Component {
                     isCorrectClass: 'incorrect',
                     answer: 0
                 })
-            } else {
-                this.setState({
-                    isAnsCorrect: false,
-                    showAnsClass: 'ans-card',
-                    respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว',
-                    isCorrectClass: 'incorrect',
-                    answer: 0
-                })
+            }
+
+            else {
+                tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
+                console.log(tempAns)
+                if (this.state.equation.length >= 6) {
+                    if (tempAns === this.state.defaultAnswer) {
+                        this.setState({
+                            isAnsCorrect: true,
+                            showAnsClass: 'ans-card',
+                            respondText: 'คำตอบถูกต้อง',
+                            isCorrectClass: 'correct',
+                            answer: tempAns
+                        })
+                    } else {
+                        this.setState({
+                            isAnsCorrect: false,
+                            showAnsClass: 'ans-card',
+                            respondText: 'คำตอบไม่ถูกต้อง',
+                            isCorrectClass: 'incorrect',
+                            answer: tempAns
+                        })
+                    }
+                } else if (this.state.equation.length === 0) {
+                    this.setState({
+                        isAnsCorrect: false,
+                        showAnsClass: 'ans-card',
+                        isCorrectClass: 'incorrect',
+                        respondText: 'โปรดกรอกสมการ'
+                    })
+                }
+                else {
+                    this.setState({
+                        isAnsCorrect: false,
+                        showAnsClass: 'ans-card',
+                        isCorrectClass: 'incorrect',
+                        respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
+                    })
+                }
             }
 
         } else {
@@ -669,6 +791,30 @@ class Level5 extends React.Component {
     render() {
         return (
             <div className="level-1">
+                <div className="alert-root">
+                    <span className="close" onClick={this.openRootModal}>x</span>
+                    <div className="root-suggest-content">
+                        <h4 className="root-suggest-texts">
+                            รูปแบบการใช้การใช้รูท
+                        </h4>
+                        <p className="root-details">
+                            √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
+                        </p>
+
+                        <h4 className="root-suggest-texts">
+                            ตัวอย่าง
+                        </h4>
+                        <p className="root-details">
+                            √(27,3) ค่าที่จะได้เท่ากับ 3
+                            <br />
+                            √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
+                        </p>
+                        <input type="checkbox" className="not-open-root" onClick={this.checkShowAgain} />
+                        <label htmlFor="not-open-root" className="not-open-root-label">ฉันเข้าใจแล้วไม่ต้องแสดงอีก</label>
+                    </div>
+
+
+                </div>
                 <div className="re-random-section">
                     <button className="re-random-btn" onClick={this.doRandomNumbers}>
                         สุ่มใหม่
@@ -690,21 +836,21 @@ class Level5 extends React.Component {
                     <div className="calculator-section">
 
                         {/* numbers */}
-                        <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1">{this.state.numbers['a']}</button>
-                        <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2">{this.state.numbers['b']}</button>
-                        <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3">{this.state.numbers['c']}</button>
-                        <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4">{this.state.numbers['d']}</button>
+                        <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1" isnumber="true">{this.state.numbers['a']}</button>
+                        <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2" isnumber="true">{this.state.numbers['b']}</button>
+                        <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3" isnumber="true">{this.state.numbers['c']}</button>
+                        <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4" isnumber="true">{this.state.numbers['d']}</button>
 
                         {/* Operators */}
-                        <button className="operator-btn" value={'+'} onClick={this.insertAnswer}>+</button>
-                        <button className="operator-btn" value={'-'} onClick={this.insertAnswer}>-</button>
-                        <button className="operator-btn" value={'*'} onClick={this.insertAnswer}>*</button>
-                        <button className="operator-btn" value={'/'} onClick={this.insertAnswer}>/</button>
-                        <button className="operator-btn" value={'^'} onClick={this.insertAnswer}>^</button>
-                        <button className="operator-btn" value={','} onClick={this.insertAnswer}>,</button>
-                        <button className="operator-btn" value={'√'} onClick={this.insertAnswer} index="5">√</button>
-                        <button className="operator-btn" value={'('} onClick={this.insertAnswer}>(</button>
-                        <button className="operator-btn" value={')'} onClick={this.insertAnswer}>)</button>
+                        <button className="operator-btn" value={'+'} onClick={this.insertAnswer} notnumber="true">+</button>
+                        <button className="operator-btn" value={'-'} onClick={this.insertAnswer} notnumber="true">-</button>
+                        <button className="operator-btn" value={'*'} onClick={this.insertAnswer} notnumber="true">*</button>
+                        <button className="operator-btn" value={'/'} onClick={this.insertAnswer} notnumber="true">/</button>
+                        <button className="operator-btn" value={'^'} onClick={this.insertAnswer} notnumber="true">^</button>
+                        <button className="operator-btn" value={','} onClick={this.insertAnswer} notnumber="true">,</button>
+                        <button className="operator-btn" value={'√'} onClick={this.insertAnswer} index="5" notnumber="true">√</button>
+                        <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
+                        <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 
 
                         {/* Clear */}

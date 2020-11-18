@@ -17,9 +17,8 @@ class Ingame extends React.Component {
     componentDidMount() {
         const level = this.props.location.state
         this.setState({ level: level['level'] })
+
     }
-
-
 
     render() {
 
