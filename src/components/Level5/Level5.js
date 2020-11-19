@@ -623,7 +623,7 @@ class Level5 extends React.Component {
             if (await this.checkRootValue(equationTemp)) {
                 tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
                 console.log(tempAns)
-                if (this.state.equation.length >= 6) {
+                if (this.state.equation.length >= 6 && this.state.lastButtonIndex.length >= 4) {
                     if (tempAns === this.state.defaultAnswer) {
                         this.setState({
                             isAnsCorrect: true,
@@ -671,7 +671,7 @@ class Level5 extends React.Component {
             else {
                 tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
                 console.log(tempAns)
-                if (this.state.equation.length >= 6) {
+                if (this.state.equation.length >= 6 && this.state.lastButtonIndex.length >= 4) {
                     if (tempAns === this.state.defaultAnswer) {
                         this.setState({
                             isAnsCorrect: true,
@@ -799,12 +799,18 @@ class Level5 extends React.Component {
                         </h4>
                         <p className="root-details">
                             √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
+                            <br />
+                            หากไม่กำหนดรากที่ n จะเท่ากับรากที่ 2
                         </p>
 
                         <h4 className="root-suggest-texts">
                             ตัวอย่าง
                         </h4>
                         <p className="root-details">
+                            √(16) ค่าที่จะได้เท่ากับ 4
+                            <br />
+                            √(8*2) ค่าที่จะได้เท่ากับ 4
+                            <br />
                             √(27,3) ค่าที่จะได้เท่ากับ 3
                             <br />
                             √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
