@@ -325,23 +325,56 @@ class Level2 extends React.Component {
 
             //setState new answer and buttonIndex
             await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+
+            const allNumber = document.querySelectorAll('button[index]')
+
+            await allNumber.forEach(elem => {
+                const index = elem.getAttribute('index')
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                } else {
+                    elem.removeAttribute("disabled")
+                }
+            })
         }
 
     }
 
     //get user input answer
-    insertAnswer = (event) => {
+    insertAnswer = async (event) => {
         let temp = this.state.equation
         temp = temp + event.target.value
         let elem = event.target
-        if (elem.hasAttribute("index")) {
-            let indexTemp = [...this.state.lastButtonIndex]
-            indexTemp.push(elem.getAttribute("index"))
-            this.setState({ equation: temp, lastButtonIndex: indexTemp })
-            elem.setAttribute("disabled", true)
-        } else {
+        let allNumber = document.querySelectorAll("button[isnumber]")
+        let allIndex = document.querySelectorAll("button[index]")
+        if (elem.hasAttribute("isnumber")) {
+            await allNumber.forEach(elem => {
+                elem.setAttribute("disabled", true)
+            })
+            if (elem.hasAttribute("index")) {
+                let indexTemp = [...this.state.lastButtonIndex]
+                indexTemp.push(elem.getAttribute("index"))
+                this.setState({ equation: temp, lastButtonIndex: indexTemp })
+                elem.setAttribute("disabled", true)
+            } else {
+                this.setState({ equation: temp })
+            }
+        } else if (elem.hasAttribute("notnumber")) {
+            await allNumber.forEach(elem => {
+                elem.removeAttribute("disabled")
+            })
+
+            await allIndex.forEach(elem => {
+                let index = elem.getAttribute("index")
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                }
+            })
+
             this.setState({ equation: temp })
+
         }
+
 
     }
 
@@ -378,11 +411,10 @@ class Level2 extends React.Component {
     calAns = async () => {
         const operatorList = ['-', '+', '*', '/']
         let tempAns
-
         if (this.checkParatheses(this.state.equation)) {
             tempAns = operatorList.includes(this.state.equation.slice(-1)) ? false : await Parser.evaluate(this.state.equation)
-
-            if (this.state.equation.length >= 6) {
+            console.log(tempAns)
+            if (this.state.equation.length >= 6 && this.state.lastButtonIndex.length >= 5) {
                 if (tempAns === this.state.defaultAnswer) {
                     this.setState({
                         isAnsCorrect: true,
@@ -407,7 +439,8 @@ class Level2 extends React.Component {
                     isCorrectClass: 'incorrect',
                     respondText: 'โปรดกรอกสมการ'
                 })
-            } else {
+            }
+            else {
                 this.setState({
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
@@ -415,9 +448,9 @@ class Level2 extends React.Component {
                     respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
                 })
             }
+        }
 
-            console.log(tempAns)
-        } else {
+        else {
             this.setState({
                 isAnsCorrect: false,
                 showAnsClass: 'ans-card',
@@ -525,19 +558,19 @@ class Level2 extends React.Component {
                     <div className="calculator-section">
 
                         {/* numbers */}
-                        <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1">{this.state.numbers['a']}</button>
-                        <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2">{this.state.numbers['b']}</button>
-                        <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3">{this.state.numbers['c']}</button>
-                        <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4">{this.state.numbers['d']}</button>
-                        <button className="number-btn" value={this.state.numbers['e']} onClick={this.insertAnswer} index="5">{this.state.numbers['e']}</button>
+                        <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1" isnumber="true">{this.state.numbers['a']}</button>
+                        <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2" isnumber="true">{this.state.numbers['b']}</button>
+                        <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3" isnumber="true">{this.state.numbers['c']}</button>
+                        <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4" isnumber="true">{this.state.numbers['d']}</button>
+                        <button className="number-btn" value={this.state.numbers['e']} onClick={this.insertAnswer} index="5" isnumber="true">{this.state.numbers['e']}</button>
 
                         {/* Operators */}
-                        <button className="operator-btn" value={'+'} onClick={this.insertAnswer}>+</button>
-                        <button className="operator-btn" value={'-'} onClick={this.insertAnswer}>-</button>
-                        <button className="operator-btn" value={'*'} onClick={this.insertAnswer}>*</button>
-                        <button className="operator-btn" value={'/'} onClick={this.insertAnswer}>/</button>
-                        <button className="operator-btn" value={'('} onClick={this.insertAnswer}>(</button>
-                        <button className="operator-btn" value={')'} onClick={this.insertAnswer}>)</button>
+                        <button className="operator-btn" value={'+'} onClick={this.insertAnswer} notnumber="true">+</button>
+                        <button className="operator-btn" value={'-'} onClick={this.insertAnswer} notnumber="true">-</button>
+                        <button className="operator-btn" value={'*'} onClick={this.insertAnswer} notnumber="true">*</button>
+                        <button className="operator-btn" value={'/'} onClick={this.insertAnswer} notnumber="true">/</button>
+                        <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
+                        <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 
                         {/* Clear */}
                         <button className="clear-btn" onClick={this.clearAns}>เคลียร์</button>
