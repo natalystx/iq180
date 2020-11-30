@@ -222,10 +222,12 @@ class Level5 extends React.Component {
         let baseRootPart = '' // set default value of baseRootPart 
         let openParathensesCounter = 0 // set default value of openParathensesCounter 
         let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
+        let rootValue = ''
         console.log('nthRoot' + newParams)
 
         const baseRootPartStartIndex = newParams.indexOf(',') + 1 //find start index of comma
 
+        //get root base value 
         for (let index = baseRootPartStartIndex; index < newParams.length; index++) {
 
             if (newParams[index] === '(') { // count open parathenses 
@@ -238,18 +240,61 @@ class Level5 extends React.Component {
                 //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
                 if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
                     break //break the loop 
-                } else {
-                    baseRootPart = baseRootPart.replace('(', '')
-                    baseRootPart = baseRootPart.replace(')', '')
                 }
+
             } else {
                 baseRootPart += newParams[index] // store baseRootPart
+            }
+        }
+
+        //check Parathenses balance
+        if (openParathensesCounter > closeParathensesCounter) {
+            let diff = openParathensesCounter - closeParathensesCounter
+            for (let index = 0; index < diff; index++) {
+                baseRootPart = baseRootPart + ')'
+            }
+        }
+
+        //check Parathenses balance
+        if (openParathensesCounter < closeParathensesCounter) {
+            let diff = closeParathensesCounter - openParathensesCounter
+            for (let index = 0; index < diff; index++) {
+                baseRootPart = '(' + baseRootPart
+            }
+        }
+
+        //reset Parathenses counter
+        openParathensesCounter = 0
+        closeParathensesCounter = 0
+
+        //get root value 
+        for (let index = baseRootPartStartIndex - 2; index >= 0; index--) {
+
+            if (newParams[index] === '(') { // count open parathenses 
+                rootValue += newParams[index] // store value in index into baseRootPart
+                openParathensesCounter++ // store openParathensesCounter
+            } else if (newParams[index] === ')') { // close open parathenses 
+                rootValue += newParams[index] // store value in index into baseRootPart
+                closeParathensesCounter++ // close openParathensesCounter
+
+                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
+                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
+                    break //break the loop 
+                }
+
+            } else {
+                rootValue += newParams[index] // store baseRootPart
             }
 
         }
 
+        //reverse rootValue string
+        const finalRootValue = rootValue.split("").reverse().join("") + ')'
+
         console.log('baseRootPart: ' + baseRootPart)
-        if (Parser.evaluate(baseRootPart) >= 2) {
+        console.log('finalRootValue: ' + finalRootValue)
+        //check root condition
+        if (Parser.evaluate(baseRootPart) >= 3 && Parser.evaluate(finalRootValue) >= 0 && Number.isInteger(Parser.evaluate(finalRootValue))) {
             return 'nthRoot' + newParams // return new form of equation
         } else {
             return 0
@@ -569,12 +614,12 @@ class Level5 extends React.Component {
         const checkbox = event.target
         if (!this.state.isCheck) {
             checkbox.setAttribute('checked', true)
-            console.log(checkbox.getAttribute('checked'));
+            console.log(checkbox.getAttribute('checked'))
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         } else {
             checkbox.setAttribute('checked', false)
-            console.log(checkbox.getAttribute('checked'));
+            console.log(checkbox.getAttribute('checked'))
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         }
