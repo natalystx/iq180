@@ -197,35 +197,10 @@ class Level7 extends React.Component {
 
 
         }
-        // 
-        // else { // if root value it doesn't get on conditional rerandom numbers and equation
-        //   // Parse string to mathmatic equation for computable
-        //   let defaultAns = Parser.evaluate(tempDefaultEquation)
-        //
-        //   //check default answer is 2 digits
-        //   if (defaultAns < 10 || defaultAns > 99 || !Number.isInteger(defaultAns)) {
-        //       await this.doRandomNumbers()
-        //   } else {
-        //
-        //       if (this.checkDivideResult(tempDefaultEquation)) {
-        //           await this.setState({
-        //               defaultAnswer: defaultAns,
-        //               defaultEquation: defaultEquation
-        //           })
-        //           console.log('equation: ' + this.state.defaultEquation)
-        //           console.log('answer: ' + this.state.defaultAnswer)
-        //       } else {
-        //           await this.setState({
-        //               defaultAnswer: defaultAns,
-        //               defaultEquation: defaultEquation
-        //           })
-        //
-        //       }
-        //
-        //
-        //
-        //   }
-        // }
+
+        else {
+          this.doRandomNumbers()
+        }
 
 
     }
@@ -295,7 +270,7 @@ class Level7 extends React.Component {
 
 
         if (await allFacValueIsValid.includes(false)) {
-          this.doRandomNumbers()
+          return false
         } else {
           return true
         }
@@ -821,6 +796,16 @@ class Level7 extends React.Component {
                     answer: 0
                 })
             }
+            else if(await this.checkFacValue(equationTemp) === false){
+                      this.setState({
+                          isAnsCorrect: false,
+                          showAnsClass: 'ans-card',
+                          respondText: 'ค่า factorial ไม่สามารถติดลบได้',
+                          isCorrectClass: 'incorrect',
+                          answer: 0
+                      })
+            }
+
 
             else {
                 tempAns = operatorList.includes(equationTemp.slice(-1)) ? false : await Parser.evaluate(equationTemp)
