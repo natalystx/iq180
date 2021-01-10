@@ -7,6 +7,7 @@ import Level3 from '../Level3/Level3'
 import Level4 from '../Level4/Level4'
 import Level5 from '../Level5/Level5'
 import Level6 from '../Level6/Level6'
+import Level7 from '../Level7/Level7'
 
 class Ingame extends React.Component {
     constructor(props) {
@@ -30,7 +31,8 @@ class Ingame extends React.Component {
             3: <Level3 />,
             4: <Level4 />,
             5: <Level5 />,
-            6: <Level6 />
+            6: <Level6 />,
+            7: <Level7 />
         }
 
         return (
