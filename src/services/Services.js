@@ -7,6 +7,8 @@ class Services {
 
         numberedEquation = numberedEquation.replace('√', 'nthRoot')
 
+        console.log(`defaultEquation: ${numberedEquation}`)
+
         let status = {
             equation: null,
             answer: null,
@@ -43,6 +45,10 @@ class Services {
             //set equation is contain root value valid status
             status.root.valid = await this.checkRootValue(numberedEquation)
 
+            if (!status.root.valid && status.root.contain) {
+                return false
+            }
+
             //set equation is contain divide operator status
             status.divide.contain = await numberedEquation.includes('/')
 
@@ -54,6 +60,8 @@ class Services {
 
             //set equation is contain root value valid status
             status.factorial.valid = await this.checkFacValue(numberedEquation)
+
+
         } else {
 
             //set paratheses valid status
@@ -221,33 +229,32 @@ class Services {
 
     //generate random numbers
     randomNumbers = async (numberFormat) => {
+        let prevNumbers = []
         let randomedNumber = numberFormat
         for (const key in randomedNumber) {
             let dummy = Math.floor(Math.random() * 10)
             const keyCheckList = ['c', 'd', 'e']
-            let prevKey = []
+
+
             if (key === 'a') {
                 randomedNumber[key] = dummy
-                prevKey.push(key)
+                prevNumbers.push(randomedNumber[key])
+
             }
 
             if (key === 'b') {
                 randomedNumber[key] = dummy === 0 ? dummy + 1 : dummy
-                prevKey.push(key)
+                prevNumbers.push(randomedNumber[key])
+
             }
 
-            if (keyCheckList.includes(key)) {
-                let isIntersec = 0
-                prevKey.forEach(valKey => {
-                    isIntersec += valKey === dummy ? 1 : 0
-                })
-
-                if (isIntersec <= 1) {
-                    randomedNumber[key] = dummy
-                } else {
-                    randomedNumber[key] = dummy + 1
-                }
+            while (prevNumbers.includes(dummy) || dummy === 0) {
+                dummy = Math.floor(Math.random() * 10)
             }
+            randomedNumber[key] = dummy
+            prevNumbers.push(randomedNumber[key])
+
+
 
         }
 
@@ -439,7 +446,7 @@ class Services {
 
 
     //check inside root value
-    checkRootValue = (defaultEquation) => {
+    checkRootValue = async (defaultEquation) => {
 
         const startIndex = defaultEquation.indexOf('nthRoot') //find start index of root 
         let rootPart = '' // set default value of rootPart 
@@ -470,7 +477,7 @@ class Services {
 
             }
 
-            const insideRootValue = insideRootCal.includes(',') ? Parser.evaluate(this.getNRootForm(insideRootCal)) : Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
+            const insideRootValue = insideRootCal.includes(',') ? Parser.evaluate(await this.getNRootForm(insideRootCal)) : Parser.evaluate(insideRootCal) //get the calculation of value inside parathenses of root 
 
             if (insideRootValue > 0 && Number.isInteger(insideRootValue)) { // check insideRootValue is >= 0
                 return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
@@ -485,85 +492,72 @@ class Services {
 
 
     //gen nthRoot form
-    getNRootForm = (params) => {
-        let newParams = params // define variable
-        let baseRootPart = '' // set default value of baseRootPart 
-        let openParathensesCounter = 0 // set default value of openParathensesCounter 
-        let closeParathensesCounter = 0 // set default value of closeParathensesCounter 
-        let rootValue = ''
-        console.log('nthRoot' + newParams)
+    getNRootForm = async (equation) => {
+        console.log('og: ' + equation)
 
-        const baseRootPartStartIndex = newParams.indexOf(',') + 1 //find start index of comma
+        const commaIndex = equation.indexOf(',')
+        let leftPart = ''
+        let rightPart = ''
 
-        //get root base value 
-        for (let index = baseRootPartStartIndex; index < newParams.length; index++) {
-
-            if (newParams[index] === '(') { // count open parathenses 
-                baseRootPart += newParams[index] // store value in index into baseRootPart
-                openParathensesCounter++ // store openParathensesCounter
-            } else if (newParams[index] === ')') { // close open parathenses 
-                baseRootPart += newParams[index] // store value in index into baseRootPart
-                closeParathensesCounter++ // close openParathensesCounter
-
-                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
-                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
-                    break //break the loop 
+        //get right part beside comma symbol
+        for (let index = commaIndex + 1; index < equation.length; index++) {
+            if (equation[commaIndex + 1] === '(') {
+                rightPart += equation[index]
+                if (this.checkParatheses(rightPart)) {
+                    break
+                }
+            } else {
+                if (equation[index] === ')') {
+                    break
                 }
 
+                rightPart += equation[index]
+            }
+
+            // if (equation[index] === ')') {
+            //     if (this.checkParatheses(rightPart)) {
+            //         break
+            //     }
+            // }
+        }
+
+
+        for (let index = commaIndex - 1; index >= 0; index--) {
+
+            if (equation[commaIndex - 1] === ')') {
+                leftPart += equation[index]
+                if (this.checkParatheses(leftPart)) {
+                    break
+                }
             } else {
-                baseRootPart += newParams[index] // store baseRootPart
-            }
-        }
-
-        //check Parathenses balance
-        if (openParathensesCounter > closeParathensesCounter) {
-            let diff = openParathensesCounter - closeParathensesCounter
-            for (let index = 0; index < diff; index++) {
-                baseRootPart = baseRootPart + ')'
-            }
-        }
-
-        //check Parathenses balance
-        if (openParathensesCounter < closeParathensesCounter) {
-            let diff = closeParathensesCounter - openParathensesCounter
-            for (let index = 0; index < diff; index++) {
-                baseRootPart = '(' + baseRootPart
-            }
-        }
-
-        //reset Parathenses counter
-        openParathensesCounter = 0
-        closeParathensesCounter = 0
-
-        //get root value 
-        for (let index = baseRootPartStartIndex - 2; index >= 0; index--) {
-
-            if (newParams[index] === '(') { // count open parathenses 
-                rootValue += newParams[index] // store value in index into baseRootPart
-                openParathensesCounter++ // store openParathensesCounter
-            } else if (newParams[index] === ')') { // close open parathenses 
-                rootValue += newParams[index] // store value in index into baseRootPart
-                closeParathensesCounter++ // close openParathensesCounter
-
-                //check closeParathensesCounter and openParathensesCounter are both eqaul and aren't empty
-                if (openParathensesCounter === closeParathensesCounter && openParathensesCounter !== 0 && closeParathensesCounter !== 0) {
-                    break //break the loop 
+                if (equation[index] === '(' && this.checkParatheses(leftPart)) {
+                    break
                 }
 
-            } else {
-                rootValue += newParams[index] // store baseRootPart
+                leftPart += equation[index]
             }
-
         }
 
-        //reverse rootValue string
-        const finalRootValue = rootValue.split("").reverse().join("") + ')'
+        // leftPart = await leftPart.replaceAll('(', '')
+        // leftPart = await leftPart.replaceAll(')', '')
 
-        console.log('baseRootPart: ' + baseRootPart)
-        console.log('finalRootValue: ' + finalRootValue)
+        // rightPart = await rightPart.replaceAll('(', '')
+        // rightPart = await rightPart.replaceAll(')', '')
+
+        //reverse equation left part
+        leftPart = leftPart.split('').reverse().join('')
+
+
+
+        // //reverse rootValue string
+        // const finalRootValue = rootValue.split("").reverse().join("") + ')'
+
+        console.log('baseRootPart: ' + leftPart)
+        console.log('finalRootValue: ' + rightPart)
         //check root condition
-        if (Parser.evaluate(baseRootPart) >= 3 && Parser.evaluate(finalRootValue) >= 0 && Number.isInteger(Parser.evaluate(finalRootValue))) {
-            return 'nthRoot' + newParams // return new form of equation
+        if (Parser.evaluate(leftPart) >= 3 && Parser.evaluate(rightPart) > 1 && Number.isInteger(Parser.evaluate(rightPart))) {
+            console.log(`nthRoot(${leftPart},${rightPart})`)
+            return `nthRoot(${leftPart},${rightPart})` // return new form of equation
         } else {
             return 0
         }
