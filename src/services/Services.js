@@ -4,6 +4,9 @@ class Services {
 
     //equation validator
     equationValidate = async (numberedEquation) => {
+
+        numberedEquation = numberedEquation.replace('√', 'nthRoot')
+
         let status = {
             equation: null,
             answer: null,
@@ -34,17 +37,17 @@ class Services {
             //set paratheses valid status
             status.parathesesValid = true
 
-            //set equation is contain divide operator status
-            status.divide.contain = await numberedEquation.includes('/')
-
-            //set equation is contain divide value valid status
-            status.divide.valid = await this.checkDivideResult(numberedEquation)
-
             //set equation is contain root operator status
             status.root.contain = await numberedEquation.includes('nthRoot')
 
             //set equation is contain root value valid status
             status.root.valid = await this.checkRootValue(numberedEquation)
+
+            //set equation is contain divide operator status
+            status.divide.contain = await numberedEquation.includes('/')
+
+            //set equation is contain divide value valid status
+            status.divide.valid = await this.checkDivideResult(numberedEquation)
 
             //set equation is contain factorial operator status
             status.factorial.contain = await numberedEquation.includes('!')
@@ -216,6 +219,41 @@ class Services {
 
     }
 
+    //generate random numbers
+    randomNumbers = async (numberFormat) => {
+        let randomedNumber = numberFormat
+        for (const key in randomedNumber) {
+            let dummy = Math.floor(Math.random() * 10)
+            const keyCheckList = ['c', 'd', 'e']
+            let prevKey = []
+            if (key === 'a') {
+                randomedNumber[key] = dummy
+                prevKey.push(key)
+            }
+
+            if (key === 'b') {
+                randomedNumber[key] = dummy === 0 ? dummy + 1 : dummy
+                prevKey.push(key)
+            }
+
+            if (keyCheckList.includes(key)) {
+                let isIntersec = 0
+                prevKey.forEach(valKey => {
+                    isIntersec += valKey === dummy ? 1 : 0
+                })
+
+                if (isIntersec <= 1) {
+                    randomedNumber[key] = dummy
+                } else {
+                    randomedNumber[key] = dummy + 1
+                }
+            }
+
+        }
+
+        return randomedNumber
+    }
+
 
     //Paratheses checker
     checkParatheses = (equation) => {
@@ -316,7 +354,14 @@ class Services {
                 }
 
                 let equationPart = leftPart.split("").reverse().join("") + '/' + rightPart
-                isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                console.log(equationPart)
+                if (equationPart.includes('nthRoot')) {
+                    const rootResult = this.checkRootValue(equationPart)
+                    isAllResultInt.push(rootResult)
+                } else {
+                    isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                }
+
 
 
             }
@@ -340,8 +385,17 @@ class Services {
 
                     }
 
+
                     let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos + 1]
-                    isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                    equationPart = equationPart.includes(',') ? 'nthRoot' + equationPart : equationPart
+
+                    if (equationPart.includes('nthRoot')) {
+                        const rootResult = this.checkRootValue(equationPart)
+                        isAllResultInt.push(rootResult)
+                    } else {
+                        isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                    }
+
 
                 }
 
@@ -363,6 +417,7 @@ class Services {
                     }
 
                     let equationPart = equation[pos - 1] + '/' + rightPart
+                    console.log(equationPart)
                     isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
                 }
 
@@ -567,6 +622,14 @@ class Services {
         return isValid
     }
 
+    generateEquation = async (equationForm, generatedNumbers) => {
+        let equation = equationForm.toLowerCase()
+        for (const key in generatedNumbers) {
+            equation = await equation.replace(key, generatedNumbers[key])
+        }
+
+        return equation
+    }
 }
 
 export default Services

@@ -59,6 +59,7 @@ class Level1 extends React.Component {
             24: 'a/((b/c)*d)',
             25: 'a-((b/c)*d)'
         }
+        const service = new Services()
 
         //random one equation for list, 25 means the total numbers of list 
         let randomIndex = await Math.floor(Math.random() * 25)
@@ -66,15 +67,9 @@ class Level1 extends React.Component {
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
         let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
 
-        //split equation and replace all a,b,c,d with numbers as same index name
-        defaultEquation = await defaultEquation.split('a').join(this.state.numbers['a'])
-        defaultEquation = await defaultEquation.split('b').join(this.state.numbers['b'])
-        defaultEquation = await defaultEquation.split('c').join(this.state.numbers['c'])
-        defaultEquation = await defaultEquation.split('d').join(this.state.numbers['d'])
+        //convert equation form to mathmatic equation
+        defaultEquation = await service.generateEquation(defaultEquation, this.state.numbers)
 
-        // Parse string to mathmatic equation for computable 
-        // let defaultAns = Parser.evaluate(defaultEquation)
-        const service = new Services()
         const equationValidResult = await service.equationValidate(defaultEquation)
         const equation = equationValidResult.equation
         //check default answer is 2 digits
@@ -193,16 +188,9 @@ class Level1 extends React.Component {
     }
 
     //random 4 numbers
-    doRandomNumbers = () => {
-        let temp = this.state.numbers
-        let dummy = Math.floor(Math.random() * 10)
-        temp['a'] = dummy
-        dummy = Math.floor(Math.random() * 10)
-        temp['b'] = dummy !== 0 ? dummy : Math.floor(Math.random() * 9)
-        dummy = Math.floor(Math.random() * 10)
-        temp['c'] = (dummy !== temp['a'] && dummy !== temp['b'] && dummy !== 0) ? dummy : Math.floor(Math.random() * 9)
-        dummy = Math.floor(Math.random() * 10)
-        temp['d'] = (dummy !== temp['a'] && dummy !== temp['b'] && dummy !== temp['c'] && dummy !== 0) ? dummy : Math.floor(Math.random() * 9)
+    doRandomNumbers = async () => {
+        const services = new Services()
+        const temp = await services.randomNumbers(this.state.numbers)
         this.setState({ numbers: temp })
 
         //generate default ans
