@@ -1,4 +1,5 @@
 import * as Parser from 'mathjs'
+const sigma = require('math-sigma')
 
 class Services {
 
@@ -32,12 +33,28 @@ class Services {
         }
 
         status.equation = numberedEquation
+        numberedEquation = numberedEquation.replace('Σ', 'sigma')
 
         //check paratheses
         if (this.checkParatheses(numberedEquation)) {
 
             //set paratheses valid status
             status.parathesesValid = true
+
+            //set equation is contain summation operator status
+            status.summation.contain = await numberedEquation.includes('sigma')
+
+            // const for get result of checksigma
+            const sigmaRes = await this.checkSigma(numberedEquation)
+
+            //set equation is valid summation value valid status
+            status.summation.valid = !sigmaRes ? sigmaRes : sigmaRes.status
+
+            //replace sigma() to result of sigma
+            numberedEquation = await numberedEquation.replace(sigmaRes.reformSigma, sigmaRes.sigmaRes)
+
+            //update default eqaution
+            status.equation = numberedEquation
 
             //set equation is contain root operator status
             status.root.contain = await numberedEquation.includes('nthRoot')
@@ -183,7 +200,7 @@ class Services {
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
                     isCorrectClass: 'incorrect',
-                    respondText: 'ค่าsummationไม่สามารถติดลบได้'
+                    respondText: 'ค่า sigma ขอบล่างต้องมากกว่าหรือเท่ากับขอบบน'
                 }
             }
         }
@@ -259,6 +276,40 @@ class Services {
         }
 
         return randomedNumber
+    }
+
+    checkSigma = async (equation) => {
+        if (equation.includes('sigma')) {
+            const sigmaStartIndex = equation.indexOf('a')
+            let sigmaEquation = ''
+            for (let index = sigmaStartIndex + 1; index < equation.length; index++) {
+                sigmaEquation += equation[index]
+                if (this.checkParatheses(sigmaEquation)) {
+                    break
+                }
+
+
+            }
+            sigmaEquation = sigmaEquation.slice(1, -1)
+
+            console.log(sigmaEquation)
+
+            const sigmaResult = await eval(`sigma(x => ${sigmaEquation})`)
+            console.log(`sigma: ${sigmaResult}`)
+
+            console.log(sigmaResult)
+
+            if (sigmaResult > 0) {
+                return { status: true, reformSigma: `sigma(${sigmaEquation})`, sigmaRes: sigmaResult }
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+
+
+
     }
 
 
