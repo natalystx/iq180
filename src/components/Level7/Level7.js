@@ -587,6 +587,22 @@ class Level7 extends React.Component {
 
     }
 
+    doLastIndexListDisabled = async () => {
+        let allNumber = document.querySelectorAll("button[isnumber]")
+        let allIndex = document.querySelectorAll("button[index]")
+
+        await allNumber.forEach(elem => {
+            elem.removeAttribute("disabled")
+        })
+
+        await allIndex.forEach(elem => {
+            let index = elem.getAttribute("index")
+            if (this.state.lastButtonIndex.includes(index)) {
+                elem.setAttribute("disabled", true)
+            }
+        })
+    }
+
     render() {
         return (
             <div className="level-1">
@@ -596,7 +612,7 @@ class Level7 extends React.Component {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title" id="exampleModalLabel">Sigma</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { this.doLastIndexListDisabled() }}></button>
                             </div>
                             <div className="modal-body">
                                 <div className="sigma-input-wrapper">
