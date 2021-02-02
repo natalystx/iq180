@@ -1,4 +1,5 @@
 import * as Parser from 'mathjs'
+const sigma = require('math-sigma')
 
 class Services {
 
@@ -32,12 +33,37 @@ class Services {
         }
 
         status.equation = numberedEquation
+        numberedEquation = numberedEquation.replace('Σ', 'sigma')
+        numberedEquation = numberedEquation.replace('σ', 'sigma')
+
+        const realEquation = numberedEquation.replace('sigma', 'Σ')
 
         //check paratheses
         if (this.checkParatheses(numberedEquation)) {
 
             //set paratheses valid status
             status.parathesesValid = true
+
+            //set equation is contain summation operator status
+            status.summation.contain = await numberedEquation.includes('sigma')
+
+            // const for get result of checksigma
+            const sigmaRes = await this.checkSigma(numberedEquation)
+
+            //set equation is valid summation value valid status
+            status.summation.valid = !sigmaRes ? sigmaRes : sigmaRes.status
+
+            console.log(`sigma: ${JSON.stringify(status.summation)}`)
+
+            if (status.summation.contain === true && status.summation.valid === false) {
+                return false
+            }
+
+            //replace sigma() to result of sigma
+            numberedEquation = await numberedEquation.replace(sigmaRes.reformSigma, sigmaRes.sigmaRes)
+
+            //update default eqaution
+            status.equation = numberedEquation
 
             //set equation is contain root operator status
             status.root.contain = await numberedEquation.includes('nthRoot')
@@ -94,6 +120,7 @@ class Services {
 
         //set answer by isAllOperatorValid value based
         status.answer = isAllOperatorValid ? await Parser.evaluate(status.equation) : 'invalid'
+        status.equation = realEquation
         //return status object
         return status
 
@@ -183,7 +210,7 @@ class Services {
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
                     isCorrectClass: 'incorrect',
-                    respondText: 'ค่าsummationไม่สามารถติดลบได้'
+                    respondText: 'ค่า sigma ขอบล่างต้องมากกว่าหรือเท่ากับขอบบน'
                 }
             }
         }
@@ -259,6 +286,56 @@ class Services {
         }
 
         return randomedNumber
+    }
+
+    checkSigma = async (equation) => {
+        if (equation.includes('sigma')) {
+            const sigmaStartIndex = equation.indexOf('a')
+            let sigmaEquation = ''
+            for (let index = sigmaStartIndex + 1; index < equation.length; index++) {
+                sigmaEquation += equation[index]
+                if (this.checkParatheses(sigmaEquation)) {
+                    break
+                }
+
+
+            }
+            sigmaEquation = await sigmaEquation.slice(1, -1)
+
+            console.log(sigmaEquation)
+            let splitParams = await sigmaEquation.split(',')
+            let allParams = []
+            console.log(`params: ${splitParams}`)
+
+            let isAllInteger = []
+
+            splitParams.forEach(item => {
+                const temp = Parser.evaluate(item)
+                isAllInteger.push(Number.isInteger(temp))
+                allParams.push(temp)
+            })
+
+            console.log(`Allparams: ${allParams}`)
+            console.log(`isAllInteger: ${isAllInteger}`)
+
+            const sigmaResult = await eval(`sigma(x => ${allParams[0]},${allParams[1]}, ${allParams[2]})`)
+            console.log(`sigma: ${sigmaResult}`)
+
+            console.log(sigmaResult)
+
+            const isTrue = (res) => res === true
+
+            if (sigmaResult > 0 && isAllInteger.every(isTrue)) {
+                return { status: true, reformSigma: `sigma(${sigmaEquation})`, sigmaRes: sigmaResult }
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+
+
+
     }
 
 

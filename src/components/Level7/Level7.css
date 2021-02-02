@@ -299,6 +299,43 @@
     padding-top: 3rem;
 }
 
+.sigma-input-wrapper{
+    width: 20rem;
+    height: 100%;
+    /* background-color: #f4f4f4; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1.5rem;
+}
+
+
+.sigma-symbol{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.sigma-icon{
+    width: 5rem;
+}
+
+.celling-bound, .lower-bound{
+    width: 5rem;
+    height: 2rem;
+    font-size: 1.5rem;
+
+}
+
+.itelator{
+    width: 8rem;
+    height: 2rem;
+    font-size: 1.5rem;
+}
+
 @media only screen and (min-width: 768px){
     .calculator-section{
         width: 50vw;

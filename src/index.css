@@ -14,3 +14,7 @@ button:active{
   background-color: rgb(236, 102, 102);
 
 }
+
+.modal-open{
+  padding-right: 0 !important;
+}
