@@ -655,7 +655,9 @@ class Level7 extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => {
+                                    this.doLastIndexListDisabled()
+                                }}>ปิดหน้าต่าง</button>
                                 <button type="button" className="btn btn-primary" onClick={this.fillSigma}>ตกลง</button>
                             </div>
                         </div>
