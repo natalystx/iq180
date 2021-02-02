@@ -122,13 +122,33 @@ class Level7 extends React.Component {
             77: 'a*((b!)-((c!)/(d!)))',
             78: '(a!)*((b!)/((c!)+(d!)))',
             79: 'a*(b+((c*d)!))',
-            80: 'a+((b!)+((c*d)!))'
+            80: 'a+((b!)+((c*d)!))',
+            81: `Σ(c,a*b,d)`,
+            82: 'Σ(c,a-b,d)',
+            83: 'Σ(c,a+b,d)',
+            84: 'Σ(c*b,a,d)',
+            85: 'Σ(c+b,a,d)',
+            86: 'Σ(c-b,a,d)',
+            87: 'Σ(c^b,a,d)',
+            88: 'Σ(a^b,c,d)',
+            89: 'Σ(b,(a+d),c)',
+            90: 'Σ(b,(a-d),c)',
+            91: 'Σ(b,(a*d),c)',
+            92: 'Σ(c,(b/d),a)',
+            93: 'Σ(c,(b-d),a)',
+            94: 'Σ(c,(b+d),a)',
+            95: 'Σ(c^b,d,a)',
+            96: 'Σ(c^b,a,b)',
+            97: 'Σ(c^b,a,d)',
+            98: 'Σ(c^a,d,b)',
+            99: 'Σ(a^c,d,b)',
+            100: 'Σ(b^a,c,b)',
         }
 
         const service = new Services()
 
         //random one equation for list, 25 means the total numbers of list 
-        let randomIndex = await Math.floor(Math.random() * 80)
+        let randomIndex = await Math.floor(Math.random() * 100)
 
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
         let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
@@ -394,6 +414,7 @@ class Level7 extends React.Component {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
         let indexTemp = [...this.state.lastButtonIndex]
+
         if (elem.hasAttribute("isnumber")) {
             await allNumber.forEach(elem => {
                 elem.setAttribute("disabled", true)
@@ -497,14 +518,73 @@ class Level7 extends React.Component {
         await this.setState({ inputTarget: className })
     }
 
-    fillSigma = () => {
-        const temp = this.state.equation
-        this.setState({
-            equation: temp + `Σ(${this.state.itelator},${this.state.lowerBound},${this.state.cellingBound})`,
-            lowerBound: '',
-            cellingBound: '',
-            itelator: ''
+    disabledAllNumbers = () => {
+        let allNumber = document.querySelectorAll("button[isnumber]")
+        let allIndex = document.querySelectorAll("button[index]")
+
+        allNumber.forEach(elem => {
+            elem.setAttribute("disabled", "true")
         })
+
+    }
+
+    fillSigma = async () => {
+        const modal = document.querySelector('#sigmaModal')
+        const backdrop = document.querySelector('.modal-backdrop')
+        let allNumber = document.querySelectorAll("button[isnumber]")
+        let allIndex = document.querySelectorAll("button[index]")
+
+
+        if (this.state.lowerBound === '') {
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ค่าขอบล่างไม่สามารถเป็นค่าว่างได้'
+            })
+        }
+
+        else if (this.state.cellingBound === '') {
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ค่าขอบขอบบนไม่สามารถเป็นค่าว่างได้'
+            })
+        }
+
+        else if (this.state.itelator === '') {
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ตัวกระทำไม่สามารถเป็นค่าว่างได้'
+            })
+        } else {
+            const temp = this.state.equation
+            this.setState({
+                equation: temp + `Σ(${this.state.itelator},${this.state.lowerBound},${this.state.cellingBound})`,
+                lowerBound: '',
+                cellingBound: '',
+                itelator: ''
+            })
+
+            modal.classList.remove('show')
+            backdrop.classList.remove('show')
+            modal.style.display = 'none'
+            backdrop.style.display = 'none'
+            const body = document.querySelector('body')
+            body.classList.remove('modal-open')
+
+            await allNumber.forEach(elem => {
+                elem.removeAttribute("disabled")
+            })
+
+            await allIndex.forEach(elem => {
+                let index = elem.getAttribute("index")
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                }
+            })
+        }
+
     }
 
     render() {
@@ -559,8 +639,8 @@ class Level7 extends React.Component {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.fillSigma}>Save changes</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+                                <button type="button" className="btn btn-primary" onClick={this.fillSigma}>ตกลง</button>
                             </div>
                         </div>
                     </div>
@@ -633,7 +713,7 @@ class Level7 extends React.Component {
                         <button className="operator-btn" value={'!'} onClick={this.insertAnswer} notnumber="true">!</button>
                         <button className="operator-btn" value={','} onClick={this.insertAnswer} notnumber="true">,</button>
                         <button className="operator-btn" value={'√'} onClick={this.insertAnswer} notnumber="true">√</button>
-                        <button className="operator-btn" value={'Σ'} data-bs-toggle="modal" data-bs-target="#sigmaModal" notnumber="true">Σ</button>
+                        <button className="operator-btn" value={'Σ'} data-bs-toggle="modal" data-bs-target="#sigmaModal" notnumber="true" onClick={() => { this.disabledAllNumbers() }}>Σ</button>
                         <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
                         <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 

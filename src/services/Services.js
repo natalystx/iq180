@@ -34,6 +34,9 @@ class Services {
 
         status.equation = numberedEquation
         numberedEquation = numberedEquation.replace('Σ', 'sigma')
+        numberedEquation = numberedEquation.replace('σ', 'sigma')
+
+        const realEquation = numberedEquation.replace('sigma', 'Σ')
 
         //check paratheses
         if (this.checkParatheses(numberedEquation)) {
@@ -49,6 +52,12 @@ class Services {
 
             //set equation is valid summation value valid status
             status.summation.valid = !sigmaRes ? sigmaRes : sigmaRes.status
+
+            console.log(`sigma: ${JSON.stringify(status.summation)}`)
+
+            if (status.summation.contain === true && status.summation.valid === false) {
+                return false
+            }
 
             //replace sigma() to result of sigma
             numberedEquation = await numberedEquation.replace(sigmaRes.reformSigma, sigmaRes.sigmaRes)
@@ -111,6 +120,7 @@ class Services {
 
         //set answer by isAllOperatorValid value based
         status.answer = isAllOperatorValid ? await Parser.evaluate(status.equation) : 'invalid'
+        status.equation = realEquation
         //return status object
         return status
 
@@ -290,16 +300,32 @@ class Services {
 
 
             }
-            sigmaEquation = sigmaEquation.slice(1, -1)
+            sigmaEquation = await sigmaEquation.slice(1, -1)
 
             console.log(sigmaEquation)
+            let splitParams = await sigmaEquation.split(',')
+            let allParams = []
+            console.log(`params: ${splitParams}`)
 
-            const sigmaResult = await eval(`sigma(x => ${sigmaEquation})`)
+            let isAllInteger = []
+
+            splitParams.forEach(item => {
+                const temp = Parser.evaluate(item)
+                isAllInteger.push(Number.isInteger(temp))
+                allParams.push(temp)
+            })
+
+            console.log(`Allparams: ${allParams}`)
+            console.log(`isAllInteger: ${isAllInteger}`)
+
+            const sigmaResult = await eval(`sigma(x => ${allParams[0]},${allParams[1]}, ${allParams[2]})`)
             console.log(`sigma: ${sigmaResult}`)
 
             console.log(sigmaResult)
 
-            if (sigmaResult > 0) {
+            const isTrue = (res) => res === true
+
+            if (sigmaResult > 0 && isAllInteger.every(isTrue)) {
                 return { status: true, reformSigma: `sigma(${sigmaEquation})`, sigmaRes: sigmaResult }
             } else {
                 return false
