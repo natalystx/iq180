@@ -1,19 +1,29 @@
 *{
-  font-family: 'Mitr', sans-serif;
+  font-family: 'Prompt', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body{
+  background-color: #6EC1DB;
 }
 
 button{
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-button:active{
+
+button:focus, button:hover, button:active{
+  outline: none;
+  border: 1px transparent;
+
+}
+/* button:active{
   transform: scale(1.1);
   background-color: rgb(236, 102, 102);
 
-}
+} */
 
 .modal-open{
   padding-right: 0 !important;

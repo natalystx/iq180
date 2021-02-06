@@ -8,6 +8,8 @@ import Level4 from '../Level4/Level4'
 import Level5 from '../Level5/Level5'
 import Level6 from '../Level6/Level6'
 import Level7 from '../Level7/Level7'
+import Level8 from '../Level8/Level8'
+import rubik from '../../images/rubik.svg'
 
 class Ingame extends React.Component {
     constructor(props) {
@@ -32,16 +34,21 @@ class Ingame extends React.Component {
             4: <Level4 />,
             5: <Level5 />,
             6: <Level6 />,
-            7: <Level7 />
+            7: <Level7 />,
+            8: <Level8 />
         }
 
         return (
-            <div className="Ingame">
+            <div className="Ingame container">
                 <div className="ingame-top-section">
-                    <h3 className="level-show-text">ระดับความยาก {this.state.level}</h3>
-                    <Link to="/">
+                    <div className="level-box">
+                        <img src={rubik} alt="sdas" className="rubik-icon-ingame" />
+                        <h4 className="level-text-ingame text-white">ระดับ {this.state.level}</h4>
+                    </div>
+                    <Link to="/" className="h-100">
                         <button className="back-btn">กลับ</button>
                     </Link>
+
                 </div>
                 <div className="game-window">
                     {levelComponents[this.state.level]}
