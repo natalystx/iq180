@@ -7,6 +7,7 @@ import Services from '../../services/Services' //calculation services
 import * as swal from 'sweetalert2'
 import * as sigma from 'math-sigma'
 import think from '../../images/think.svg'
+import * as boostrap from 'bootstrap' 
 
 class Level8 extends React.Component {
 
@@ -571,12 +572,9 @@ class Level8 extends React.Component {
                 itelator: ''
             })
 
-            modal.classList.remove('show')
-            backdrop.classList.remove('show')
-            modal.style.display = 'none'
-            backdrop.style.display = 'none'
-            const body = document.querySelector('body')
-            body.classList.remove('modal-open')
+            const modalController = new boostrap.Modal(document.querySelector(modal))
+
+            modalController.toggle()
 
             await allNumber.forEach(elem => {
                 elem.removeAttribute("disabled")
@@ -626,23 +624,26 @@ class Level8 extends React.Component {
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { this.doLastIndexListDisabled() }}></button>
                             </div>
                             <div className="modal-body">
+                                <div className="alert alert-info" role="alert">
+                                    กรุณาเลือกค่าที่ต้องกรอกก่อนใส่ค่า 
+                                </div>  
                                 <div className="sigma-input-wrapper">
                                     <div className="input-wrapper">
                                         <label htmlFor="celling-bound text-white">ขอบบน</label>
-                                        <input type="text" step="1" className="celling-bound" readOnly={true} value={this.state.cellingBound} onClick={() => { this.setFieldSigma('.celling-bound') }} name="celling-bound" />
+                                        <input type="text" step="1" className="celling-bound" data-bs-dismiss="alert" readOnly={true} value={this.state.cellingBound} onClick={() => { this.setFieldSigma('.celling-bound') }} name="celling-bound" />
                                         <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
                                     <div className="sigma-symbol">
                                         <img src={sigmaIcon} alt="" className="sigma-icon" />
                                         <div className="input-wrapper">
                                             <label htmlFor="itelator text-white">ตัวกระทำ</label>
-                                            <input type="text" step="1" className="itelator" readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
+                                            <input type="text" step="1" className="itelator" data-bs-dismiss="alert"  readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
                                             <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                         </div>
                                     </div>
                                     <div className="input-wrapper">
                                         <label htmlFor="lower-bound text-white">ขอบล่าง</label>
-                                        <input type="text" readOnly={true} step="1" className="lower-bound" name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
+                                        <input type="text" readOnly={true} step="1" className="lower-bound" data-bs-dismiss="alert"  name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
                                         <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
 
