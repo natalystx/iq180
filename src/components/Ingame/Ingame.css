@@ -1,14 +1,16 @@
-@keyframes slideUp{
+  @keyframes fade {
     from{
-      transform: translateY(-100%);
+      opacity: 0;
     }
+
     to{
-      transform: translateY(0%);
+      opacity: 1;
     }
   }
 
+
 .Ingame{
-    background-image: url("../../images/bg.jpg");
+    /* background-image: url("../../images/bg.jpg"); */
     display: flex;
     min-height: 100vh;
     justify-content: flex-start;
@@ -16,16 +18,18 @@
     background-position: bottom center;
     background-repeat: no-repeat;
     background-size: cover;
-    animation: slideUp 0.3s ease-in;
-    transition: transform 0.3s ease;
+    transition: all 1s ease;
+    animation: fade 1s ease-in;
+    position: relative;
 }
 
 .ingame-top-section{
-    width: 100vw;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 1;
 }
 
 .level-show-text{
@@ -40,7 +44,7 @@
 .back-btn{
     width: 95px;
     height: 40px;
-    background-color: #FF9999;
+    background-color: #FF4492;
     border: none;
     border-radius: 20px;
     outline: none;
@@ -49,14 +53,53 @@
     font-weight: 400;
     text-align: center;
     margin-top: 1rem;
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
 }
 
 .game-window{
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+ @keyframes scaleup{
+      from{
+      transform: scale(1);
+    }
+
+    50%{
+       transform:scale(1.1);
+    }
+
+    to{
+      transform: scale(1);
+    }
+  }
+
+.level-box{
+    width: 125px;
+    height: 125px;
+    display: flex;
+    flex-direction: column;
+    justify-content:center ;
+    align-items: center;
+    background-color: #FF9753;
+    border-radius: 1rem;
+    margin: 1rem;
+
+}
+
+.level-text-ingame{
+    font-size: 1.2rem;
+    padding-top: .5rem;
+}
+
+.rubik-icon-ingame{
+    width: 45px;
+    transition: all 5s ease;
+    transform-origin: center;
+    animation: scaleup 3s ease infinite;
 }
 
 @media only screen and (min-width:1366px){
@@ -64,9 +107,9 @@
         font-size: 30px;
         margin-left: 2rem;
     }
-    .back-btn{
+    /* .back-btn{
         width: 150px;
         height: 50px;
         font-size: 20px;
-    }
+    } */
 }

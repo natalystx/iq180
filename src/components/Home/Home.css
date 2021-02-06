@@ -1,13 +1,15 @@
-@keyframes slideUp{
-  from{
-    transform: translateY(-100%);
+  @keyframes fade {
+    from{
+      opacity: 0;
+    }
+
+    to{
+      opacity: 1;
+    }
   }
-  to{
-    transform: translateY(0%);
-  }
-}
 .Home{
-    background-image: url("../../images/bg.jpg");
+    /* background-image: url("../../images/bg.jpg"); */
+    background-color: #6EC1DB;
     display: flex;
     min-height: 100vh;
     justify-content: flex-start;
@@ -15,16 +17,16 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    animation: slideUp 0.3s ease-in;
-    transition: transform 0.3s ease;
+    transition: all 1s ease;
+    animation: fade 1s ease-in;
   }
   
   .header-text{
-    font-size: 35px;
+    font-size: 30px;
     color: #ffffff;
     font-weight: 400;
     text-align: center;
-    padding-top: 6rem;
+    padding-top: 2rem;
   }
   
   .level-selection{
@@ -74,4 +76,209 @@
     font-weight: 400;
     margin-top: 8rem;
   }
+
+  @keyframes icon-animate-1{
+    from{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+
+    50%{
+       transform: translateX(-10px) translateY(-5px) scale(1.1);
+    }
+
+    to{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+  }
+
+   @keyframes icon-animate-2{
+    from{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+
+    50%{
+       transform: translateX(10px) translateY(-5px) scale(1.1);
+    }
+
+    to{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+  }
+
+   @keyframes icon-animate-3{
+    from{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+
+    50%{
+       transform: translateX(-10px) translateY(5px) scale(.9);
+    }
+
+    to{
+      transform: translateX(0) translateY(0)  scale(1);
+    }
+  }
+
+  @keyframes scaleup{
+      from{
+      transform: scale(1);
+    }
+
+    50%{
+       transform:scale(1.1);
+    }
+
+    to{
+      transform: scale(1);
+    }
+  }
+
+
   
+  .svg-logo{
+    padding-top: 3rem;
+  }
+  
+  
+  .logo-animated{
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 150px;
+  }
+
+  .kid-head{
+    transform-origin: center;
+    transition: all 5s ease;
+    animation: scaleup 5s ease infinite;
+  }
+
+.overfloat-logo{
+  position: absolute;
+  transition: all 1s ease;
+}
+
+.overfloat-logo-1{
+  top: 50%;
+  left: 30%;
+  animation: icon-animate-1 5s ease infinite;
+}
+
+
+.overfloat-logo-2{
+  top: 23%;
+  left: 32%;
+  animation: icon-animate-1 5s ease infinite;
+}
+
+.overfloat-logo-3{
+  top: 5%;
+  right: 46%;
+   animation: icon-animate-3 5s ease infinite;
+}
+
+.overfloat-logo-4{
+  top: 27%;
+  right: 30%;
+   animation: icon-animate-2 5s ease infinite;
+}
+
+.overfloat-logo-5{
+  top: 50%;
+  right: 30%;
+   animation: icon-animate-2 5s ease infinite;
+}
+
+.level-card{
+  border-radius: 25px;
+  background-color: #FF9753;
+  height: 500px;
+  justify-content: center;
+}
+
+
+
+.rubik-icon {
+  width: 150px;
+  transition: all .5s ease;
+  transform-origin: center;
+  animation: scaleup 3s ease infinite;
+}
+
+.level-text{
+  font-size: 1.5rem;
+}
+
+
+.level-text-head{
+  font-size: 2.5rem;
+}
+
+.link {
+  text-decoration: none;
+  justify-content: center;
+}
+
+.levels-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow-y: hidden;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  cursor: grab;
+}
+
+.levels-section::-webkit-scrollbar-track {
+  background: #C4C4C4;
+}
+.levels-section::-webkit-scrollbar {
+  height: 8px;
+  border-radius: 10px;
+}
+
+.levels-section::-webkit-scrollbar-thumb {
+  background: #F4DD45;
+   border-radius: 5px;
+   width: 20px;
+}
+
+
+.level-card-wrap{
+ flex: 10 0 auto;
+ margin-right: 1rem;
+}
+
+@media (min-width: 768px){
+
+  .overfloat-logo-1{
+  top: 50%;
+   left: 40%;
+}
+
+
+.overfloat-logo-2{
+  top: 23%;
+  left: 38%;
+}
+
+
+
+.overfloat-logo-4{
+  top: 27%;
+  right: 38%;
+}
+
+.overfloat-logo-5{
+  top: 50%;
+  right: 40%;
+}
+
+.level-card{
+  height: 60vh;
+}
+
+}

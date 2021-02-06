@@ -153,7 +153,7 @@ class Level6 extends React.Component {
         const equationValidResult = await service.equationValidate(defaultEquation)
         const equation = equationValidResult.equation
         //check default answer is 2 digits
-        if (equationValidResult.answer < 10 || equationValidResult.answer > 99
+        if (equationValidResult.answer < 99 || equationValidResult.answer > 999
             || equationValidResult.answer === 'invalid'
             || !Number.isInteger(equationValidResult.answer)) {
             this.doRandomNumbers()
