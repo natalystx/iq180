@@ -35,7 +35,7 @@ class Home extends React.Component {
                 </div>
                 <h1 className="header-text">IQ180 GAME</h1>
 
-                <div className="levels-section d-flex justify-content-start align-items-center w-100 mb-md-5">
+                <div className="levels-section d-flex justify-content-start align-items-center w-100 my-md-5">
                     <Link to={
                         {
                             pathname: "/ingame",
@@ -46,7 +46,7 @@ class Home extends React.Component {
                         }
                     } className="d-flex flex-column align-items-center link w-100 level-card-wrap">
 
-                        <div className="level-card d-flex flex-column align-items-center w-100 mt-md-5">
+                        <div className="level-card d-flex flex-column align-items-center w-100">
                             <div className="rubik-wrapper d-flex flex-column align-items-center w-100">
                                 <img src={rubik} alt="" className="rubik-icon" />
                             </div>

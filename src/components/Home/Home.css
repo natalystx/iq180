@@ -279,6 +279,24 @@
 
 .level-card{
   height: 60vh;
+  
 }
 
+}
+
+@media (min-width: 992px){
+  .level-card{
+    margin-bottom: 1rem;
+
+  }
+  .levels-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-direction: column;
+   height: 62vh;
+}
 }
