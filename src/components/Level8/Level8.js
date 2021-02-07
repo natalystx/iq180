@@ -7,7 +7,7 @@ import Services from '../../services/Services' //calculation services
 import * as swal from 'sweetalert2'
 import * as sigma from 'math-sigma'
 import think from '../../images/think.svg'
-import * as boostrap from 'bootstrap' 
+import * as bootstrap from 'bootstrap'
 
 class Level8 extends React.Component {
 
@@ -38,7 +38,10 @@ class Level8 extends React.Component {
             cellingBound: '',
             lowerBound: '',
             itelator: '',
-            inSigmaIndex: []
+            inSigmaIndex: [],
+            // cellingIndex: [],
+            // itelatorIndex: [],
+            // lowerIndex: []
         }
     }
 
@@ -185,7 +188,7 @@ class Level8 extends React.Component {
     //delete input answer
     delAnswer = async () => {
 
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!']
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!','Σ']
 
         let temp = this.state.equation
 
@@ -302,33 +305,6 @@ class Level8 extends React.Component {
 
     }
 
-    //checkparatheses
-    checkParatheses = (equation) => {
-
-        let openParathensesCounter = 0
-        let closeParathensesCounter = 0
-
-        //check parathenses
-        for (let index = 0; index < equation.length; index++) {
-
-
-            if (equation[index] === '(') {
-                openParathensesCounter++
-            }
-            if (equation[index] === ')') {
-                closeParathensesCounter++
-            }
-
-
-        }
-
-        if (openParathensesCounter === closeParathensesCounter) {
-            return true
-        } else {
-            return false
-        }
-
-    }
 
     //calculate user's equation result and checks with default answer
     calAns = async () => {
@@ -419,6 +395,9 @@ class Level8 extends React.Component {
         let allIndex = document.querySelectorAll("button[index]")
         let indexTemp = [...this.state.lastButtonIndex]
         let sigmaindex = [...this.state.inSigmaIndex]
+        // let cellingindex = [...this.state.cellingIndex]
+        // let itelatorindex = [...this.state.intelatorIndex]
+        // let lowerindex = [...this.state.lowerIndex]
 
         if (elem.hasAttribute("isnumber")) {
             await allNumber.forEach(elem => {
@@ -536,7 +515,6 @@ class Level8 extends React.Component {
 
     fillSigma = async () => {
         const modal = document.querySelector('#sigmaModal')
-        const backdrop = document.querySelector('.modal-backdrop')
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
 
@@ -572,9 +550,12 @@ class Level8 extends React.Component {
                 itelator: ''
             })
 
-            const modalController = new boostrap.Modal(document.querySelector(modal))
+            
 
-            modalController.toggle()
+           
+
+            const closeBTN = document.querySelector('.btn-close')
+            closeBTN.click()
 
             await allNumber.forEach(elem => {
                 elem.removeAttribute("disabled")
@@ -586,6 +567,7 @@ class Level8 extends React.Component {
                     elem.setAttribute("disabled", true)
                 }
             })
+
         }
 
     }
@@ -612,6 +594,45 @@ class Level8 extends React.Component {
         })
     }
 
+    delSigma = async () =>{
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ']
+
+        let celling = this.state.cellingBound
+        let itelator = this.state.itelator
+        let lower = this.state.lowerBound
+
+        // // check values
+        // if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
+        //     //delete answer
+        //     temp = await temp.slice(0, -1)
+        //     //setState new answer
+        //     await this.setState({ equation: temp })
+        // }
+        // else {
+        //     //delete answer
+        //     temp = await temp.slice(0, -1)
+        //     //remove disable button
+        //     let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
+        //     let tempIndex = this.state.lastButtonIndex
+        //     tempIndex = await tempIndex.slice(0, -1)
+
+        //     //setState new answer and buttonIndex
+        //     await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+
+        //     const allNumber = document.querySelectorAll('button[index]')
+
+        //     await allNumber.forEach(elem => {
+        //         const index = elem.getAttribute('index')
+        //         if (this.state.lastButtonIndex.includes(index)) {
+        //             elem.setAttribute("disabled", true)
+        //         } else {
+        //             elem.removeAttribute("disabled")
+        //         }
+        //     })
+        // }
+
+    }
+
     render() {
         return (
             <div className="level-1">
@@ -623,7 +644,7 @@ class Level8 extends React.Component {
                                 <h5 className="modal-title text-white" id="exampleModalLabel">Sigma</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { this.doLastIndexListDisabled() }}></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body d-flex flex-column align-items-center justify-content-center">
                                 <div className="alert alert-info" role="alert">
                                     กรุณาเลือกค่าที่ต้องกรอกก่อนใส่ค่า 
                                 </div>  
