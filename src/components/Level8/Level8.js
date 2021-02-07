@@ -36,9 +36,8 @@ class Level8 extends React.Component {
             lowerBound: '',
             itelator: '',
             inSigmaIndex: [],
-            // cellingIndex: [],
-            // itelatorIndex: [],
-            // lowerIndex: []
+            intersectionIndex: [],
+            notIntersectionIndex: []
         }
     }
 
@@ -185,7 +184,9 @@ class Level8 extends React.Component {
     //delete input answer
     delAnswer = async () => {
 
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ']
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ', '√']
+        const allNumberIndexValue = document.querySelectorAll('button[index]')
+        let allIndex
 
         let temp = this.state.equation
 
@@ -198,21 +199,27 @@ class Level8 extends React.Component {
             await this.setState({ equation: temp })
         }
         else {
-            //delete answer
+
+            console.log(this.state.lastButtonIndex);
+            allNumberIndexValue.forEach(item => {
+
+                const number = item.getAttribute('value').toString()
+                const index = item.getAttribute('index').toString()
+
+                if (number === temp[temp.length - 1]) {
+                    if (this.state.lastButtonIndex.includes(index)) {
+                        allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+                    }
+                }
+            })
             temp = await temp.slice(0, -1)
-            //remove disable button
-            let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
-            let tempIndex = this.state.lastButtonIndex
-            tempIndex = await tempIndex.slice(0, -1)
+            this.setState({ equation: temp })
 
-            //setState new answer and buttonIndex
-            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+            this.setState({ lastButtonIndex: allIndex })
 
-            const allNumber = document.querySelectorAll('button[index]')
-
-            await allNumber.forEach(elem => {
+            allNumberIndexValue.forEach(elem => {
                 const index = elem.getAttribute('index')
-                if (this.state.lastButtonIndex.includes(index)) {
+                if (allIndex.includes(index)) {
                     elem.setAttribute("disabled", true)
                 } else {
                     elem.removeAttribute("disabled")
@@ -468,15 +475,6 @@ class Level8 extends React.Component {
 
         this.setState({ lastButtonIndex: indexTemp, inSigmaIndex: sigmaindex })
 
-        // else {
-        //     if (elem.hasAttribute("index")) {
-        //         this.setState({ equation: temp })
-        //     } else {
-        //         this.setState({ equation: temp })
-        //     }
-        //     this.openRootModal()
-        // }
-
 
 
 
@@ -552,18 +550,29 @@ class Level8 extends React.Component {
 
 
             const closeBTN = document.querySelector('.btn-close')
-            closeBTN.click()
+            await closeBTN.click()
 
-            await allNumber.forEach(elem => {
-                elem.removeAttribute("disabled")
-            })
 
-            await allIndex.forEach(elem => {
-                let index = elem.getAttribute("index")
-                if (this.state.lastButtonIndex.includes(index)) {
+
+            const joinedIndex = this.state.intersectionIndex.concat(this.state.lastButtonIndex)
+
+            console.log('join: ' + joinedIndex);
+
+            allIndex.forEach(elem => {
+                const index = elem.getAttribute('index')
+                if (joinedIndex.includes(index)) {
                     elem.setAttribute("disabled", true)
+                } else {
+                    elem.removeAttribute("disabled")
                 }
             })
+
+            this.setState({
+                intersectionIndex: [],
+                notIntersectionIndex: [],
+                lastButtonIndex: joinedIndex
+            })
+
 
         }
 
@@ -572,8 +581,11 @@ class Level8 extends React.Component {
     doLastIndexListDisabled = async () => {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
+        console.log('last: ' + this.state.lastButtonIndex);
+        console.log('sig: ' + this.state.inSigmaIndex);
 
         const notIntersectionIndex = this.state.lastButtonIndex.filter(item => !this.state.inSigmaIndex.includes(item))
+        const intersectionIndex = this.state.lastButtonIndex.filter(item => this.state.inSigmaIndex.includes(item))
 
         console.log(notIntersectionIndex);
 
@@ -593,6 +605,8 @@ class Level8 extends React.Component {
             lowerBound: '',
             itelator: '',
             lastButtonIndex: notIntersectionIndex,
+            intersectionIndex: intersectionIndex,
+            notIntersectionIndex: notIntersectionIndex,
             inSigmaIndex: []
         })
     }
