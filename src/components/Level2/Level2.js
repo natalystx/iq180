@@ -1,8 +1,10 @@
 import React from 'react'
-import * as Parser from 'mathjs' //math library
-import './Level2.css'
+import '../styles/Level.css'
 import delIcon from '../../images/icons/delete.png'
 import Services from '../../services/Services' //calculation services
+import * as swal from 'sweetalert2'
+import think from '../../images/think.svg'
+
 
 class Level2 extends React.Component {
 
@@ -255,22 +257,23 @@ class Level2 extends React.Component {
     render() {
         return (
             <div className="level-1">
-                <div className="re-random-section">
-                    <button className="re-random-btn" onClick={this.doRandomNumbers}>
+
+                <div className="re-random-section-new">
+                    <button className="re-random-btn-new" onClick={this.doRandomNumbers}>
                         สุ่มใหม่
                 </button>
                 </div>
                 <div className="game-content">
                     <div className="info-text">
-                        <p className="ur-equation-text">
-                            สมการของคุณ
-                        </p>
-                        <p className="ans-text">
+                        <div className="ans-icon-wrap">
+                            <img src={think} alt="" className="think-icon" />
+                        </div>
+                        <p className="ans-text-new">
                             ผลลัพท์ {this.state.defaultAnswer}
                         </p>
                     </div>
                     <div className="input-section">
-                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} />
+                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} placeholder="กรอกสมการของคุณ" />
                         <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                     </div>
                     <div className="calculator-section">

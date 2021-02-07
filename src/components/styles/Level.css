@@ -1,30 +1,50 @@
+
+  @keyframes shine{
+    from{
+        transform: rotate(-5deg) scale(1);
+        filter: brightness(1);
+    }
+
+    50%{
+      filter: brightness(1.1);
+      transform: rotate(5deg) scale(1.1);
+    }
+
+     to{
+      filter: brightness(1);
+      transform: rotate(-5deg) scale(1);
+    }
+  }
+
 .level-1{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.re-random-section{
+.re-random-section-new{
     display: flex;
+    z-index: -1;
     flex-direction: row;
     justify-content: flex-end;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 7%;
+    right: 3%;
+    z-index: 1;
 }
 
-.re-random-btn{
+.re-random-btn-new{
     width: 95px;
     height: 40px;
-    background-color: #99C2FF;
+    background-color: #732AF7;
     border: none;
     border-radius: 20px;
     outline: none;
     color: #ffffff;
-    font-size: 18;
+    font-size: 16px;
     font-weight: 400;
     text-align: center;
     margin-top: 1rem;
-    margin-right: 1rem;
 }
 
 .game-content{
@@ -35,28 +55,35 @@
 
 .info-text{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding-top: 5rem;
+    width: 100%;
+    height: 120px;
+    padding-top: 0;
+    background-color: #F4DD45;
+    border-radius: 25px;
+    transition: all 1s ease;
+    animation: fade 1s ease-out;
+    
 }
 
-.ur-equation-text{
-    position: relative;
+.ur-equation-text-new{
     font-size: 20px;
     text-align: left;
     font-weight: 300;
     color: #ffffff;
-  left: -3rem;
+    
 }
 
-.ans-text{
-    position: relative;
+.ans-text-new{
+  
     font-size: 25px;
     text-align: right;
     font-weight: 300;
-    color: #ffffff;
-    right: -3rem;
+    color: #2F2F2F;
+    margin-bottom: 0 !important;
+    margin-left: 1rem;
+    
 }
 
 .input-section{
@@ -64,10 +91,12 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 1rem;
+    width: 100%;
 }
 
 .equationInput{
-    width: 18rem;
+    width: 100%;
     height: 65px;
     border: none;
     border-radius: 20px 0px 0px 20px;
@@ -76,16 +105,16 @@
     color: #6c6c6c;
     background-color: #ffffff;
     font-weight: 400;
-    font-size: 25px;
+    font-size: 1.2rem;
     padding-left: 1rem;
 }
 
 .del-btn{
     margin-top: 0.5rem;
-    width: 65px;
+    width: 5rem;
     height: 65px;
     border: none;
-    background-color: #FB8878;
+    background-color: #FF9753;
     font-size: 20px;
     font-weight: 400;
     color: #ffffff;
@@ -105,7 +134,7 @@
 .calculator-section{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 2rem;
+    margin-top: 1rem;
     justify-content: center;
 }
 
@@ -114,16 +143,17 @@
     width: 56px;
     height: 56px;
     border: none;
-    background-color: #86E4B7;
+    background-color: #FF9753;
     font-size: 20px;
     font-weight: 400;
     color: #ffffff;
-    border-radius: 100%;
+    border-radius: 15px;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     margin-top: 1rem;
     outline: none;
     text-align: center;
+    transition: all .5s ease;
 }
 .number-btn:disabled{
     background-color: #4d4d4d;
@@ -136,12 +166,12 @@
 }
 
 .number-btn:active{
-    background-color: #86a4e4;
+    background-color: #FF9753;
     outline: none;
 }
 
 .operator-btn:active{
-    background-color: #86a4e4;
+    background-color: #FF9753;
     outline: none;
 }
 
@@ -150,24 +180,25 @@
     width: 56px;
     height: 56px;
     border: none;
-    background-color: #FB8878;
+    background-color: #FF9753;
     font-size: 20px;
     font-weight: 400;
     color: #ffffff;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     margin-top: 1rem;
     outline: none;
     text-align: center;
+    transition: all .5s ease;
 }
 
 .submit-btn{
-    width: 9.6rem;
+    width: 100%;
     height: 56px;
     border: none;
     border-radius: 20px;
-    background-color: #4EF0C9;
+    background-color: #F4DD45;
     color: #ffffff;
     font-size: 20px;
     font-weight: 400;
@@ -177,12 +208,19 @@
     margin-top: 1rem;
 }
 
+.think-icon{
+    transition: all 1s ease;
+    width: 50px;
+    animation: shine 3s ease infinite;
+    transform-origin: bottom center;
+}
+
 .clear-btn{
-    width: 9.6rem;
+    width: 100%;
     height: 56px;
     border: none;
     border-radius: 20px;
-    background-color: #f0614e;
+    background-color: #FF4492;
     color: #ffffff;
     font-size: 20px;
     font-weight: 400;
@@ -193,22 +231,23 @@
 }
 
 .show-ans-btn{
-    width: 21rem;
+    width: 100%;
     height: 56px;
     border: none;
     border-radius: 20px;
-    background-color: #99C2FF;
+    background-color: #732AF7;
     color: #ffffff;
     font-size: 20px;
     font-weight: 400;
     outline: none;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-top: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .ans-card{
-    width: 80vw;
+    width: 100%;
     height: 160px;
     border: none;
     border-radius: 20px;
@@ -220,6 +259,14 @@
     font-size: 25px;
     font-weight: 400;
     margin-top: 1rem;
+    transition: all 1s ease;
+    animation: fade 1s ease-in;
+    margin-bottom: 3rem;
+}
+
+.res-text{
+    margin-bottom: 0 !important;
+    font-size: 1.3rem;
 }
 
 .incorrect{
@@ -327,70 +374,138 @@
     width: 5rem;
     height: 2rem;
     font-size: 1.5rem;
+    border-radius: 5px 0px 0px 5px;
+     font-size: 1.1rem;
 
 }
 
 .itelator{
-    width: 8rem;
+    width: 5rem;
     height: 2rem;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 5px 0px 0px 5px;
 }
 
-@media only screen and (min-width: 768px){
+.input-wrapper{
+    display: flex;
+}
+
+.sigma-del{
+    height: 2rem;
+    margin-top: 0;
+    width: 3rem;
+    border-radius: 0px 5px 5px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sigma-del img{
+    width: 20px;
+    height: 20px;
+}
+
+@media (min-width: 576px){
     .calculator-section{
-        width: 50vw;
+        width: 85%;
     }
 }
 
-@media only screen and (min-width: 1024px){
-    .calculator-section{
-        width: 60vw;
-    }
-
-    .alert-root{
-        margin-top: 10%;
-    }
-
-    .root-suggest-texts{
-        font-size: 2rem;
-        color: #ffffff;
-        font-weight: 500;
-        padding-top: 1rem;
-    }
-    
-    .root-details{
-        font-size: 1rem;
-        color: #ffffff;
-        font-weight: 300;
-        padding-top: 10px;
-    }
-}
-
-@media only screen and (min-width: 1366px){
-    .alert-root{
-        margin-top: 0rem;
-    }
+@media (min-width: 768px){
     .info-text{
-        width: 33vw;
+        height: 200px;
+        
     }
-    .ur-equation-text{
-        font-size: 25px;
+
+    .ans-text-new{
+        font-size: 2rem;
     }
-    .input-section{
-        margin-bottom: 3rem;
+
+    .think-icon{
+        width: 70px;
     }
-    .equationInput{
-        width: 35vw;
+
+    .re-random-section-new{
+        right: 2%;
+        top: 6%;
     }
-    .calculator-section{
-        width: 20vw;
-    }
-    .show-ans-btn{
-        margin-top: 1rem;
-    }
-    .re-random-btn{
-        width: 150px;
+
+    .re-random-btn-new, .back-btn{
+        width: 10rem;
         height: 50px;
-        font-size: 20px;
+    }
+
+    .info-text{
+        margin-top: 3rem;
+    }
+
+    .input-section, .info-text{
+        width: 85%;
+    }
+}
+
+.modal-dialog{
+    width: 100vw;
+}
+
+.modal-content{
+    background-color: #6EC1DB;
+    box-shadow: 0 0 10px #ffffff;
+    min-height: 100vh;  
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.root-suggest-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-footer{
+    border-top: none;
+    justify-content: center;
+}
+
+.btn-primary{
+    background-color: #F4DD45;
+    border: 0px;
+    padding: .5rem 2rem;
+    color: #000;
+}
+
+label{
+    color: #fff;
+   padding-right: 1rem;
+}
+
+input{
+    border: none;
+    border-radius: 5px;
+}
+
+@media (min-width: 992px){
+    .calculator-section, .input-section, .info-text {
+    width: 36rem;
+}
+
+.calculator-section-on-modal{
+    width: 100%;
+}
+
+.modal-content{
+    min-height: 500px;
+}
+
+}
+
+@media (min-width: 1200px){
+    .info-text{
+        margin-top: 8rem;
+    }
+    .re-random-section-new{
+        right: 1%;
     }
 }

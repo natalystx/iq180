@@ -1,8 +1,9 @@
 import React from 'react'
-import * as Parser from 'mathjs' //math library
-import './Level6.css'
+import '../styles/Level.css'
 import delIcon from '../../images/icons/delete.png'
 import Services from '../../services/Services' //calculation services
+import * as swal from 'sweetalert2'
+import think from '../../images/think.svg'
 
 class Level6 extends React.Component {
 
@@ -253,7 +254,7 @@ class Level6 extends React.Component {
             } else {
                 this.setState({ equation: temp })
             }
-            this.openRootModal()
+            // this.openRootModal()
         }
 
 
@@ -378,52 +379,59 @@ class Level6 extends React.Component {
     render() {
         return (
             <div className="level-1">
-                <div className="alert-root">
-                    <span className="close" onClick={this.openRootModal}>x</span>
-                    <div className="root-suggest-content">
-                        <h4 className="root-suggest-texts">
-                            รูปแบบการใช้การใช้รูท
-                        </h4>
-                        <p className="root-details">
-                            √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
-                            <br />
-                            หากไม่กำหนดรากที่ n จะเท่ากับรากที่ 2
-                        </p>
+                <div className="modal fade" id="rootModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-body">
 
-                        <h4 className="root-suggest-texts">
-                            ตัวอย่าง
-                        </h4>
-                        <p className="root-details">
-                            √(16) ค่าที่จะได้เท่ากับ 4
-                            <br />
-                            √(8*2) ค่าที่จะได้เท่ากับ 4
-                            <br />
-                            √(27,3) ค่าที่จะได้เท่ากับ 3
-                            <br />
-                            √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
-                        </p>
-                        <input type="checkbox" className="not-open-root" onClick={this.checkShowAgain} />
-                        <label htmlFor="not-open-root" className="not-open-root-label">ฉันเข้าใจแล้วไม่ต้องแสดงอีก</label>
+                                <div className="root-suggest-content">
+                                    <h4 className="root-suggest-texts">
+                                        รูปแบบการใช้การใช้รูท
+                                        </h4>
+                                    <p className="root-details">
+                                        √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
+                                            <br />
+                                            หากไม่กำหนดรากที่ n จะเท่ากับรากที่ 2
+                                        </p>
+
+                                    <h4 className="root-suggest-texts">
+                                        ตัวอย่าง
+                                        </h4>
+                                    <p className="root-details">
+                                        √(16) ค่าที่จะได้เท่ากับ 4
+                                            <br />
+                                            √(8*2) ค่าที่จะได้เท่ากับ 4
+                                            <br />
+                                            √(27,3) ค่าที่จะได้เท่ากับ 3
+                                            <br />
+                                            √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
+                                        </p>
+                                </div>
+
+
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" data-bs-dismiss="modal" className="btn btn-primary">ตกลง</button>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
-                <div className="re-random-section">
-                    <button className="re-random-btn" onClick={this.doRandomNumbers}>
+                <div className="re-random-section-new">
+                    <button className="re-random-btn-new" onClick={this.doRandomNumbers}>
                         สุ่มใหม่
                 </button>
                 </div>
                 <div className="game-content">
                     <div className="info-text">
-                        <p className="ur-equation-text">
-                            สมการของคุณ
-                        </p>
-                        <p className="ans-text">
+                        <div className="ans-icon-wrap">
+                            <img src={think} alt="" className="think-icon" />
+                        </div>
+                        <p className="ans-text-new">
                             ผลลัพท์ {this.state.defaultAnswer}
                         </p>
                     </div>
                     <div className="input-section">
-                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} />
+                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} placeholder="กรอกสมการของคุณ" />
                         <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                     </div>
                     <div className="calculator-section">
@@ -442,7 +450,7 @@ class Level6 extends React.Component {
                         <button className="operator-btn" value={'/'} onClick={this.insertAnswer} notnumber="true">/</button>
                         <button className="operator-btn" value={'^'} onClick={this.insertAnswer} notnumber="true">^</button>
                         <button className="operator-btn" value={','} onClick={this.insertAnswer} notnumber="true">,</button>
-                        <button className="operator-btn" value={'√'} onClick={this.insertAnswer} index="6" notnumber="true">√</button>
+                        <button className="operator-btn" value={'√'} data-bs-toggle="modal" data-bs-target="#rootModal" onClick={this.insertAnswer} index="6" notnumber="true">√</button>
                         <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
                         <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 

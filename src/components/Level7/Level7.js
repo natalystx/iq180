@@ -1,11 +1,10 @@
 import React from 'react'
-import * as Parser from 'mathjs' //math library
-import './Level7.css'
+import '../styles/Level.css'
 import delIcon from '../../images/icons/delete.png'
 import sigmaIcon from '../../images/icons/sigma.svg'
 import Services from '../../services/Services' //calculation services
 import * as swal from 'sweetalert2'
-import * as sigma from 'math-sigma'
+import think from '../../images/think.svg'
 
 class Level7 extends React.Component {
 
@@ -34,7 +33,8 @@ class Level7 extends React.Component {
             inputTarget: '',
             cellingBound: '',
             lowerBound: '',
-            itelator: ''
+            itelator: '',
+            inSigmaIndex: [],
         }
     }
 
@@ -138,11 +138,11 @@ class Level7 extends React.Component {
             93: 'Σ(c,(b-d),a)',
             94: 'Σ(c,(b+d),a)',
             95: 'Σ(c^b,d,a)',
-            96: 'Σ(c^b,a,b)',
+            96: 'Σ(c^b,a,d)',
             97: 'Σ(c^b,a,d)',
             98: 'Σ(c^a,d,b)',
             99: 'Σ(a^c,d,b)',
-            100: 'Σ(b^a,c,b)',
+            100: 'Σ(b^a,c,d)',
         }
 
         const service = new Services()
@@ -181,7 +181,7 @@ class Level7 extends React.Component {
     //delete input answer
     delAnswer = async () => {
 
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!']
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ']
 
         let temp = this.state.equation
 
@@ -257,7 +257,7 @@ class Level7 extends React.Component {
             } else {
                 this.setState({ equation: temp })
             }
-            this.openRootModal()
+            // this.openRootModal()
         }
 
 
@@ -414,6 +414,10 @@ class Level7 extends React.Component {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
         let indexTemp = [...this.state.lastButtonIndex]
+        let sigmaindex = [...this.state.inSigmaIndex]
+        // let cellingindex = [...this.state.cellingIndex]
+        // let itelatorindex = [...this.state.intelatorIndex]
+        // let lowerindex = [...this.state.lowerIndex]
 
         if (elem.hasAttribute("isnumber")) {
             await allNumber.forEach(elem => {
@@ -422,6 +426,7 @@ class Level7 extends React.Component {
             if (elem.hasAttribute("index")) {
 
                 indexTemp.push(elem.getAttribute("index"))
+                sigmaindex.push(elem.getAttribute("index"))
 
                 if (this.state.inputTarget === '.celling-bound') {
                     const temp = this.state.cellingBound
@@ -484,7 +489,7 @@ class Level7 extends React.Component {
 
         }
 
-        this.setState({ lastButtonIndex: indexTemp })
+        this.setState({ lastButtonIndex: indexTemp, inSigmaIndex: sigmaindex })
 
         // else {
         //     if (elem.hasAttribute("index")) {
@@ -530,7 +535,6 @@ class Level7 extends React.Component {
 
     fillSigma = async () => {
         const modal = document.querySelector('#sigmaModal')
-        const backdrop = document.querySelector('.modal-backdrop')
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
 
@@ -566,12 +570,12 @@ class Level7 extends React.Component {
                 itelator: ''
             })
 
-            modal.classList.remove('show')
-            backdrop.classList.remove('show')
-            modal.style.display = 'none'
-            backdrop.style.display = 'none'
-            const body = document.querySelector('body')
-            body.classList.remove('modal-open')
+
+
+
+
+            const closeBTN = document.querySelector('.btn-close')
+            closeBTN.click()
 
             await allNumber.forEach(elem => {
                 elem.removeAttribute("disabled")
@@ -583,6 +587,7 @@ class Level7 extends React.Component {
                     elem.setAttribute("disabled", true)
                 }
             })
+
         }
 
     }
@@ -591,16 +596,172 @@ class Level7 extends React.Component {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
 
-        await allNumber.forEach(elem => {
+        const notIntersectionIndex = this.state.lastButtonIndex.filter(item => !this.state.inSigmaIndex.includes(item))
+
+        console.log(notIntersectionIndex);
+
+        allNumber.forEach(elem => {
             elem.removeAttribute("disabled")
         })
 
-        await allIndex.forEach(elem => {
+        allIndex.forEach(elem => {
             let index = elem.getAttribute("index")
-            if (this.state.lastButtonIndex.includes(index)) {
+            if (notIntersectionIndex.includes(index)) {
                 elem.setAttribute("disabled", true)
             }
         })
+
+        this.setState({
+            cellingBound: '',
+            lowerBound: '',
+            itelator: '',
+            lastButtonIndex: notIntersectionIndex,
+            inSigmaIndex: []
+        })
+    }
+
+    delSigma = async (targetInput) => {
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ', '√']
+
+        let celling = this.state.cellingBound
+        let itelatorTemp = this.state.itelator
+        let lower = this.state.lowerBound
+        const allNumberIndexValue = document.querySelectorAll('button[index]')
+        let sigmaIndex
+        let allIndex
+
+        console.log(this.state.inputTarget);
+
+        if (targetInput === '.lower-bound') {
+            if (lower.length === 0 || operatorList.includes(lower[lower.length - 1])) {
+                console.log('tes');
+                lower = lower.slice(0, -1)
+                this.setState({ lowerBound: lower })
+
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
+
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === lower[lower.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                lower = lower.slice(0, -1)
+                this.setState({ lowerBound: lower })
+
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+
+
+
+        }
+
+        if (targetInput === '.itelator') {
+            if (itelatorTemp.length === 0 || operatorList.includes(itelatorTemp[itelatorTemp.length - 1])) {
+                console.log('tes');
+                itelatorTemp = itelatorTemp.slice(0, -1)
+                this.setState({ itelator: itelatorTemp })
+
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
+
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === itelatorTemp[itelatorTemp.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                itelatorTemp = itelatorTemp.slice(0, -1)
+                this.setState({ itelator: itelatorTemp })
+
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+        }
+
+        if (targetInput === '.celling-bound') {
+            if (celling.length === 0 || operatorList.includes(celling[celling.length - 1])) {
+                console.log('tes');
+                celling = celling.slice(0, -1)
+                this.setState({ cellingBound: celling })
+
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
+
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === celling[celling.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                celling = celling.slice(0, -1)
+                this.setState({ cellingBound: celling })
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+
+        }
+
+
     }
 
     render() {
@@ -611,29 +772,35 @@ class Level7 extends React.Component {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Sigma</h5>
+                                <h5 className="modal-title text-white" id="exampleModalLabel">Sigma</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { this.doLastIndexListDisabled() }}></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body d-flex flex-column align-items-center justify-content-center">
+                                <div className="alert alert-info" role="alert">
+                                    กรุณาเลือกค่าที่ต้องกรอกก่อนใส่ค่า
+                                </div>
                                 <div className="sigma-input-wrapper">
                                     <div className="input-wrapper">
-                                        <label htmlFor="celling-bound">ขอบบน</label>
-                                        <input type="text" step="1" className="celling-bound" readOnly={true} value={this.state.cellingBound} onClick={() => { this.setFieldSigma('.celling-bound') }} name="celling-bound" />
+                                        <label htmlFor="celling-bound text-white">ขอบบน</label>
+                                        <input type="text" step="1" className="celling-bound" data-bs-dismiss="alert" readOnly={true} value={this.state.cellingBound} onClick={() => { this.setFieldSigma('.celling-bound') }} name="celling-bound" />
+                                        <button className="del-btn sigma-del" onClick={() => { this.delSigma('.celling-bound') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
                                     <div className="sigma-symbol">
                                         <img src={sigmaIcon} alt="" className="sigma-icon" />
                                         <div className="input-wrapper">
-                                            <label htmlFor="itelator">ตัวกระทำ</label>
-                                            <input type="text" step="1" className="itelator" readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
+                                            <label htmlFor="itelator text-white">ตัวกระทำ</label>
+                                            <input type="text" step="1" className="itelator" data-bs-dismiss="alert" readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
+                                            <button className="del-btn sigma-del" onClick={() => { this.delSigma('.itelator') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                         </div>
                                     </div>
                                     <div className="input-wrapper">
-                                        <label htmlFor="lower-bound">ขอบล่าง</label>
-                                        <input type="text" readOnly={true} step="1" className="lower-bound" name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
+                                        <label htmlFor="lower-bound text-white">ขอบล่าง</label>
+                                        <input type="text" readOnly={true} step="1" className="lower-bound" data-bs-dismiss="alert" name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
+                                        <button className="del-btn sigma-del" onClick={() => { this.delSigma('.lower-bound') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
 
                                 </div>
-                                <div className="calculator-section">
+                                <div className="calculator-section calculator-section-on-modal">
 
                                     {/* numbers */}
                                     <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertSigma} index="1" isnumber="true">{this.state.numbers['a']}</button>
@@ -649,7 +816,7 @@ class Level7 extends React.Component {
                                     <button className="operator-btn" value={'^'} onClick={this.insertSigma} notnumber="true">^</button>
                                     <button className="operator-btn" value={'!'} onClick={this.insertSigma} notnumber="true">!</button>
                                     <button className="operator-btn" value={','} onClick={this.insertSigma} notnumber="true">,</button>
-                                    <button className="operator-btn" value={'√'} onClick={this.insertSigma} notnumber="true">√</button>
+                                    <button className="operator-btn" value={'√'} data-bs-toggle="modal" data-bs-target="#rootModal" onClick={this.insertSigma} notnumber="true">√</button>
                                     <button className="operator-btn" value={'('} onClick={this.insertSigma} notnumber="true">(</button>
                                     <button className="operator-btn" value={')'} onClick={this.insertSigma} notnumber="true">)</button>
                                 </div>
@@ -665,53 +832,64 @@ class Level7 extends React.Component {
                 </div>
 
 
+                <div className="modal fade" id="rootModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-body">
 
-                <div className="alert-root">
-                    <span className="close" onClick={this.openRootModal}>x</span>
-                    <div className="root-suggest-content">
-                        <h4 className="root-suggest-texts">
-                            รูปแบบการใช้การใช้รูท
-                        </h4>
-                        <p className="root-details">
-                            √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
-                            <br />
-                            หากไม่กำหนดรากที่ n จะเท่ากับรากที่ 2
-                        </p>
+                                <div className="root-suggest-content">
+                                    <h4 className="root-suggest-texts">
+                                        รูปแบบการใช้การใช้รูท
+                                        </h4>
+                                    <p className="root-details">
+                                        √(ค่าที่ต้องการคำนวณ,ค่ารากที่ n)
+                                            <br />
+                                            หากไม่กำหนดรากที่ n จะเท่ากับรากที่ 2
+                                        </p>
 
-                        <h4 className="root-suggest-texts">
-                            ตัวอย่าง
-                        </h4>
-                        <p className="root-details">
-                            √(16) ค่าที่จะได้เท่ากับ 4
-                            <br />
-                            √(8*2) ค่าที่จะได้เท่ากับ 4
-                            <br />
-                            √(27,3) ค่าที่จะได้เท่ากับ 3
-                            <br />
-                            √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
-                        </p>
-                        <input type="checkbox" className="not-open-root" onClick={this.checkShowAgain} />
-                        <label htmlFor="not-open-root" className="not-open-root-label">ฉันเข้าใจแล้วไม่ต้องแสดงอีก</label>
+                                    <h4 className="root-suggest-texts">
+                                        ตัวอย่าง
+                                        </h4>
+                                    <p className="root-details">
+                                        √(16) ค่าที่จะได้เท่ากับ 4
+                                            <br />
+                                            √(8*2) ค่าที่จะได้เท่ากับ 4
+                                            <br />
+                                            √(27,3) ค่าที่จะได้เท่ากับ 3
+                                            <br />
+                                            √(5+3,2+1) ค่าที่จะได้เท่ากับ 2
+                                        </p>
+                                </div>
+
+
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" data-bs-dismiss="modal" className="btn btn-primary">ตกลง</button>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
-                <div className="re-random-section">
-                    <button className="re-random-btn" onClick={this.doRandomNumbers}>
+
+
+
+
+
+                <div className="re-random-section-new">
+                    <button className="re-random-btn-new" onClick={this.doRandomNumbers}>
                         สุ่มใหม่
                 </button>
                 </div>
                 <div className="game-content">
                     <div className="info-text">
-                        <p className="ur-equation-text">
-                            สมการของคุณ
-                        </p>
-                        <p className="ans-text">
+                        <div className="ans-icon-wrap">
+                            <img src={think} alt="" className="think-icon" />
+                        </div>
+                        <p className="ans-text-new">
                             ผลลัพท์ {this.state.defaultAnswer}
                         </p>
                     </div>
                     <div className="input-section">
-                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} />
+                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} placeholder="กรอกสมการของคุณ" />
                         <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                     </div>
                     <div className="calculator-section">
@@ -730,7 +908,7 @@ class Level7 extends React.Component {
                         <button className="operator-btn" value={'^'} onClick={this.insertAnswer} notnumber="true">^</button>
                         <button className="operator-btn" value={'!'} onClick={this.insertAnswer} notnumber="true">!</button>
                         <button className="operator-btn" value={','} onClick={this.insertAnswer} notnumber="true">,</button>
-                        <button className="operator-btn" value={'√'} onClick={this.insertAnswer} notnumber="true">√</button>
+                        <button className="operator-btn" value={'√'} data-bs-toggle="modal" data-bs-target="#rootModal" onClick={this.insertAnswer} notnumber="true">√</button>
                         <button className="operator-btn" value={'Σ'} data-bs-toggle="modal" data-bs-target="#sigmaModal" notnumber="true" onClick={() => { this.disabledAllNumbers() }}>Σ</button>
                         <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
                         <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>

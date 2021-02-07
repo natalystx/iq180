@@ -1,13 +1,10 @@
 import React from 'react'
-import * as Parser from 'mathjs' //math library
-import './Level8.css'
+import '../styles/Level.css'
 import delIcon from '../../images/icons/delete.png'
 import sigmaIcon from '../../images/icons/sigma.svg'
 import Services from '../../services/Services' //calculation services
 import * as swal from 'sweetalert2'
-import * as sigma from 'math-sigma'
 import think from '../../images/think.svg'
-import * as bootstrap from 'bootstrap'
 
 class Level8 extends React.Component {
 
@@ -188,7 +185,7 @@ class Level8 extends React.Component {
     //delete input answer
     delAnswer = async () => {
 
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!','Σ']
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ']
 
         let temp = this.state.equation
 
@@ -469,7 +466,7 @@ class Level8 extends React.Component {
 
         }
 
-        this.setState({ lastButtonIndex: indexTemp })
+        this.setState({ lastButtonIndex: indexTemp, inSigmaIndex: sigmaindex })
 
         // else {
         //     if (elem.hasAttribute("index")) {
@@ -550,9 +547,9 @@ class Level8 extends React.Component {
                 itelator: ''
             })
 
-            
 
-           
+
+
 
             const closeBTN = document.querySelector('.btn-close')
             closeBTN.click()
@@ -576,60 +573,171 @@ class Level8 extends React.Component {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
 
-        await allNumber.forEach(elem => {
+        const notIntersectionIndex = this.state.lastButtonIndex.filter(item => !this.state.inSigmaIndex.includes(item))
+
+        console.log(notIntersectionIndex);
+
+        allNumber.forEach(elem => {
             elem.removeAttribute("disabled")
         })
 
-        await allIndex.forEach(elem => {
+        allIndex.forEach(elem => {
             let index = elem.getAttribute("index")
-            if (this.state.inSigmaIndex.includes(index)) {
-                elem.remove("disabled")
+            if (notIntersectionIndex.includes(index)) {
+                elem.setAttribute("disabled", true)
             }
         })
 
         this.setState({
             cellingBound: '',
             lowerBound: '',
-            itelator: ''
+            itelator: '',
+            lastButtonIndex: notIntersectionIndex,
+            inSigmaIndex: []
         })
     }
 
-    delSigma = async () =>{
-        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ']
+    delSigma = async (targetInput) => {
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',', '!', 'Σ', '√']
 
         let celling = this.state.cellingBound
-        let itelator = this.state.itelator
+        let itelatorTemp = this.state.itelator
         let lower = this.state.lowerBound
+        const allNumberIndexValue = document.querySelectorAll('button[index]')
+        let sigmaIndex
+        let allIndex
 
-        // // check values
-        // if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
-        //     //delete answer
-        //     temp = await temp.slice(0, -1)
-        //     //setState new answer
-        //     await this.setState({ equation: temp })
-        // }
-        // else {
-        //     //delete answer
-        //     temp = await temp.slice(0, -1)
-        //     //remove disable button
-        //     let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
-        //     let tempIndex = this.state.lastButtonIndex
-        //     tempIndex = await tempIndex.slice(0, -1)
+        console.log(this.state.inputTarget);
 
-        //     //setState new answer and buttonIndex
-        //     await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+        if (targetInput === '.lower-bound') {
+            if (lower.length === 0 || operatorList.includes(lower[lower.length - 1])) {
+                console.log('tes');
+                lower = lower.slice(0, -1)
+                this.setState({ lowerBound: lower })
 
-        //     const allNumber = document.querySelectorAll('button[index]')
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
 
-        //     await allNumber.forEach(elem => {
-        //         const index = elem.getAttribute('index')
-        //         if (this.state.lastButtonIndex.includes(index)) {
-        //             elem.setAttribute("disabled", true)
-        //         } else {
-        //             elem.removeAttribute("disabled")
-        //         }
-        //     })
-        // }
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === lower[lower.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                lower = lower.slice(0, -1)
+                this.setState({ lowerBound: lower })
+
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+
+
+
+        }
+
+        if (targetInput === '.itelator') {
+            if (itelatorTemp.length === 0 || operatorList.includes(itelatorTemp[itelatorTemp.length - 1])) {
+                console.log('tes');
+                itelatorTemp = itelatorTemp.slice(0, -1)
+                this.setState({ itelator: itelatorTemp })
+
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
+
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === itelatorTemp[itelatorTemp.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                itelatorTemp = itelatorTemp.slice(0, -1)
+                this.setState({ itelator: itelatorTemp })
+
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+        }
+
+        if (targetInput === '.celling-bound') {
+            if (celling.length === 0 || operatorList.includes(celling[celling.length - 1])) {
+                console.log('tes');
+                celling = celling.slice(0, -1)
+                this.setState({ cellingBound: celling })
+
+            }
+            else {
+                console.log('es')
+                console.log(this.state.lastButtonIndex);
+                allNumberIndexValue.forEach(item => {
+
+                    const number = item.getAttribute('value').toString()
+                    const index = item.getAttribute('index').toString()
+
+                    if (number === celling[celling.length - 1]) {
+                        if (this.state.inSigmaIndex.includes(index)) {
+                            sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
+                            allIndex = this.state.lastButtonIndex.filter(item => item !== index)
+
+
+                            console.log(this.state.lastButtonIndex);
+                        }
+                    }
+                })
+                celling = celling.slice(0, -1)
+                this.setState({ cellingBound: celling })
+                this.setState({ inSigmaIndex: sigmaIndex, lastButtonIndex: allIndex })
+
+                allNumberIndexValue.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (allIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
+
+
+        }
+
 
     }
 
@@ -646,30 +754,30 @@ class Level8 extends React.Component {
                             </div>
                             <div className="modal-body d-flex flex-column align-items-center justify-content-center">
                                 <div className="alert alert-info" role="alert">
-                                    กรุณาเลือกค่าที่ต้องกรอกก่อนใส่ค่า 
-                                </div>  
+                                    กรุณาเลือกค่าที่ต้องกรอกก่อนใส่ค่า
+                                </div>
                                 <div className="sigma-input-wrapper">
                                     <div className="input-wrapper">
                                         <label htmlFor="celling-bound text-white">ขอบบน</label>
                                         <input type="text" step="1" className="celling-bound" data-bs-dismiss="alert" readOnly={true} value={this.state.cellingBound} onClick={() => { this.setFieldSigma('.celling-bound') }} name="celling-bound" />
-                                        <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
+                                        <button className="del-btn sigma-del" onClick={() => { this.delSigma('.celling-bound') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
                                     <div className="sigma-symbol">
                                         <img src={sigmaIcon} alt="" className="sigma-icon" />
                                         <div className="input-wrapper">
                                             <label htmlFor="itelator text-white">ตัวกระทำ</label>
-                                            <input type="text" step="1" className="itelator" data-bs-dismiss="alert"  readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
-                                            <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
+                                            <input type="text" step="1" className="itelator" data-bs-dismiss="alert" readOnly={true} value={this.state.itelator} name="itelator" onClick={() => { this.setFieldSigma('.itelator') }} />
+                                            <button className="del-btn sigma-del" onClick={() => { this.delSigma('.itelator') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                         </div>
                                     </div>
                                     <div className="input-wrapper">
                                         <label htmlFor="lower-bound text-white">ขอบล่าง</label>
-                                        <input type="text" readOnly={true} step="1" className="lower-bound" data-bs-dismiss="alert"  name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
-                                        <button className="del-btn sigma-del"><img src={delIcon} alt="del-icon" className="del-icon" /></button>
+                                        <input type="text" readOnly={true} step="1" className="lower-bound" data-bs-dismiss="alert" name="lower-bound" value={this.state.lowerBound} onClick={() => { this.setFieldSigma('.lower-bound') }} />
+                                        <button className="del-btn sigma-del" onClick={() => { this.delSigma('.lower-bound') }}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
                                     </div>
 
                                 </div>
-                                <div className="calculator-section">
+                                <div className="calculator-section calculator-section-on-modal">
 
                                     {/* numbers */}
                                     <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertSigma} index="1" isnumber="true">{this.state.numbers['a']}</button>
