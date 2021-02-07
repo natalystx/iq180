@@ -113,9 +113,6 @@ class Level3 extends React.Component {
             })
         }
 
-        console.log(this.state.defaultAnswer)
-        console.log(this.state.defaultEquation)
-
 
 
     }
@@ -204,7 +201,6 @@ class Level3 extends React.Component {
             this.state.defaultAnswer,
             this.state.lastButtonIndex.length,
             4)
-        console.log(calculatedResult)
 
         this.setState(
             {

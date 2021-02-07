@@ -8,8 +8,6 @@ class Services {
 
         numberedEquation = numberedEquation.replace('√', 'nthRoot')
 
-        console.log(`defaultEquation: ${numberedEquation}`)
-
         let status = {
             equation: null,
             answer: null,
@@ -52,8 +50,6 @@ class Services {
 
             //set equation is valid summation value valid status
             status.summation.valid = !sigmaRes ? sigmaRes : sigmaRes.status
-
-            console.log(`sigma: ${JSON.stringify(status.summation)}`)
 
             if (status.summation.contain === true && status.summation.valid === false) {
                 return false
@@ -301,12 +297,8 @@ class Services {
 
             }
             sigmaEquation = await sigmaEquation.slice(1, -1)
-
-            console.log(sigmaEquation)
             let splitParams = await sigmaEquation.split(',')
             let allParams = []
-            console.log(`params: ${splitParams}`)
-
             let isAllInteger = []
 
             splitParams.forEach(item => {
@@ -315,13 +307,7 @@ class Services {
                 allParams.push(temp)
             })
 
-            console.log(`Allparams: ${allParams}`)
-            console.log(`isAllInteger: ${isAllInteger}`)
-
             const sigmaResult = await eval(`sigma(x => ${allParams[0]},${allParams[1]}, ${allParams[2]})`)
-            console.log(`sigma: ${sigmaResult}`)
-
-            console.log(sigmaResult)
 
             const isTrue = (res) => res === true
 
@@ -438,7 +424,6 @@ class Services {
                 }
 
                 let equationPart = leftPart.split("").reverse().join("") + '/' + rightPart
-                console.log(equationPart)
                 if (equationPart.includes('nthRoot')) {
                     const rootResult = this.checkRootValue(equationPart)
                     isAllResultInt.push(rootResult)
@@ -501,7 +486,6 @@ class Services {
                     }
 
                     let equationPart = equation[pos - 1] + '/' + rightPart
-                    console.log(equationPart)
                     isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
                 }
 
@@ -559,7 +543,6 @@ class Services {
             if (insideRootValue > 0 && Number.isInteger(insideRootValue)) { // check insideRootValue is >= 0
                 return Number.isInteger(Parser.evaluate(rootPart)) // return the calculation of rootPart is integer or not
             } else {
-                console.log('isNeg')
                 return false // incase insideRootValue < 0 get false
             }
         } else {
@@ -570,7 +553,6 @@ class Services {
 
     //gen nthRoot form
     getNRootForm = async (equation) => {
-        console.log('og: ' + equation)
 
         const commaIndex = equation.indexOf(',')
         let leftPart = ''
@@ -629,11 +611,8 @@ class Services {
         // //reverse rootValue string
         // const finalRootValue = rootValue.split("").reverse().join("") + ')'
 
-        console.log('baseRootPart: ' + leftPart)
-        console.log('finalRootValue: ' + rightPart)
         //check root condition
         if (Parser.evaluate(leftPart) >= 3 && Parser.evaluate(rightPart) > 1 && Number.isInteger(Parser.evaluate(rightPart))) {
-            console.log(`nthRoot(${leftPart},${rightPart})`)
             return `nthRoot(${leftPart},${rightPart})` // return new form of equation
         } else {
             return 0
@@ -654,8 +633,6 @@ class Services {
             for (let i = 0; i < facIndexList.length; i++) {
                 allFacValueIsValid.push(await this.getFacPart(equation, facIndexList[i]))
             }
-
-            console.log(`allFacValueIsValid: ${allFacValueIsValid}`)
 
 
             if (allFacValueIsValid.includes(false)) {
@@ -685,9 +662,7 @@ class Services {
         }
 
         const reseversedEquation = equationPart.split("").reverse().join("")
-        console.log(`reversed: ${reseversedEquation}`)
         const result = Parser.evaluate(reseversedEquation)
-        console.log(`isPositive: ${result >= 0 && Number.isInteger(result)}`)
         const isValid = await result >= 0 && Number.isInteger(result)
 
         return isValid

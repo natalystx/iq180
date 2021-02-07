@@ -87,229 +87,223 @@ class Level2 extends React.Component {
                 defaultAnswer: equationValidResult.answer,
                 defaultEquation: equation
             })
+
         }
 
-        console.log(this.state.defaultAnswer)
-        console.log(this.state.defaultEquation)
+        //delete input answer
+        delAnswer = async () => {
 
 
-    }
+            const operatorList = ['-', '+', '*', '/', '(', ')']
+            let temp = this.state.equation
 
-    //delete input answer
-    delAnswer = async () => {
+            // check values
+            if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
+                //delete answer
+                temp = await temp.slice(0, -1)
+                //setState new answer
+                await this.setState({ equation: temp })
+            } else {
+                //delete answer
+                temp = temp.slice(0, -1)
+                //remove disable button
+                let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
+                let tempIndex = this.state.lastButtonIndex
+                tempIndex = await tempIndex.slice(0, -1)
+                elem.removeAttribute("disabled")
 
+                //setState new answer and buttonIndex
+                await this.setState({ equation: temp, lastButtonIndex: tempIndex })
 
-        const operatorList = ['-', '+', '*', '/', '(', ')']
-        let temp = this.state.equation
+                const allNumber = document.querySelectorAll('button[index]')
 
-        // check values
-        if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
-            //delete answer
-            temp = await temp.slice(0, -1)
-            //setState new answer
-            await this.setState({ equation: temp })
-        } else {
-            //delete answer
-            temp = temp.slice(0, -1)
-            //remove disable button
-            let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
-            let tempIndex = this.state.lastButtonIndex
-            tempIndex = await tempIndex.slice(0, -1)
-            elem.removeAttribute("disabled")
+                await allNumber.forEach(elem => {
+                    const index = elem.getAttribute('index')
+                    if (this.state.lastButtonIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    } else {
+                        elem.removeAttribute("disabled")
+                    }
+                })
+            }
 
-            //setState new answer and buttonIndex
-            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+        }
 
-            const allNumber = document.querySelectorAll('button[index]')
-
-            await allNumber.forEach(elem => {
-                const index = elem.getAttribute('index')
-                if (this.state.lastButtonIndex.includes(index)) {
+        //get user input answer
+        insertAnswer = async (event) => {
+            let temp = this.state.equation
+            temp = temp + event.target.value
+            let elem = event.target
+            let allNumber = document.querySelectorAll("button[isnumber]")
+            let allIndex = document.querySelectorAll("button[index]")
+            if (elem.hasAttribute("isnumber")) {
+                await allNumber.forEach(elem => {
+                    elem.setAttribute("disabled", true)
+                })
+                if (elem.hasAttribute("index")) {
+                    let indexTemp = [...this.state.lastButtonIndex]
+                    indexTemp.push(elem.getAttribute("index"))
+                    this.setState({ equation: temp, lastButtonIndex: indexTemp })
                     elem.setAttribute("disabled", true)
                 } else {
+                    this.setState({ equation: temp })
+                }
+            } else if (elem.hasAttribute("notnumber")) {
+                await allNumber.forEach(elem => {
                     elem.removeAttribute("disabled")
-                }
-            })
-        }
+                })
 
-    }
+                await allIndex.forEach(elem => {
+                    let index = elem.getAttribute("index")
+                    if (this.state.lastButtonIndex.includes(index)) {
+                        elem.setAttribute("disabled", true)
+                    }
+                })
 
-    //get user input answer
-    insertAnswer = async (event) => {
-        let temp = this.state.equation
-        temp = temp + event.target.value
-        let elem = event.target
-        let allNumber = document.querySelectorAll("button[isnumber]")
-        let allIndex = document.querySelectorAll("button[index]")
-        if (elem.hasAttribute("isnumber")) {
-            await allNumber.forEach(elem => {
-                elem.setAttribute("disabled", true)
-            })
-            if (elem.hasAttribute("index")) {
-                let indexTemp = [...this.state.lastButtonIndex]
-                indexTemp.push(elem.getAttribute("index"))
-                this.setState({ equation: temp, lastButtonIndex: indexTemp })
-                elem.setAttribute("disabled", true)
-            } else {
                 this.setState({ equation: temp })
+
             }
-        } else if (elem.hasAttribute("notnumber")) {
-            await allNumber.forEach(elem => {
-                elem.removeAttribute("disabled")
-            })
 
-            await allIndex.forEach(elem => {
-                let index = elem.getAttribute("index")
-                if (this.state.lastButtonIndex.includes(index)) {
-                    elem.setAttribute("disabled", true)
-                }
-            })
-
-            this.setState({ equation: temp })
 
         }
 
 
-    }
+        //calculate user's equation result and checks with default answer
+        calAns = async () => {
+            const services = new Services()
+            const calculatedResult = await services.calInsertedEquation(this.state.equation,
+                this.state.defaultAnswer,
+                this.state.lastButtonIndex.length,
+                4)
 
+            this.setState(
+                {
+                    isAnsCorrect: calculatedResult.isAnsCorrect,
+                    isCorrectClass: calculatedResult.isCorrectClass,
+                    respondText: calculatedResult.respondText,
+                    showAnsClass: calculatedResult.showAnsClass
+                })
 
-    //calculate user's equation result and checks with default answer
-    calAns = async () => {
-        const services = new Services()
-        const calculatedResult = await services.calInsertedEquation(this.state.equation,
-            this.state.defaultAnswer,
-            this.state.lastButtonIndex.length,
-            4)
-        console.log(calculatedResult)
+        }
 
-        this.setState(
-            {
-                isAnsCorrect: calculatedResult.isAnsCorrect,
-                isCorrectClass: calculatedResult.isCorrectClass,
-                respondText: calculatedResult.respondText,
-                showAnsClass: calculatedResult.showAnsClass
+        //random 4 numbers
+        doRandomNumbers = async () => {
+            const services = new Services()
+            const temp = await services.randomNumbers(this.state.numbers)
+            this.setState({ numbers: temp })
+
+            //generate default ans
+            this.setState({
+                equation: '',
+                respondText: 'คำตอบไม่ถูกต้อง',
+                showAnsClass: 'ans-card-inactive',
+                isCorrectClass: 'incorrect',
+                lastButtonIndex: []
             })
 
-    }
-
-    //random 4 numbers
-    doRandomNumbers = async () => {
-        const services = new Services()
-        const temp = await services.randomNumbers(this.state.numbers)
-        this.setState({ numbers: temp })
-
-        //generate default ans
-        this.setState({
-            equation: '',
-            respondText: 'คำตอบไม่ถูกต้อง',
-            showAnsClass: 'ans-card-inactive',
-            isCorrectClass: 'incorrect',
-            lastButtonIndex: []
-        })
-
-        let elem = document.querySelectorAll('button[index]')
-        elem.forEach(item => {
-            item.removeAttribute("disabled")
-        })
-
-        this.genDefaultAnswer()
-
-    }
-
-    componentDidMount() {
-        // do random number when page is loaded or reloaded
-        this.doRandomNumbers()
-    }
-
-    // show example of equation to get same result as default answer
-    showExample = () => {
-        if (this.state.equation === '') {
-            this.setState({
-                showAnsClass: 'ans-card',
-                respondText: 'โปรดกรอกสมการ'
+            let elem = document.querySelectorAll('button[index]')
+            elem.forEach(item => {
+                item.removeAttribute("disabled")
             })
-        } else if (this.state.equation.length >= 9) {
+
+            this.genDefaultAnswer()
+
+        }
+
+        componentDidMount() {
+            // do random number when page is loaded or reloaded
+            this.doRandomNumbers()
+        }
+
+        // show example of equation to get same result as default answer
+        showExample = () => {
+            if (this.state.equation === '') {
+                this.setState({
+                    showAnsClass: 'ans-card',
+                    respondText: 'โปรดกรอกสมการ'
+                })
+            } else if (this.state.equation.length >= 9) {
+                this.setState({
+                    showAnsClass: 'ans-card',
+                    respondText: this.state.defaultEquation
+                })
+            }
+            else {
+                this.setState({
+                    showAnsClass: 'ans-card',
+                    respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
+                })
+            }
+        }
+
+        clearAns = () => {
             this.setState({
-                showAnsClass: 'ans-card',
-                respondText: this.state.defaultEquation
+                equation: '',
+                lastButtonIndex: [],
+                showAnsClass: 'ans-card-inactive',
+            })
+            let elem = document.querySelectorAll('button[index]')
+            elem.forEach(item => {
+                item.removeAttribute("disabled")
             })
         }
-        else {
-            this.setState({
-                showAnsClass: 'ans-card',
-                respondText: 'โปรดใช้ตัวเลขให้ครบทุกตัว'
-            })
-        }
-    }
 
-    clearAns = () => {
-        this.setState({
-            equation: '',
-            lastButtonIndex: [],
-            showAnsClass: 'ans-card-inactive',
-        })
-        let elem = document.querySelectorAll('button[index]')
-        elem.forEach(item => {
-            item.removeAttribute("disabled")
-        })
-    }
+        render() {
+            return (
+                <div className="level-1">
 
-    render() {
-        return (
-            <div className="level-1">
-
-                <div className="re-random-section-new">
-                    <button className="re-random-btn-new" onClick={this.doRandomNumbers}>
-                        สุ่มใหม่
+                    <div className="re-random-section-new">
+                        <button className="re-random-btn-new" onClick={this.doRandomNumbers}>
+                            สุ่มใหม่
                 </button>
-                </div>
-                <div className="game-content">
-                    <div className="info-text">
-                        <div className="ans-icon-wrap">
-                            <img src={think} alt="" className="think-icon" />
+                    </div>
+                    <div className="game-content">
+                        <div className="info-text">
+                            <div className="ans-icon-wrap">
+                                <img src={think} alt="" className="think-icon" />
+                            </div>
+                            <p className="ans-text-new">
+                                ผลลัพท์ {this.state.defaultAnswer}
+                            </p>
                         </div>
-                        <p className="ans-text-new">
-                            ผลลัพท์ {this.state.defaultAnswer}
-                        </p>
-                    </div>
-                    <div className="input-section">
-                        <input type="text" className="equationInput" readOnly={true} value={this.state.equation} placeholder="กรอกสมการของคุณ" />
-                        <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
-                    </div>
-                    <div className="calculator-section">
+                        <div className="input-section">
+                            <input type="text" className="equationInput" readOnly={true} value={this.state.equation} placeholder="กรอกสมการของคุณ" />
+                            <button className="del-btn" onClick={this.delAnswer}><img src={delIcon} alt="del-icon" className="del-icon" /></button>
+                        </div>
+                        <div className="calculator-section">
 
-                        {/* numbers */}
-                        <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1" isnumber="true">{this.state.numbers['a']}</button>
-                        <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2" isnumber="true">{this.state.numbers['b']}</button>
-                        <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3" isnumber="true">{this.state.numbers['c']}</button>
-                        <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4" isnumber="true">{this.state.numbers['d']}</button>
-                        <button className="number-btn" value={this.state.numbers['e']} onClick={this.insertAnswer} index="5" isnumber="true">{this.state.numbers['e']}</button>
+                            {/* numbers */}
+                            <button className="number-btn" value={this.state.numbers['a']} onClick={this.insertAnswer} index="1" isnumber="true">{this.state.numbers['a']}</button>
+                            <button className="number-btn" value={this.state.numbers['b']} onClick={this.insertAnswer} index="2" isnumber="true">{this.state.numbers['b']}</button>
+                            <button className="number-btn" value={this.state.numbers['c']} onClick={this.insertAnswer} index="3" isnumber="true">{this.state.numbers['c']}</button>
+                            <button className="number-btn" value={this.state.numbers['d']} onClick={this.insertAnswer} index="4" isnumber="true">{this.state.numbers['d']}</button>
+                            <button className="number-btn" value={this.state.numbers['e']} onClick={this.insertAnswer} index="5" isnumber="true">{this.state.numbers['e']}</button>
 
-                        {/* Operators */}
-                        <button className="operator-btn" value={'+'} onClick={this.insertAnswer} notnumber="true">+</button>
-                        <button className="operator-btn" value={'-'} onClick={this.insertAnswer} notnumber="true">-</button>
-                        <button className="operator-btn" value={'*'} onClick={this.insertAnswer} notnumber="true">*</button>
-                        <button className="operator-btn" value={'/'} onClick={this.insertAnswer} notnumber="true">/</button>
-                        <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
-                        <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
+                            {/* Operators */}
+                            <button className="operator-btn" value={'+'} onClick={this.insertAnswer} notnumber="true">+</button>
+                            <button className="operator-btn" value={'-'} onClick={this.insertAnswer} notnumber="true">-</button>
+                            <button className="operator-btn" value={'*'} onClick={this.insertAnswer} notnumber="true">*</button>
+                            <button className="operator-btn" value={'/'} onClick={this.insertAnswer} notnumber="true">/</button>
+                            <button className="operator-btn" value={'('} onClick={this.insertAnswer} notnumber="true">(</button>
+                            <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 
-                        {/* Clear */}
-                        <button className="clear-btn" onClick={this.clearAns}>เคลียร์</button>
+                            {/* Clear */}
+                            <button className="clear-btn" onClick={this.clearAns}>เคลียร์</button>
 
-                        {/* Submit */}
-                        <button className="submit-btn" onClick={this.calAns}>ส่งคำตอบ</button>
+                            {/* Submit */}
+                            <button className="submit-btn" onClick={this.calAns}>ส่งคำตอบ</button>
 
-                        {/* Show Answer */}
-                        <button className="show-ans-btn" onClick={this.showExample}>เฉลย</button>
+                            {/* Show Answer */}
+                            <button className="show-ans-btn" onClick={this.showExample}>เฉลย</button>
 
-                        <div className={this.state.showAnsClass + ' ' + this.state.isCorrectClass}>
-                            <p className="res-text">{this.state.respondText}</p>
+                            <div className={this.state.showAnsClass + ' ' + this.state.isCorrectClass}>
+                                <p className="res-text">{this.state.respondText}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div >
-        )
+                </div >
+            )
+        }
     }
-}
 
-export default Level2
+    export default Level2

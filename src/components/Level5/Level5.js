@@ -146,9 +146,6 @@ class Level5 extends React.Component {
             })
         }
 
-        console.log(this.state.defaultAnswer)
-        console.log(this.state.defaultEquation)
-
 
 
     }
@@ -266,12 +263,10 @@ class Level5 extends React.Component {
         const checkbox = event.target
         if (!this.state.isCheck) {
             checkbox.setAttribute('checked', true)
-            console.log(checkbox.getAttribute('checked'))
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         } else {
             checkbox.setAttribute('checked', false)
-            console.log(checkbox.getAttribute('checked'))
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         }
@@ -286,7 +281,6 @@ class Level5 extends React.Component {
             this.state.defaultAnswer,
             this.state.lastButtonIndex.length,
             4)
-        console.log(calculatedResult)
 
         this.setState(
             {

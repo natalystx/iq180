@@ -174,8 +174,6 @@ class Level8 extends React.Component {
             })
         }
 
-        console.log(this.state.defaultAnswer)
-        console.log(this.state.defaultEquation)
 
 
     }
@@ -200,7 +198,7 @@ class Level8 extends React.Component {
         }
         else {
 
-            console.log(this.state.lastButtonIndex);
+
             allNumberIndexValue.forEach(item => {
 
                 const number = item.getAttribute('value').toString()
@@ -297,12 +295,12 @@ class Level8 extends React.Component {
         const checkbox = event.target
         if (!this.state.isCheck) {
             checkbox.setAttribute('checked', true)
-            console.log(checkbox.getAttribute('checked'))
+
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         } else {
             checkbox.setAttribute('checked', false)
-            console.log(checkbox.getAttribute('checked'))
+
 
             this.setState({ isCheck: checkbox.getAttribute('checked') })
         }
@@ -317,7 +315,7 @@ class Level8 extends React.Component {
             this.state.defaultAnswer,
             this.state.lastButtonIndex.length,
             4)
-        console.log(calculatedResult)
+
 
         this.setState(
             {
@@ -556,7 +554,7 @@ class Level8 extends React.Component {
 
             const joinedIndex = this.state.intersectionIndex.concat(this.state.lastButtonIndex)
 
-            console.log('join: ' + joinedIndex);
+
 
             allIndex.forEach(elem => {
                 const index = elem.getAttribute('index')
@@ -581,13 +579,11 @@ class Level8 extends React.Component {
     doLastIndexListDisabled = async () => {
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
-        console.log('last: ' + this.state.lastButtonIndex);
-        console.log('sig: ' + this.state.inSigmaIndex);
+
 
         const notIntersectionIndex = this.state.lastButtonIndex.filter(item => !this.state.inSigmaIndex.includes(item))
         const intersectionIndex = this.state.lastButtonIndex.filter(item => this.state.inSigmaIndex.includes(item))
 
-        console.log(notIntersectionIndex);
 
         allNumber.forEach(elem => {
             elem.removeAttribute("disabled")
@@ -621,18 +617,14 @@ class Level8 extends React.Component {
         let sigmaIndex
         let allIndex
 
-        console.log(this.state.inputTarget);
-
         if (targetInput === '.lower-bound') {
             if (lower.length === 0 || operatorList.includes(lower[lower.length - 1])) {
-                console.log('tes');
+
                 lower = lower.slice(0, -1)
                 this.setState({ lowerBound: lower })
 
             }
             else {
-                console.log('es')
-                console.log(this.state.lastButtonIndex);
                 allNumberIndexValue.forEach(item => {
 
                     const number = item.getAttribute('value').toString()
@@ -643,8 +635,6 @@ class Level8 extends React.Component {
                             sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
                             allIndex = this.state.lastButtonIndex.filter(item => item !== index)
 
-
-                            console.log(this.state.lastButtonIndex);
                         }
                     }
                 })
@@ -670,14 +660,11 @@ class Level8 extends React.Component {
 
         if (targetInput === '.itelator') {
             if (itelatorTemp.length === 0 || operatorList.includes(itelatorTemp[itelatorTemp.length - 1])) {
-                console.log('tes');
                 itelatorTemp = itelatorTemp.slice(0, -1)
                 this.setState({ itelator: itelatorTemp })
 
             }
             else {
-                console.log('es')
-                console.log(this.state.lastButtonIndex);
                 allNumberIndexValue.forEach(item => {
 
                     const number = item.getAttribute('value').toString()
@@ -687,9 +674,6 @@ class Level8 extends React.Component {
                         if (this.state.inSigmaIndex.includes(index)) {
                             sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
                             allIndex = this.state.lastButtonIndex.filter(item => item !== index)
-
-
-                            console.log(this.state.lastButtonIndex);
                         }
                     }
                 })
@@ -712,14 +696,11 @@ class Level8 extends React.Component {
 
         if (targetInput === '.celling-bound') {
             if (celling.length === 0 || operatorList.includes(celling[celling.length - 1])) {
-                console.log('tes');
                 celling = celling.slice(0, -1)
                 this.setState({ cellingBound: celling })
 
             }
             else {
-                console.log('es')
-                console.log(this.state.lastButtonIndex);
                 allNumberIndexValue.forEach(item => {
 
                     const number = item.getAttribute('value').toString()
@@ -729,9 +710,6 @@ class Level8 extends React.Component {
                         if (this.state.inSigmaIndex.includes(index)) {
                             sigmaIndex = this.state.inSigmaIndex.filter(item => item !== index)
                             allIndex = this.state.lastButtonIndex.filter(item => item !== index)
-
-
-                            console.log(this.state.lastButtonIndex);
                         }
                     }
                 })
