@@ -816,7 +816,7 @@ class Level7 extends React.Component {
                                     <button className="operator-btn" value={'^'} onClick={this.insertSigma} notnumber="true">^</button>
                                     <button className="operator-btn" value={'!'} onClick={this.insertSigma} notnumber="true">!</button>
                                     <button className="operator-btn" value={','} onClick={this.insertSigma} notnumber="true">,</button>
-                                    <button className="operator-btn" value={'√'} data-bs-toggle="modal" data-bs-target="#rootModal" onClick={this.insertSigma} notnumber="true">√</button>
+                                    {/* <button className="operator-btn" value={'√'} data-bs-toggle="modal" data-bs-target="#rootModal" onClick={this.insertSigma} notnumber="true">√</button> */}
                                     <button className="operator-btn" value={'('} onClick={this.insertSigma} notnumber="true">(</button>
                                     <button className="operator-btn" value={')'} onClick={this.insertSigma} notnumber="true">)</button>
                                 </div>
