@@ -313,8 +313,9 @@ class Level3 extends React.Component {
                         <button className="operator-btn" value={')'} onClick={this.insertAnswer} notnumber="true">)</button>
 
 
-                        {/* Clear */}
-                        <button className="clear-btn" onClick={this.clearAns}>เคลียร์</button>
+                        <div className={this.state.showAnsClass + ' ' + this.state.isCorrectClass}>
+                            <p className="res-text">{this.state.respondText}</p>
+                        </div>
 
                         {/* Submit */}
                         <button className="submit-btn" onClick={this.calAns}>ส่งคำตอบ</button>
@@ -322,9 +323,8 @@ class Level3 extends React.Component {
                         {/* Show Answer */}
                         <button className="show-ans-btn" onClick={this.showExample}>เฉลย</button>
 
-                        <div className={this.state.showAnsClass + ' ' + this.state.isCorrectClass}>
-                            <p className="res-text">{this.state.respondText}</p>
-                        </div>
+                        {/* Clear */}
+                        <button className="clear-btn mt-0 mb-4" onClick={this.clearAns}>เคลียร์</button>
                     </div>
                 </div>
             </div >
