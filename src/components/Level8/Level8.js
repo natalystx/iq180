@@ -534,7 +534,15 @@ class Level8 extends React.Component {
                 icon: 'error',
                 text: 'ตัวกระทำไม่สามารถเป็นค่าว่างได้'
             })
-        } else {
+        }
+        else if(this.state.cellingBound < this.state.lowerBound ){
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
+            })
+        }
+        else {
             const temp = this.state.equation
             this.setState({
                 equation: temp + `Σ(${this.state.itelator},${this.state.lowerBound},${this.state.cellingBound})`,
