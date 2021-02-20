@@ -112,7 +112,7 @@ class Level5 extends React.Component {
             72: 'C*(√(D,(A+B)))',
             73: '√(D,((A/B)+C))',
             74: '√(D,(A-(B/C)))',
-            75: '√(C,D^(A+B))',
+            75: '√(C,(D^(A+B)))',
             76: '√((A+C),B)/D',
             77: '√(A+(C*D),B)',
             78: '√(D,((A/B)+C))',
@@ -124,7 +124,7 @@ class Level5 extends React.Component {
 
         //random one equation for list, 25 means the total numbers of list 
         let randomIndex = await Math.floor(Math.random() * 80)
-
+      
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
         let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]
 

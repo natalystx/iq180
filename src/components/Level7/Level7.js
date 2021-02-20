@@ -310,6 +310,7 @@ class Level7 extends React.Component {
             this.state.lastButtonIndex.length,
             4)
 
+          console.log(calculatedResult);
         this.setState(
             {
                 isAnsCorrect: calculatedResult.isAnsCorrect,

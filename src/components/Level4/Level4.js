@@ -122,6 +122,8 @@ class Level4 extends React.Component {
 
         //random one equation for list, 80 means the total numbers of list 
         let randomIndex = await Math.floor(Math.random() * 80)
+     
+
 
         //recheck for make sure index of equationList is not equa 0 if equa 0 just +1
         let defaultEquation = randomIndex === 0 ? equationList[randomIndex + 1] : equationList[randomIndex]

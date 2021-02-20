@@ -52,7 +52,7 @@ class Services {
             status.summation.valid = !sigmaRes ? sigmaRes : sigmaRes.status
 
             if (status.summation.contain === true && status.summation.valid === false) {
-                return false
+                return status
             }
 
             //replace sigma() to result of sigma
@@ -68,7 +68,7 @@ class Services {
             status.root.valid = await this.checkRootValue(numberedEquation)
 
             if (!status.root.valid && status.root.contain) {
-                return false
+                return status
             }
 
             //set equation is contain divide operator status
@@ -127,6 +127,7 @@ class Services {
     calInsertedEquation = async (insertedEquation, defaultAnswers, usedNumbers, defaultNumberCount) => {
 
         const checkingResult = await this.equationValidate(insertedEquation)
+        console.log(checkingResult)
         const operatorList = ['-', '+', '*', '/']
 
         const checkingRules = {
@@ -190,7 +191,7 @@ class Services {
                     isAnsCorrect: false,
                     showAnsClass: 'ans-card',
                     isCorrectClass: 'incorrect',
-                    respondText: 'ค่าภายในเครื่องหมายรูทไม่สามารถติดลบได้'
+                    respondText: 'ค่าภายในเครื่องหมายรูทไม่สามารถติดลบหรือผลลัพท์ไม่เป็นจำนวนเต็มบวกได้'
                 }
             },
             isFactorialValid: {
