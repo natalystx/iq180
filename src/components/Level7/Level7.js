@@ -301,33 +301,6 @@ class Level7 extends React.Component {
 
     }
 
-    //checkparatheses
-    checkParatheses = (equation) => {
-
-        let openParathensesCounter = 0
-        let closeParathensesCounter = 0
-
-        //check parathenses
-        for (let index = 0; index < equation.length; index++) {
-
-
-            if (equation[index] === '(') {
-                openParathensesCounter++
-            }
-            if (equation[index] === ')') {
-                closeParathensesCounter++
-            }
-
-
-        }
-
-        if (openParathensesCounter === closeParathensesCounter) {
-            return true
-        } else {
-            return false
-        }
-
-    }
 
     //calculate user's equation result and checks with default answer
     calAns = async () => {
@@ -562,6 +535,12 @@ class Level7 extends React.Component {
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
                 text: 'ตัวกระทำไม่สามารถเป็นค่าว่างได้'
+            })
+        } else if(this.state.cellingBound < this.state.lowerBound ){
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
             })
         } else {
             const temp = this.state.equation
