@@ -205,6 +205,47 @@ class Level4 extends React.Component {
 
     }
 
+       //delete input answer
+       delAnswer = async () => {
+
+        const operatorList = ['-', '+', '*', '/', '(', ')', '^', ',']
+
+        let temp = this.state.equation
+
+
+        // check values
+        if (operatorList.includes(this.state.equation[this.state.equation.length - 1]) || this.state.equation.length === 0) {
+            //delete answer
+            temp = await temp.slice(0, -1)
+            //setState new answer
+            await this.setState({ equation: temp })
+        }
+        else {
+            //delete answer
+            temp = await temp.slice(0, -1)
+            //remove disable button
+            let elem = document.querySelector('button[index = "' + this.state.lastButtonIndex[this.state.lastButtonIndex.length - 1] + '"]')
+            let tempIndex = this.state.lastButtonIndex
+            tempIndex = await tempIndex.slice(0, -1)
+            elem.removeAttribute("disabled")
+
+            //setState new answer and buttonIndex
+            await this.setState({ equation: temp, lastButtonIndex: tempIndex })
+
+            const allNumber = document.querySelectorAll('button[index]')
+
+            await allNumber.forEach(elem => {
+                const index = elem.getAttribute('index')
+                if (this.state.lastButtonIndex.includes(index)) {
+                    elem.setAttribute("disabled", true)
+                } else {
+                    elem.removeAttribute("disabled")
+                }
+            })
+        }
+
+    }
+
     //random 4 numbers
     doRandomNumbers = async () => {
         const services = new Services()
