@@ -510,6 +510,10 @@ class Level8 extends React.Component {
         const modal = document.querySelector('#sigmaModal')
         let allNumber = document.querySelectorAll("button[isnumber]")
         let allIndex = document.querySelectorAll("button[index]")
+        const services = new Services()
+        const itelatorStatus =  await services.equationValidate(this.state.itelator)
+        const cellingBoundStatus =  await services.equationValidate(this.state.cellingBound)
+        const lowerBoundStatus =  await services.equationValidate(this.state.lowerBound)
 
 
         if (this.state.lowerBound === '') {
@@ -540,6 +544,28 @@ class Level8 extends React.Component {
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
                 text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
+            })
+        }
+        else if(itelatorStatus.answer === 'invalid'){
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ผลลัพท์สมการตัวกระทำต้องเป็นจำนวนเต็มเท่านั้น'
+            })
+
+        }
+        else if(lowerBoundStatus.answer === 'invalid'){
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ผลลัพท์สมการขอบล่างต้องเป็นจำนวนเต็มเท่านั้น'
+            })
+        }
+        else if(cellingBoundStatus.answer === 'invalid'){
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ผลลัพท์สมการขอบบนต้องเป็นจำนวนเต็มเท่านั้น'
             })
         }
         else {
