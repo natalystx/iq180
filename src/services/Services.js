@@ -116,7 +116,7 @@ class Services {
 
         //set answer by isAllOperatorValid value based
         status.answer = isAllOperatorValid ? await Parser.evaluate(status.equation) : 'invalid'
-        status.equation = realEquation
+        status.equation = realEquation.replace('nthRoot','√')
         //return status object
         return status
 
@@ -307,6 +307,10 @@ class Services {
                 isAllInteger.push(Number.isInteger(temp))
                 allParams.push(temp)
             })
+
+            if (Parser.evaluate(allParams[0]) < 0 || Parser.evaluate(allParams[1]) < 0 || Parser.evaluate(allParams[2]) < 0){
+                return false
+            }
 
             const sigmaResult = await eval(`sigma(x => ${allParams[0]},${allParams[1]}, ${allParams[2]})`)
 

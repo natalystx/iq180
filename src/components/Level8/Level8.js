@@ -546,26 +546,26 @@ class Level8 extends React.Component {
                 text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
             })
         }
-        else if(itelatorStatus.answer === 'invalid'){
+        else if (itelatorStatus.answer === 'invalid' || itelatorStatus.answer < 0){
             swal.fire({
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
-                text: 'ผลลัพท์สมการตัวกระทำต้องเป็นจำนวนเต็มเท่านั้น'
+                text: 'ผลลัพท์สมการตัวกระทำต้องเป็นจำนวนเต็มบวกเท่านั้น'
             })
 
         }
-        else if(lowerBoundStatus.answer === 'invalid'){
+        else if (lowerBoundStatus.answer === 'invalid' || lowerBoundStatus.answer < 0){
             swal.fire({
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
-                text: 'ผลลัพท์สมการขอบล่างต้องเป็นจำนวนเต็มเท่านั้น'
+                text: 'ผลลัพท์สมการขอบล่างต้องเป็นจำนวนเต็มบวกเท่านั้น'
             })
         }
-        else if(cellingBoundStatus.answer === 'invalid'){
+        else if (cellingBoundStatus.answer === 'invalid' || cellingBoundStatus.answer < 0){
             swal.fire({
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
-                text: 'ผลลัพท์สมการขอบบนต้องเป็นจำนวนเต็มเท่านั้น'
+                text: 'ผลลัพท์สมการขอบบนต้องเป็นจำนวนเต็มบวกเท่านั้น'
             })
         }
         else {
