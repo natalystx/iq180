@@ -539,13 +539,7 @@ class Level8 extends React.Component {
                 text: 'ตัวกระทำไม่สามารถเป็นค่าว่างได้'
             })
         }
-        else if(this.state.cellingBound < this.state.lowerBound ){
-            swal.fire({
-                title: 'เกิดข้อผิดพลาด',
-                icon: 'error',
-                text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
-            })
-        }
+       
         else if (itelatorStatus.answer === 'invalid' || itelatorStatus.answer < 0){
             swal.fire({
                 title: 'เกิดข้อผิดพลาด',
@@ -566,6 +560,14 @@ class Level8 extends React.Component {
                 title: 'เกิดข้อผิดพลาด',
                 icon: 'error',
                 text: 'ผลลัพท์สมการขอบบนต้องเป็นจำนวนเต็มบวกเท่านั้น'
+            })
+        }
+
+        else if (cellingBoundStatus.answer < lowerBoundStatus.answer) {
+            swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                icon: 'error',
+                text: 'ค่าขอบบนไม่สามารถน้อยกว่าค่าขอบล่างได้'
             })
         }
         else {
