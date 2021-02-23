@@ -387,6 +387,7 @@ class Services {
         marksPos.forEach(pos => {
             let left = equation[pos - 1]
             let right = equation[pos + 1]
+    
 
             //left and right are numbers
             if (!isNaN(left) && !isNaN(right)) {
@@ -440,7 +441,7 @@ class Services {
 
             }
             //left or right is parentheses
-            else if (left === ')' || right === '(') {
+            else if (left === ')' || right === '(' || left === '!') {
 
                 if (left === ')') {
                     let leftPart = ''
@@ -458,6 +459,39 @@ class Services {
                         }
 
                     }
+
+
+
+
+                    let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos + 1]
+                    equationPart = equationPart.includes(',') ? 'nthRoot' + equationPart : equationPart
+
+                    if (equationPart.includes('nthRoot')) {
+                        const rootResult = this.checkRootValue(equationPart)
+                        isAllResultInt.push(rootResult)
+                    } else {
+                        isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)))
+                    }
+
+
+                }
+
+                if (left === '!') {
+                    let leftPart = ''
+                    //get left part
+                    for (let index = pos - 1; index >= 0; index--) {
+                        leftPart += equation[index]
+                      
+
+                        if (this.checkParatheses(leftPart) && leftPart.length > 1) {
+                            break
+                        }
+
+
+                    }
+
+                    // leftPart = leftPart.replaceAll('(','')
+                    // leftPart = leftPart.replaceAll(')','')
 
 
                     let equationPart = leftPart.split("").reverse().join("") + '/' + equation[pos + 1]
