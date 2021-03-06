@@ -180,6 +180,78 @@ class Home extends React.Component {
                             <h1 className="level-text-head text-white">Level 8</h1>
                         </div>
                     </Link>
+                     <Link to={
+                        {
+                            pathname: "/ingame",
+                            state: {
+                                level: 9
+                            }
+
+                        }
+                    } className="d-flex flex-column align-items-center link w-100 level-card-wrap">
+
+                        <div className="level-card d-flex flex-column align-items-center w-100">
+                            <div className="rubik-wrapper d-flex flex-column align-items-center w-100">
+                                <img src={rubik} alt="" className="rubik-icon" />
+                            </div>
+                            <p className="level-text text-white mt-5">ระดับ</p>
+                            <h1 className="level-text-head text-white">Level 9</h1>
+                        </div>
+                    </Link>
+                     <Link to={
+                        {
+                            pathname: "/ingame",
+                            state: {
+                                level: 10
+                            }
+
+                        }
+                    } className="d-flex flex-column align-items-center link w-100 level-card-wrap">
+
+                        <div className="level-card d-flex flex-column align-items-center w-100">
+                            <div className="rubik-wrapper d-flex flex-column align-items-center w-100">
+                                <img src={rubik} alt="" className="rubik-icon" />
+                            </div>
+                            <p className="level-text text-white mt-5">ระดับ</p>
+                            <h1 className="level-text-head text-white">Level 10</h1>
+                        </div>
+                    </Link>
+                     <Link to={
+                        {
+                            pathname: "/ingame",
+                            state: {
+                                level: 11
+                            }
+
+                        }
+                    } className="d-flex flex-column align-items-center link w-100 level-card-wrap">
+
+                        <div className="level-card d-flex flex-column align-items-center w-100">
+                            <div className="rubik-wrapper d-flex flex-column align-items-center w-100">
+                                <img src={rubik} alt="" className="rubik-icon" />
+                            </div>
+                            <p className="level-text text-white mt-5">ระดับ</p>
+                            <h1 className="level-text-head text-white">Level 11</h1>
+                        </div>
+                    </Link>
+                     <Link to={
+                        {
+                            pathname: "/ingame",
+                            state: {
+                                level: 12
+                            }
+
+                        }
+                    } className="d-flex flex-column align-items-center link w-100 level-card-wrap">
+
+                        <div className="level-card d-flex flex-column align-items-center w-100">
+                            <div className="rubik-wrapper d-flex flex-column align-items-center w-100">
+                                <img src={rubik} alt="" className="rubik-icon" />
+                            </div>
+                            <p className="level-text text-white mt-5">ระดับ</p>
+                            <h1 className="level-text-head text-white">Level 12</h1>
+                        </div>
+                    </Link>
                 </div>
                 {/* 
                 <h1 className="header-text">IQ180 GAME</h1>

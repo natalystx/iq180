@@ -9,6 +9,10 @@ import Level5 from '../Level5/Level5'
 import Level6 from '../Level6/Level6'
 import Level7 from '../Level7/Level7'
 import Level8 from '../Level8/Level8'
+import Level2Half from '../Level2-5/Level2-5'
+import Level4Half from '../Level4-5/Level4-5'
+import Level6Half from '../Level6-5/Level6-5'
+import Level8Half from '../Level8-5/Level8-5'
 import rubik from '../../images/rubik.svg'
 
 class Ingame extends React.Component {
@@ -29,13 +33,17 @@ class Ingame extends React.Component {
         // Levels of game components store
         const levelComponents = {
             1: <Level1 />,
-            2: <Level2 />,
-            3: <Level3 />,
-            4: <Level4 />,
-            5: <Level5 />,
-            6: <Level6 />,
-            7: <Level7 />,
-            8: <Level8 />
+            2: <Level2Half />,
+            3: <Level2 />,
+            4: <Level3 />,
+            5: <Level4Half />,
+            6: <Level4 />,
+            7: <Level5 />,
+            8: <Level6Half />,
+            9: <Level6 />,
+            10: <Level7 />,
+            11: <Level8Half />,
+            12: <Level8 />,
         }
 
         return (
