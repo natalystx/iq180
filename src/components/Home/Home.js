@@ -33,7 +33,7 @@ class Home extends React.Component {
                         <img src={kidHead} alt="logo" className="kid-head" />
                     </div>
                 </div>
-                <h1 className="header-text">IQ180 GAME</h1>
+                <h1 className="header-text">GAME 180 IQ</h1>
 
                 <div className="levels-section d-flex justify-content-start align-items-center w-100 my-md-5">
                     <Link to={
