@@ -80,6 +80,7 @@ class Level1 extends React.Component {
             this.doRandomNumbers()
         } else {
 
+            console.log(equation);
             this.setState({
                 defaultAnswer: equationValidResult.answer,
                 defaultEquation: equation

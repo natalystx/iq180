@@ -16,6 +16,10 @@ class Services {
                 contain: false,
                 valid: false
             },
+            subtract:{
+                contain: false,
+                valid: false
+            },
             factorial: {
                 contain: false,
                 valid: false
@@ -80,8 +84,14 @@ class Services {
             //set equation is contain factorial operator status
             status.factorial.contain = await numberedEquation.includes('!')
 
-            //set equation is contain root value valid status
+            //set equation is valid root value valid status
             status.factorial.valid = await this.checkFacValue(numberedEquation)
+
+            //set equation is contain substract operator status
+            status.subtract.contain = await numberedEquation.includes('-')
+
+            //set equation is valid subtract operator status
+            status.subtract.valid = await this.checkSubtractResult(numberedEquation)
 
 
         } else {
@@ -103,7 +113,7 @@ class Services {
             }
 
             // check all operator validation 
-            if (['root', 'divide', 'factorial', 'summation'].includes(key)) {
+            if (['root', 'divide', 'factorial', 'summation', 'subtract'].includes(key)) {
                 // check contain and valid status are same
                 isAllOperatorValid = status[key].contain === status[key].valid
 
@@ -127,7 +137,6 @@ class Services {
     calInsertedEquation = async (insertedEquation, defaultAnswers, usedNumbers, defaultNumberCount) => {
 
         const checkingResult = await this.equationValidate(insertedEquation)
-        console.log(checkingResult)
         const operatorList = ['-', '+', '*', '/']
 
         const checkingRules = {
@@ -209,6 +218,14 @@ class Services {
                     isCorrectClass: 'incorrect',
                     respondText: 'ค่า sigma ขอบล่างต้องมากกว่าหรือเท่ากับขอบบน'
                 }
+            },
+             isSubtractValid: {
+                false: {
+                    isAnsCorrect: false,
+                    showAnsClass: 'ans-card',
+                    isCorrectClass: 'incorrect',
+                    respondText: 'ไม่สามารถมีผลลัพท์ติดลบในสมการได้'
+                }
             }
         }
 
@@ -240,6 +257,10 @@ class Services {
 
         if (checkingResult.summation.contain !== checkingResult.summation.valid) {
             return checkingRules.isSummationValid[false]
+        }
+
+         if (checkingResult.subtract.contain !== checkingResult.subtract.valid) {
+            return checkingRules.isSubtractValid[false]
         }
 
         if (checkingResult.answer === defaultAnswers) {
@@ -714,6 +735,200 @@ class Services {
         }
 
         return equation
+    }
+
+
+
+    checkSubtractResult = async (defaultEquation) => {
+        //check equation is contain "/"
+        if (defaultEquation.search('-') > -1) {  // incase of equation is contain
+            const marksPos = this.scanSubtractMarkPos(defaultEquation)
+            return this.splitSubtractEquation(marksPos, defaultEquation)
+        } else { // incase of equation isn't contain /
+            return false
+        }
+    }
+
+    //get Position of divide marks
+    scanSubtractMarkPos = (equation) => {
+        let marksPos = []
+        for (let index = 0; index < equation.length; index++) {
+            if (equation[index] === '-') {
+                marksPos.push(index)
+            }
+        }
+        return marksPos
+    }
+
+    //split equation and check result of value 
+    splitSubtractEquation = (marksPos, equation) => {
+
+        let isAllResultInt = []
+        marksPos.forEach(pos => {
+            let left = equation[pos - 1]
+            let right = equation[pos + 1]
+    
+
+            //left and right are numbers
+            if (!isNaN(left) && !isNaN(right)) {
+                let result = parseInt(left) - parseInt(right)
+                isAllResultInt.push(Number.isInteger(result) && result >= 0)
+            }
+            //left and right are parentheses
+            else if (left === ')' && right === '(') {
+                let leftPart = ''
+                let rightPart = ''
+
+                //get left part
+                for (let index = pos - 1; index >= 0; index--) {
+                    if (equation[index] === '(') {
+                        leftPart += equation[index]
+
+                        if (this.checkParatheses(leftPart)) {
+                            break
+                        }
+                    } else {
+                        leftPart += equation[index]
+                    }
+
+                }
+
+                //get right part
+                for (let index = pos + 1; index < equation.length; index++) {
+                    if (equation[index] === ')') {
+                        rightPart += equation[index]
+
+
+                        if (this.checkParatheses(rightPart)) {
+                            break
+                        }
+
+                    } else {
+                        rightPart += equation[index]
+                    }
+
+                }
+
+                let equationPart = leftPart.split("").reverse().join("") + '-' + rightPart
+                if (equationPart.includes('nthRoot')) {
+                    const rootResult = this.checkRootValue(equationPart)
+                    isAllResultInt.push(rootResult)
+                } else {
+                    isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)) 
+                    && Parser.evaluate(equationPart) >= 0)
+                }
+
+
+
+            }
+            //left or right is parentheses
+            else if (left === ')' || right === '(' || left === '!') {
+
+                if (left === ')') {
+                    let leftPart = ''
+                    //get left part
+                    for (let index = pos - 1; index >= 0; index--) {
+                        if (equation[index] === '(') {
+                            leftPart += equation[index]
+
+                            if (this.checkParatheses(leftPart)) {
+                                break
+                            }
+
+                        } else {
+                            leftPart += equation[index]
+                        }
+
+                    }
+
+
+
+
+                    let equationPart = leftPart.split("").reverse().join("") + '-' + equation[pos + 1]
+                    equationPart = equationPart.includes(',') ? 'nthRoot' + equationPart : equationPart
+
+                    if (equationPart.includes('nthRoot')) {
+                        const rootResult = this.checkRootValue(equationPart)
+                        isAllResultInt.push(rootResult)
+                    } else {
+                        isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)) 
+                        && Parser.evaluate(equationPart) >=0)
+                    }
+
+
+                }
+
+                if (left === '!') {
+                    let leftPart = ''
+                    //get left part
+                    for (let index = pos - 1; index >= 0; index--) {
+                        leftPart += equation[index]
+                      
+
+                        if (this.checkParatheses(leftPart) && leftPart.length > 1) {
+                            break
+                        }
+
+
+                    }
+
+                    // leftPart = leftPart.replaceAll('(','')
+                    // leftPart = leftPart.replaceAll(')','')
+
+
+                    let equationPart = leftPart.split("").reverse().join("") + '-' + equation[pos + 1]
+                    equationPart = equationPart.includes(',') ? 'nthRoot' + equationPart : equationPart
+
+                    if (equationPart.includes('nthRoot')) {
+                        const rootResult = this.checkRootValue(equationPart)
+                        isAllResultInt.push(rootResult)
+                    } else {
+                        isAllResultInt.push(Number.isInteger(Parser.evaluate(equationPart)) 
+                        && Parser.evaluate(equationPart) >= 0)
+                    }
+
+
+                }
+
+                if (right === '(') {
+                    let rightPart = ''
+                    //get right part
+                    for (let index = pos + 1; index < equation.length; index++) {
+                        if (equation[index] === ')') {
+                            rightPart += equation[index]
+
+
+                            if (this.checkParatheses(rightPart)) {
+                                break
+                            }
+                        } else {
+                            rightPart += equation[index]
+                        }
+
+                    }
+
+                    let equationPart = equation[pos - 1] + '-' + rightPart
+                    const equationPartResult  = Parser.evaluate(equationPart);
+                    const isValidAnswer = equationPartResult >= 0 
+                    && Number.isInteger(equationPartResult)
+                    isAllResultInt.push(isValidAnswer)
+                }
+
+            }
+        })
+
+        //check all is Integer
+        const finalResult = isAllResultInt.every(item => item === true)
+        // for (let index = 0; index < isAllResultInt.length; index++) {
+
+        //     finalResult = index > 0 ? isAllResultInt[index] && finalResult : isAllResultInt[index]
+
+        // }
+
+        console.log(finalResult);
+        //return result
+        return finalResult
+
     }
 }
 
