@@ -8,11 +8,12 @@ import overfloat4 from '../../images/icon-flow-4.svg'
 import overfloat5 from '../../images/icon-flow-5.svg'
 import rubik from '../../images/rubik.svg'
 import './Home.css';
+import FirebaseService from '../../services/Firebase'
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { level: 1 };
+        this.state = { level: 1 , visitor: 0};
     }
 
     //Update value when select option
@@ -20,7 +21,33 @@ class Home extends React.Component {
         this.setState({ level: event.target.value })
     }
 
+   async componentDidMount(){
+        const db = new FirebaseService()
+        db.initialize()
+        let count = 0
+      await db.getData().then((data) => {
+        
+        
+        if (data !== undefined) {
+           count = data.count
+        }
+      })
+      
+
+       this.setState({
+            visitor:count + 1
+        })
+
+
+        await db.setData(count + 1)
+      
+
+       
+    }
+
+
     render() {
+        
         return (
             <div className="Home container">
                 <div className="svg-logo d-flex justify-content-center align-items-center">
@@ -34,6 +61,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <h1 className="header-text">GAME 180 IQ</h1>
+                <p className="w-100 text-center text-white">จำนวนผู้เข้าเล่น {this.state.visitor ? 1423+ this.state.visitor : 1423} คน</p>
 
                 <div className="levels-section d-flex justify-content-start align-items-center w-100 my-md-5">
                     <Link to={
@@ -253,32 +281,11 @@ class Home extends React.Component {
                         </div>
                     </Link>
                 </div>
-                {/* 
-                <h1 className="header-text">IQ180 GAME</h1>
-                <h3 className="level-selection">เลือกระดับความยาก</h3>
-                <div className="selector">
-                    <select className="levels" onChange={this.onValChange} defaultValue={this.state.level}>
-                        <option value="1">ระดับที่ 1</option>
-                        <option value="2">ระดับที่ 2</option>
-                        <option value="3">ระดับที่ 3</option>
-                        <option value="4">ระดับที่ 4</option>
-                        <option value="5">ระดับที่ 5</option>
-                        <option value="6">ระดับที่ 6</option>
-                        <option value="7">ระดับที่ 7</option>
-                        <option value="8">ระดับที่ 8</option>
-                    </select>
-                    <Link to={
-                        {
-                            pathname: "/ingame",
-                            state: {
-                                level: this.state.level
-                            }
+              
 
-                        }
-                    } >
-                        <button className="goBtn" onClick={this.goInGame}>เริ่มเกมกันเลย</button>
-                    </Link>
-                </div> */}
+               
+
+               
             </div >
         );
     }
