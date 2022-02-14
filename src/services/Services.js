@@ -918,15 +918,7 @@ class Services {
         })
 
         //check all is Integer
-        const finalResult = isAllResultInt.every(item => item === true)
-        // for (let index = 0; index < isAllResultInt.length; index++) {
-
-        //     finalResult = index > 0 ? isAllResultInt[index] && finalResult : isAllResultInt[index]
-
-        // }
-
-        console.log(finalResult);
-        //return result
+        const finalResult = isAllResultInt.every(item => item === true)      
         return finalResult
 
     }

@@ -79,8 +79,7 @@ class Level1 extends React.Component {
             || !Number.isInteger(equationValidResult.answer)) {
             this.doRandomNumbers()
         } else {
-
-            console.log(equation);
+            
             this.setState({
                 defaultAnswer: equationValidResult.answer,
                 defaultEquation: equation
